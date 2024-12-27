@@ -23,11 +23,19 @@ typedef unsigned long long uint64;
 } do{} while(0)
 #endif
 
+#ifndef LogInfo
+#define LogInfo(fmt, ...)\
+{\
+    printf(fmt "\n", ##__VA_ARGS__);\
+    fflush(stdout);\
+} do{} while(0)
+#endif
+
 #ifndef LogError
 #define LogError(fmt, ...)\
 {\
-printf(fmt "\n", ##__VA_ARGS__);\
-ASSERT(false);\
+    printf(fmt "\n", ##__VA_ARGS__);\
+    ASSERT(false);\
 } do{} while(0)
 #endif
 
