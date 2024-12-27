@@ -77,7 +77,7 @@ Execute NiflectGenTool to generate reflection code, here is a batch script examp
 
 Then the reflection code will be generated
 
-![1732206465218](../Wishing/Doc/Introduction/1732206465218.png)
+![1732206465218](Doc/Introduction/1732206465218.png)
 
 About the **DefaultAccessorSetting.h** appears in the commandline args
 
@@ -159,7 +159,7 @@ int main()
 
 and the result
 
-![1732212533978](../Wishing/Doc/Introduction/1732212533978.png)
+![1732212533978](Doc/Introduction/1732212533978.png)
 
 ## [Experiment 2] Being C++ Native
 
@@ -348,7 +348,7 @@ public:
 
 Finally, do save and load `CMyClass` instance like the Step 3 of Experiment 1
 
-![1732372828784](../Wishing/Doc/Introduction/1732372828784.png)
+![1732372828784](Doc/Introduction/1732372828784.png)
 
 ## The Repo of The Experiments Above
 
