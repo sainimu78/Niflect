@@ -221,7 +221,7 @@ namespace NiflectGen
 			}
 			else
 			{
-				LogError("Unknown option: %s\n", pszV);
+				LogInfo("Unknown option: %s\n", pszV);
 			}
 		}
 	}
