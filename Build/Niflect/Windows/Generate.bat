@@ -1,7 +1,7 @@
 ::参数[vs2015/vs2017/vs2022] [x64/Win32] [MD/MT]
 @echo off
 
-set AppName=NiflectGenTool
+set AppName=Niflect
 set AppOutputPath=%AppName%
 set option_output_dir=%1
 set option_generator_toolset=
