@@ -22,13 +22,14 @@ set DstZipFilePath=%DstProjectDirPath%.zip
 
 rmdir /s /q "%DstProjectDirPath%"
 
-::begin, 不发布 Debug 版本的 NiflectGenTool
-xcopy /y "%SrcBinDirPathRelease%\libclang.dll" "%DstBinDirPathDebug%\"
-xcopy /y "%SrcBinDirPathRelease%\NiflectGen.dll" "%DstBinDirPathDebug%\"
-xcopy /y "%SrcBinDirPathRelease%\NiflectGenCLI.exe" "%DstBinDirPathDebug%\"
-xcopy /y "%SrcBinDirPathDebug%\Niflect.*" "%DstBinDirPathDebug%\"
-::end
+::::begin, 不发布 Debug 版本的 NiflectGenTool
+::xcopy /y "%SrcBinDirPathRelease%\libclang.dll" "%DstBinDirPathDebug%\"
+::xcopy /y "%SrcBinDirPathRelease%\NiflectGen.dll" "%DstBinDirPathDebug%\"
+::xcopy /y "%SrcBinDirPathRelease%\NiflectGenCLI.exe" "%DstBinDirPathDebug%\"
+::xcopy /y "%SrcBinDirPathDebug%\Niflect.*" "%DstBinDirPathDebug%\"
+::::end
 
+xcopy /E /y "%SrcBinDirPathDebug%\" "%DstBinDirPathDebug%\"
 xcopy /E /y "%SrcBinDirPathRelease%\" "%DstBinDirPathRelease%\"
 
 del "%DstBinDirPathDebug%\*.exp"
