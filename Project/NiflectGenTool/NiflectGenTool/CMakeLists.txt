@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10.0)
 
-set(ModuleName NiflectGenCLI)
+set(ModuleName NiflectGenTool)
 
 set(ModuleRootPath ${RootSourcePath}/${ModuleName})
 set(SourcePath ${ModuleRootPath})
