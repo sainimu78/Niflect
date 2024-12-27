@@ -1,0 +1,1 @@
+cmake --build ./vs2022_x64 --config Debug -j 999
