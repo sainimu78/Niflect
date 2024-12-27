@@ -1,1 +1,1 @@
-Setup vs2022_x64
+Setup vs2022 x64
