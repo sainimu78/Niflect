@@ -1,7 +1,7 @@
 @echo off
 setlocal
 
-set ProjectName=Niflect
+set ProjectName=NiflectGenTool
 set Arch=%2
 set ToolsetAndArch=%1_%Arch%
 set Platform=Windows
@@ -22,17 +22,10 @@ set DstZipFilePath=%DstProjectDirPath%.zip
 
 rmdir /s /q "%DstProjectDirPath%"
 
-::::begin, 不发布 Debug 版本的 NiflectGenTool
-::xcopy /y "%SrcBinDirPathRelease%\libclang.dll" "%DstBinDirPathDebug%\"
-::xcopy /y "%SrcBinDirPathRelease%\NiflectGen.dll" "%DstBinDirPathDebug%\"
-::xcopy /y "%SrcBinDirPathRelease%\NiflectGenCLI.exe" "%DstBinDirPathDebug%\"
-::xcopy /y "%SrcBinDirPathDebug%\Niflect.*" "%DstBinDirPathDebug%\"
-::::end
-
-xcopy /E /y "%SrcBinDirPathDebug%\" "%DstBinDirPathDebug%\"
-del "%DstBinDirPathDebug%\*.exp"
-xcopy /E /y "%SrcBinDirPathRelease%\" "%DstBinDirPathRelease%\"
-del "%DstBinDirPathRelease%\*.exp"
+::xcopy /E /y "%SrcBinDirPathDebug%\*.dll" "%DstBinDirPathDebug%\"
+::xcopy /E /y "%SrcBinDirPathDebug%\*.exe" "%DstBinDirPathDebug%\"
+xcopy /y "%SrcBinDirPathRelease%\*.dll" "%DstBinDirPathRelease%\"
+xcopy /y "%SrcBinDirPathRelease%\*.exe" "%DstBinDirPathRelease%\"
 
 xcopy /y "%LicenseFilePath%" "%DstProjectDirPath%\"
 
