@@ -1,0 +1,26 @@
+{
+	"Nihao": 1.23000002,
+	"Haike": {
+		"Bucuo": 4.55999994,
+		"Shima": 7.88999987,
+		"Zhende": "Some Text"
+	},
+	"Buxin": [
+		2.33999991,
+		2.55999994
+	],
+	"Shide": [
+		{
+			"My Value 0": 3.11999989
+		},
+		{
+			"My Value 1": false
+		},
+		{
+			"My Value 2": true
+		},
+		{
+			"My Value 3": "My String Value"
+		}
+	]
+}
