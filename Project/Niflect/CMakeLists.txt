@@ -8,7 +8,7 @@ project(${ProjectName})
 include(${RootProjectPath}/CommonAfterProject.cmake)
 
 if(MSVC)
-    set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT ${ProjectName})
+    set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT NiflectGenCLI)
 endif()
 
 add_subdirectory(Niflect)
