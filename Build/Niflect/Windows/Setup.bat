@@ -18,13 +18,14 @@ set DstRootDirPath=%cd%\..\..\..\ThirdParty\libclang
 set ZipFileName=llvm-project_17_0_6.zip
 set DstZipFilePath=%DstRootDirPath%\%ZipFileName%
 set DstExtractedDirPath=%DstRootDirPath%\llvm-project
-set Dst7zExeFilePath=%ToolDirPath%\7za.exe
+set 7zExeName=7za.exe
+set Dst7zExeFilePath=%ToolDirPath%\%7zExeName%
 set SrcBinPathDebug=%DstExtractedDirPath%\build\Windows\x64\Debug\bin
 set DstBinPathDebug=%cd%\%ToolsetAndArch%\Debug\%ProjectName%
 set SrcBinPathRelease=%DstExtractedDirPath%\build\Windows\x64\Release\bin
 set DstBinPathRelease=%cd%\%ToolsetAndArch%\Release\%ProjectName%
 
-curl -u %UserName%:%Password% -L -o "%Dst7zExeFilePath%" "%StorageDirPath%/Tool/Windows/7za.exe"
+curl -u %UserName%:%Password% -L -o "%Dst7zExeFilePath%" "%StorageDirPath%/Tool/Windows/%7zExeName%"
 
 ::if not exist "%DstZipFilePath%" (
 ::wget -np -nH --cut-dirs=3 -O "%DstZipFilePath%" "%SrcRootDirPath%/%ZipFileName%"
