@@ -21,9 +21,9 @@ set DstExtractedDirPath=%DstRootDirPath%\llvm-project
 set Name7zExe=7za.exe
 set Dst7zExeFilePath=%ToolDirPath%\%Name7zExe%
 set SrcBinPathDebug=%DstExtractedDirPath%\build\Windows\x64\Debug\bin
-set DstBinPathDebug=%cd%\%ToolsetAndArch%\Debug\%ProjectName%
+set DstBinPathDebug=%cd%\%ToolsetAndArch%\Debug\bin
 set SrcBinPathRelease=%DstExtractedDirPath%\build\Windows\x64\Release\bin
-set DstBinPathRelease=%cd%\%ToolsetAndArch%\Release\%ProjectName%
+set DstBinPathRelease=%cd%\%ToolsetAndArch%\Release\bin
 
 curl -u %UserName%:%Password% -L -o "%Dst7zExeFilePath%" "%StorageDirPath%/Tool/Windows/%Name7zExe%"
 
