@@ -1,0 +1,1 @@
+Release vs2022_x64
