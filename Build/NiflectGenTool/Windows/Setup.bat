@@ -13,7 +13,7 @@ set Password=1
 ::end
 
 set StorageDirPath=http://192.168.245.158/sainimu78_Storage/
-set SrcRootDirPath=%StorageDirPath%/ThirdParty/llvm-project
+set SrcRootDirPath=%StorageDirPath%/ThirdParty/llvm-project/Windows
 set DstRootDirPath=%cd%\..\..\..\ThirdParty\libclang
 set ZipFileName=llvm-project_17_0_6.zip
 set DstZipFilePath=%DstRootDirPath%\%ZipFileName%
