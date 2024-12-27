@@ -1,7 +1,7 @@
 @echo off
 setlocal
 
-set ProjectName=NiflectGenTool
+set ProjectName=Niflect
 set ToolsetAndArch=%1
 set ToolDirPath=%cd%
 set path=%ToolDirPath%;%path%
