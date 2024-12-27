@@ -19,9 +19,6 @@ elseif(WIN32)
 endif()
 
 if("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
-	set(libclangBinDebug "${CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG}/libclang${DlPost}")
-	set(libclangBinRelease "${CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG}/libclang${DlPost}")
-	
 	if(WIN32)
 		set(LibPath "${RootThirdPartyPath}/libclang/llvm-project/build/${OsType}/x64")
 		set(libclangLibDebug "${LibPath}/Debug/bin/libclang${SlPost}")
@@ -34,6 +31,8 @@ if("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
 		)
 		target_include_directories(${ModuleName} PRIVATE "${LibPath}/include")
 	else()
+		set(libclangBinDebug "${CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG}/libclang${DlPost}")
+		set(libclangBinRelease "${CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE}/libclang${DlPost}")
 		set_target_properties(libclang2 PROPERTIES
 			IMPORTED_LOCATION_DEBUG "${libclangBinDebug}"
 			IMPORTED_LOCATION_RELEASE "${libclangBinRelease}"

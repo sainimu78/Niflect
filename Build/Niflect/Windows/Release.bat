@@ -7,19 +7,17 @@ set ToolsetAndArch=%1
 set DstRootDirPath=F:\sainimu78_Storage\Release\Windows\x64
 set SrcBinDirPathDebug=%cd%\%ToolsetAndArch%\Debug\%ProjectName%
 set SrcBinDirPathRelease=%cd%\%ToolsetAndArch%\Release\%ProjectName%
-set DstProjectDirPathDebug=%DstRootDirPath%\Debug\%ProjectName%
-set DstProjectDirPathRelease=%DstRootDirPath%\Release\%ProjectName%
+set DstProjectDirPath=%DstRootDirPath%\%ProjectName%
+set DstProjectDirPathDebug=%DstProjectDirPath%\Debug
+set DstProjectDirPathRelease=%DstProjectDirPath%\Release
 set DstBinDirPathDebug=%DstProjectDirPathDebug%\bin
 set DstBinDirPathRelease=%DstProjectDirPathRelease%\bin
 set LicenseFilePath=%cd%\..\..\..\LICENSE.md
 set SrcIncludeDirPath=%cd%\..\..\..\Source\%ProjectName%\include
-set DstIncludeDirPathDebug=%DstProjectDirPathDebug%\include
-set DstIncludeDirPathRelease=%DstProjectDirPathRelease%\include
-set DstZipFilePathDebug=%DstProjectDirPathDebug%.zip
-set DstZipFilePathRelease=%DstProjectDirPathRelease%.zip
+set DstIncludeDirPath=%DstProjectDirPath%\include
+set DstZipFilePath=%DstProjectDirPath%.zip
 
-rmdir /s /q "%DstProjectDirPathDebug%"
-rmdir /s /q "%DstProjectDirPathRelease%"
+rmdir /s /q "%DstProjectDirPath%"
 
 ::begin, 不发布 Debug 版本的 NiflectGenTool
 xcopy /y "%SrcBinDirPathRelease%\libclang.dll" "%DstBinDirPathDebug%\"
@@ -31,11 +29,9 @@ xcopy /y "%SrcBinDirPathDebug%\Niflect.pdb" "%DstBinDirPathDebug%\"
 
 xcopy /E /y "%SrcBinDirPathRelease%\" "%DstBinDirPathRelease%\"
 
-xcopy /y "%LicenseFilePath%" "%DstProjectDirPathDebug%\"
-xcopy /y "%LicenseFilePath%" "%DstProjectDirPathRelease%\"
+xcopy /y "%LicenseFilePath%" "%DstProjectDirPath%\"
 
-xcopy /E /y "%SrcIncludeDirPath%\" "%DstIncludeDirPathDebug%\"
-xcopy /E /y "%SrcIncludeDirPath%\" "%DstIncludeDirPathRelease%\"
+xcopy /E /y "%SrcIncludeDirPath%\" "%DstIncludeDirPath%\"
 
 ::---------------------------------------------------------------
 
@@ -50,14 +46,11 @@ set DstZippedDirPath=%DstRootDirPath%\%ZipFileName%
 
 curl -u %UserName%:%Password% -L -o "%Dst7zExeFilePath%" "%StorageDirPath%/Tool/Windows/%Name7zExe%"
 
-del "%DstZipFilePathDebug%"
-del "%DstZipFilePathRelease%"
+del "%DstZipFilePath%"
 
-7za a "%DstZipFilePathDebug%" "%DstProjectDirPathDebug%"
-7za a "%DstZipFilePathRelease%" "%DstProjectDirPathRelease%"
+7za a "%DstZipFilePath%" "%DstProjectDirPath%"
 
-rmdir /s /q  "%DstProjectDirPathDebug%"
-rmdir /s /q  "%DstProjectDirPathRelease%"
+rmdir /s /q  "%DstProjectDirPath%"
 del "%Dst7zExeFilePath%"
 
 endlocal
