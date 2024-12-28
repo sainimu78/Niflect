@@ -1,1 +1,0 @@
-cmake --build ./Make_x64/Release --target clean
