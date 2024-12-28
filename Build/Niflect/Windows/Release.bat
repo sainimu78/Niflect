@@ -46,14 +46,15 @@ set UserName=WishingContributor
 set Password=1
 set StorageDirPath=http://192.168.245.158/sainimu78_Storage/
 set Name7zExe=7za.exe
+set Storage7zDirPath=%StorageDirPath%/Tool/%Platform%/7z
 set Dst7zExeFilePath=%ToolDirPath%\%Name7zExe%
 set DstZippedDirPath=%DstRootDirPath%\%ZipFileName%
 
-curl -u %UserName%:%Password% -L -o "%Dst7zExeFilePath%" "%StorageDirPath%/Tool/%Platform%/%Name7zExe%"
+curl -u %UserName%:%Password% -L -o "%Dst7zExeFilePath%" "%Storage7zDirPath%/%Name7zExe%"
 
 del "%DstZipFilePath%"
 
-7za a "%DstZipFilePath%" "%DstProjectDirPath%"
+%Name7zExe% a "%DstZipFilePath%" "%DstProjectDirPath%"
 
 rmdir /s /q "%DstProjectDirPath%"
 del "%Dst7zExeFilePath%"

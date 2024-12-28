@@ -21,6 +21,7 @@ set ZipFileName=llvm-project_17_0_6.zip
 set DstZipFilePath=%DstRootDirPath%\%ZipFileName%
 set SrcExtractedDirPath=%DstRootDirPath%\llvm-project
 set Name7zExe=7za.exe
+set Storage7zDirPath=%StorageDirPath%/Tool/%Platform%/7z
 set Dst7zExeFilePath=%ToolDirPath%\%Name7zExe%
 set SrcBuildArchDirPath=%SrcExtractedDirPath%\build\%Platform%\%Arch%
 set SrcBinPathDebug=%SrcBuildArchDirPath%\Debug\bin
@@ -28,7 +29,7 @@ set DstBinPathDebug=%cd%\%ToolsetAndArch%\Debug\bin
 set SrcBinPathRelease=%SrcBuildArchDirPath%\Release\bin
 set DstBinPathRelease=%cd%\%ToolsetAndArch%\Release\bin
 
-curl -u %UserName%:%Password% -L -o "%Dst7zExeFilePath%" "%StorageDirPath%/Tool/%Platform%/%Name7zExe%"
+curl -u %UserName%:%Password% -L -o "%Dst7zExeFilePath%" "%Storage7zDirPath%/%Name7zExe%"
 
 ::if not exist "%DstZipFilePath%" (
 ::wget -np -nH --cut-dirs=3 -O "%DstZipFilePath%" "%SrcRootDirPath%/%ZipFileName%"
@@ -36,7 +37,7 @@ curl -u %UserName%:%Password% -L -o "%DstZipFilePath%" "%SrcRootDirPath%/%ZipFil
 ::)
 
 rmdir /s /q "%SrcExtractedDirPath%"
-7za x "%DstZipFilePath%" -o"%DstRootDirPath%"
+%Name7zExe% x "%DstZipFilePath%" -o"%DstRootDirPath%"
 del "%DstZipFilePath%"
 del "%Dst7zExeFilePath%"
 
