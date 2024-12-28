@@ -1,5 +1,9 @@
 
-add_library(libclang2 SHARED IMPORTED)
+set(LibName Niflect)
+set(LibRootPath ${ProjectRootThirdPartyPath}/${LibName}/${LibName})
+set(LibTargetName ${LibName}_${ModuleName})
+
+add_library(${LibTargetName} SHARED IMPORTED)
 
 target_include_directories(${ModuleName} PRIVATE "${RootThirdPartyPath}/libclang/llvm-project/clang/include")
 
@@ -23,7 +27,7 @@ if("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
 		set(LibPath "${RootThirdPartyPath}/libclang/llvm-project/build/${OsType}/x64")
 		set(libclangLibDebug "${LibPath}/Debug/bin/libclang${SlPost}")
 		set(libclangLibRelease "${LibPath}/Release/bin/libclang${SlPost}")
-		set_target_properties(libclang2 PROPERTIES
+		set_target_properties(${LibTargetName} PROPERTIES
 			IMPORTED_IMPLIB_DEBUG "${libclangLibDebug}"
 			IMPORTED_IMPLIB_RELEASE "${libclangLibRelease}"
 			IMPORTED_IMPLIB_RELWITHDEBINFO "${libclangLibDebug}"
@@ -33,7 +37,7 @@ if("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
 	else()
 		set(libclangBinDebug "${CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG}/libclang${DlPost}")
 		set(libclangBinRelease "${CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE}/libclang${DlPost}")
-		set_target_properties(libclang2 PROPERTIES
+		set_target_properties(${LibTargetName} PROPERTIES
 			IMPORTED_LOCATION_DEBUG "${libclangBinDebug}"
 			IMPORTED_LOCATION_RELEASE "${libclangBinRelease}"
 			IMPORTED_LOCATION_RELWITHDEBINFO "${libclangBinDebug}"
@@ -41,7 +45,7 @@ if("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
 		)
 	endif()
 	
-	target_link_libraries(${ModuleName} PRIVATE libclang2)
+	target_link_libraries(${ModuleName} PRIVATE ${LibTargetName})
 else()
 	message(ERROR "asdf")
 endif()
