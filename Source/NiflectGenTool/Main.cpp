@@ -10,6 +10,7 @@
 #include "NiflectGen/CodeWriter/CppWriter.h"
 #include "Niflect/Util/SystemUtil.h"
 #include <cstring>//strcmp
+#include <iostream>//std::cin.get()
 
 //代码中的用语
 //1. StaticRegStage, 在静态初始化阶段的注册过程
@@ -161,7 +162,7 @@ namespace NiflectGen
 		return NiflectUtil::ConvertToSearchPath(path);
 	}
 
-	static void ParseOptions(int argc, const char** argv, CModuleRegInfo& info)
+	static void ParseOptions(int argc, const char** argv, CModuleRegInfo& info, bool& waitingForDebuggerAttaching)
 	{
 		ASSERT(argc > 1);
 		for (int idx = 1; idx < argc; ++idx)
@@ -218,6 +219,10 @@ namespace NiflectGen
 			else if (strcmp(pszV, "-fs") == 0)
 			{
 				info.m_genFileMode = EGeneratingHeaderAndSourceFileMode::ESourceAndHeader;
+			}
+			else if (strcmp(pszV, "-debuggerAttaching") == 0)
+			{
+				waitingForDebuggerAttaching = true;
 			}
 			else
 			{
@@ -305,7 +310,13 @@ int main(int argc, const char** argv)
 				//argc = sizeof(argvTest) / sizeof(const char*);
 				//argv = argvTest;
 
-				ParseOptions(argc, argv, info);
+				bool waitingForDebuggerAttaching = false;
+				ParseOptions(argc, argv, info, waitingForDebuggerAttaching);
+				if (waitingForDebuggerAttaching)
+				{
+					printf("Tip: You can set breakpoints after this if statement, and then attach the debugger to the NiflectGenTool process\n");
+					std::cin.get();
+				}
 
 				if (gen->InitModuleRegInfo(info))
 				{
