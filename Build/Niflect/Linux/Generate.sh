@@ -1,6 +1,6 @@
 #!/bin/bash
 
-AppName="NiflectGenTool"
+AppName="Niflect"
 AppOutputPath=$AppName
 option_output_dir=$1
 option_generator_toolset=""
