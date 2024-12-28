@@ -220,7 +220,7 @@ namespace NiflectGen
 			{
 				info.m_genFileMode = EGeneratingHeaderAndSourceFileMode::ESourceAndHeader;
 			}
-			else if (strcmp(pszV, "-debuggerAttaching") == 0)
+			else if (strcmp(pszV, "-debuggerattaching") == 0)
 			{
 				waitingForDebuggerAttaching = true;
 			}
@@ -314,7 +314,14 @@ int main(int argc, const char** argv)
 				ParseOptions(argc, argv, info, waitingForDebuggerAttaching);
 				if (waitingForDebuggerAttaching)
 				{
-					printf("Tip: You can set breakpoints after this if statement, and then attach the debugger to the NiflectGenTool process\n");
+					printf(R"(Debugging Tip:
+#1. Set the output directory path for all projects to the bin directory, eg. "Wishing\ThirdParty\NiflectGenTool\NiflectGenTool\build\Windows\x64\Release\bin".
+#2. Set breakpoints after the line containing std::cin.get().
+#3. Attach the debugger to the NiflectGenTool.exe process.
+#4. Press any key on this console.
+#5. You can now debug NiflectGenTool.
+#6. When you finished debugging, you can restore the projects' settings by Save All in VS and then running Generate.bat.
+)");
 					std::cin.get();
 				}
 
