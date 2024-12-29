@@ -19,9 +19,4 @@ endif()
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-#set(EngineSourcePath "${RootSourcePath}/../Engine")
-#set(DependenciesPath "${EngineSourcePath}/Dependencies")
-#set(S3EngineIncludePath "${EngineSourcePath}/S3Engine")
-#set(BaseSourcePath "${EngineSourcePath}/SampleTest/SampleGamePrototyping/Cos/Client/ReflectionSystemDemo")
-
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)# 可将工程添加到目录中, 如 set_target_properties(NiflectGenTool_${ModuleName} PROPERTIES FOLDER "AutoGen")
