@@ -1,4 +1,4 @@
-if(DEPLOY)
+if(PROJECT_RELEASE)
 	set(ModuleTempDirPath ${RootTempDirPath}/${ModuleName})
 	if(WIN32)
 		set(ExeName7z 7za.exe)

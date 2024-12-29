@@ -63,14 +63,14 @@ set(InstalledPlatformArchDirPath build/${ProjectPlatform}/${ProjectArch}/${Relat
 
 install(FILES "${RootDirPath}/LICENSE.md" DESTINATION ${ProjectName})
 
-option(SETUP "Setup dependencies" OFF)
-option(DEPLOY "Deploy the installed" OFF)
+option(PROJECT_SETUP "Setup the project dependencies" OFF)
+option(PROJECT_RELEASE "Release the installed project" OFF)
 
 set(StorageAddrPath http://WishingContributor:1@localhost/sainimu78_Storage)
 if(WIN32)
 	set(StorageDirPath F:/sainimu78_Storage)
 else()
-	message(ERROR "StorageDirPath is not set")
+	message(FATAL_ERROR "StorageDirPath is not set")
 	set(StorageDirPath asdf)
 endif()
 set(PlatformDeployDirPath ${StorageDirPath}/Release/${ProjectPlatform})

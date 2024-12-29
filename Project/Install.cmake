@@ -2,7 +2,7 @@ set(ModuleInstallingDirPath ${ModuleName})
 set(ModuleInstallingTargetDirPath ${ModuleInstallingDirPath}/${InstalledPlatformArchDirPath})
 set(ModuleInstalledDirPath ${CMAKE_INSTALL_PREFIX}/${ModuleName})
 
-if(NOT SETUP AND NOT DEPLOY AND EXISTS "${ModuleInstalledDirPath}")
+if(NOT PROJECT_SETUP AND NOT PROJECT_RELEASE AND EXISTS "${ModuleInstalledDirPath}")
     message(STATUS "Clearing install directory: ${ModuleInstalledDirPath}")
     file(REMOVE_RECURSE "${ModuleInstalledDirPath}")
 endif()
