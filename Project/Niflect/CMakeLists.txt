@@ -13,6 +13,6 @@ endif()
 
 add_subdirectory(Niflect)
 
-if(DEPLOY)
+if(PROJECT_RELEASE)
 	file(REMOVE_RECURSE "${RootTempDirPath}")
 endif()
