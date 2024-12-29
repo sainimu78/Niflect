@@ -39,19 +39,4 @@ target_compile_definitions(${ModuleName}
 	PRIVATE -DNIFLECT_EXPORTS
 )
 
-set(ModuleInstallDirPath ${ModuleName})
-set(ModuleInstallTargetDirPath ${ModuleInstallDirPath}/${InstalledPlatformArchDirPath})
-
-install(TARGETS ${ModuleName}
-	RUNTIME DESTINATION ${ModuleInstallTargetDirPath}/bin
-	LIBRARY DESTINATION ${ModuleInstallTargetDirPath}/lib
-	ARCHIVE DESTINATION ${ModuleInstallTargetDirPath}/lib
-)
-install(DIRECTORY "${ModuleHeaderDirPath}" DESTINATION ${ModuleInstallDirPath})
-#install(FILES ${ModuleHeaders} DESTINATION include)
-if(WIN32)
-	install(FILES "$<TARGET_FILE_DIR:${ModuleName}>/${ModuleName}.pdb"
-		DESTINATION ${ModuleInstallTargetDirPath}/bin
-		CONFIGURATIONS Debug
-	)
-endif()
+include(${RootProjectDirPath}/Install.cmake)
