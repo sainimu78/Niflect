@@ -12,3 +12,7 @@ if(MSVC)
 endif()
 
 add_subdirectory(Niflect)
+
+if(DEPLOY)
+	file(REMOVE_RECURSE "${RootTempDirPath}")
+endif()

@@ -1,5 +1,6 @@
 get_filename_component(RootDirPath "${CMAKE_CURRENT_SOURCE_DIR}/../.." ABSOLUTE)
 set(RootGeneratedDirPath ${CMAKE_CURRENT_BINARY_DIR}/Generated)
+set(RootTempDirPath ${RootDirPath}/DeployingTemp)
 set(RootSourceDirPath ${RootDirPath}/Source)
 set(RootProjectDirPath ${RootDirPath}/Project)
 set(RootThirdPartyDirPath ${RootDirPath}/ThirdParty)
