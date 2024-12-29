@@ -1,11 +1,11 @@
-cmake_minimum_required(VERSION 3.10.0)
+cmake_minimum_required(VERSION 3.20.0)
 
 include(../RootPathSetup.cmake)
-
 set(ProjectName Niflect)
-include(${RootProjectPath}/CommonBeforeProject.cmake)
+
+include(${RootProjectDirPath}/CommonBeforeProject.cmake)
 project(${ProjectName})
-include(${RootProjectPath}/CommonAfterProject.cmake)
+include(${RootProjectDirPath}/CommonAfterProject.cmake)
 
 if(MSVC)
     set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT ${ProjectName})

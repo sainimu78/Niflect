@@ -1,27 +1,29 @@
 set(ModuleName Niflect)
 
-set(ModuleRootPath ${RootSourcePath}/Niflect)
-set(SourcePath ${ModuleRootPath}/src)
-file(GLOB_RECURSE Sources ${SourcePath}/*.cpp)
-create_source_group(${SourcePath} ${Sources})
-set(IncludePath ${RootSourcePath}/Niflect/include)
-file(GLOB_RECURSE Headers ${IncludePath}/*.h)
-create_source_group(${IncludePath} ${Headers})
+set(ModuleRootDirPath ${RootSourceDirPath}/Niflect)
+set(ModuleSourceDirPath ${ModuleRootDirPath}/src)
+file(GLOB_RECURSE ModuleSources ${ModuleSourceDirPath}/*.cpp)
+create_source_group(${ModuleSourceDirPath} ${ModuleSources})
+set(ModuleHeaderDirPath ${ModuleRootDirPath}/include)
+file(GLOB_RECURSE ModuleHeaders ${ModuleHeaderDirPath}/*.h)
+create_source_group(${ModuleHeaderDirPath} ${ModuleHeaders})
 set(SrcAll "")
-list(APPEND SrcAll ${Sources})
-list(APPEND SrcAll ${Headers})
+list(APPEND SrcAll ${ModuleSources})
+list(APPEND SrcAll ${ModuleHeaders})
 
 add_library(${ModuleName} SHARED ${SrcAll})
-set_target_properties(${ModuleName} PROPERTIES 
-    RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG}
-    RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE}
-)
+#set_target_properties(${ModuleName} PROPERTIES 
+#    RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG}
+#    RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE}
+#)
 
 target_include_directories(${ModuleName}
-	PUBLIC ${IncludePath}
+	PUBLIC ${ModuleHeaderDirPath}
 )
 
-if(CMAKE_CXX_COMPILER MATCHES "c\\+\\+$")
+if(MSVC)
+	message(STATUS "Using MSVC")
+elseif(GCC)
 	message(STATUS "Using GCC")
 	#find_library(PTHREAD_LIB pthread)
 	#if (PTHREAD_LIB)
@@ -29,16 +31,27 @@ if(CMAKE_CXX_COMPILER MATCHES "c\\+\\+$")
 	#endif()
 	target_link_libraries(${ModuleName} PRIVATE pthread)
 	target_link_libraries(${ModuleName} PRIVATE dl) # For loading module info using dlopen
-elseif(CMAKE_CXX_COMPILER MATCHES "clang\\+\\+$")
+elseif(CLANG)
 	message(STATUS "Using Clang")
-	
-elseif(MSVC)
-	message(STATUS "Using MSVC")
-	
 endif()
 
 target_compile_definitions(${ModuleName} 
 	PRIVATE -DNIFLECT_EXPORTS
 )
 
-set(LinkParentName ${ModuleName})
+set(ModuleInstallDirPath ${ModuleName})
+set(ModuleInstallTargetDirPath ${ModuleInstallDirPath}/${InstalledPlatformArchDirPath})
+
+install(TARGETS ${ModuleName}
+	RUNTIME DESTINATION ${ModuleInstallTargetDirPath}/bin
+	LIBRARY DESTINATION ${ModuleInstallTargetDirPath}/lib
+	ARCHIVE DESTINATION ${ModuleInstallTargetDirPath}/lib
+)
+install(DIRECTORY "${ModuleHeaderDirPath}" DESTINATION ${ModuleInstallDirPath})
+#install(FILES ${ModuleHeaders} DESTINATION include)
+if(WIN32)
+	install(FILES "$<TARGET_FILE_DIR:${ModuleName}>/${ModuleName}.pdb"
+		DESTINATION ${ModuleInstallTargetDirPath}/bin
+		CONFIGURATIONS Debug
+	)
+endif()
