@@ -43,9 +43,11 @@ function(zip_directory DirPathToZip ZipFilePath)
 			RESULT_VARIABLE ZIP_RESULT
 		)
 	else()
+		get_filename_component(DirName "${DirPathToZip}" NAME)
+		get_filename_component(ParentDir "${DirPathToZip}" DIRECTORY)
 		execute_process(
-			COMMAND zip -r "${ZipFilePath}" "${DirPathToZip}"
-			WORKING_DIRECTORY "${DirPathToZip}/.."
+			COMMAND zip -r "${ZipFilePath}" "${DirName}"
+			WORKING_DIRECTORY "${ParentDir}"
 			RESULT_VARIABLE ZIP_RESULT
 		)
 	endif()
