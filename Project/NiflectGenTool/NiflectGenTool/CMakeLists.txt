@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.10.0)
 
 set(ModuleName NiflectGenTool)
 
-set(ModuleRootPath ${RootSourcePath}/${ModuleName})
+set(ModuleRootPath ${RootSourceDirPath}/${ModuleName})
 set(SourcePath ${ModuleRootPath})
 
 file(GLOB_RECURSE SrcAll ${SourcePath}/*.cpp ${SourcePath}/*.h)
@@ -15,7 +15,7 @@ target_link_libraries(${ModuleName} PRIVATE Niflect)
 target_link_libraries(${ModuleName} PRIVATE NiflectGen)
 
 target_include_directories(${ModuleName}
-	PRIVATE ${RootSourcePath}
+	PRIVATE ${RootSourceDirPath}
 )
 
 if(MSVC)
@@ -23,3 +23,5 @@ if(MSVC)
 		VS_DEBUGGER_WORKING_DIRECTORY "$<IF:$<CONFIG:Debug>,${CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG},${CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE}>"
 	)
 endif()
+
+include(${RootProjectDirPath}/Install.cmake)

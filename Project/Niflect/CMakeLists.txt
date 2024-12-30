@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.20.0)
 
-include(../RootPathSetup.cmake)
+include(../InitRootPath.cmake)
+
 set(ProjectName Niflect)
 
 include(${RootProjectDirPath}/CommonBeforeProject.cmake)
@@ -13,6 +14,4 @@ endif()
 
 add_subdirectory(Niflect)
 
-if(PROJECT_RELEASE)
-	file(REMOVE_RECURSE "${RootTempDirPath}")
-endif()
+include(${RootProjectDirPath}/Release.cmake)

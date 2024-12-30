@@ -1,6 +1,6 @@
 set(ModuleName Niflect)
 
-set(ModuleRootDirPath ${RootSourceDirPath}/Niflect)
+set(ModuleRootDirPath ${RootSourceDirPath}/${ModuleName})
 set(ModuleSourceDirPath ${ModuleRootDirPath}/src)
 file(GLOB_RECURSE ModuleSources ${ModuleSourceDirPath}/*.cpp)
 create_source_group(${ModuleSourceDirPath} ${ModuleSources})
@@ -38,5 +38,3 @@ endif()
 target_compile_definitions(${ModuleName} 
 	PRIVATE -DNIFLECT_EXPORTS
 )
-
-include(${RootProjectDirPath}/Install.cmake)

@@ -1,11 +1,12 @@
 cmake_minimum_required(VERSION 3.10.0)
 
-include(../RootPathSetup.cmake)
+include(../InitRootPath.cmake)
 
 set(ProjectName NiflectGenTool)
-include(${RootProjectPath}/CommonBeforeProject.cmake)
+
+include(${RootProjectDirPath}/CommonBeforeProject.cmake)
 project(${ProjectName})
-include(${RootProjectPath}/CommonAfterProject.cmake)
+include(${RootProjectDirPath}/CommonAfterProject.cmake)
 
 if(MSVC)
     set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT ${ProjectName})
@@ -14,3 +15,6 @@ endif()
 add_subdirectory(Niflect)
 add_subdirectory(NiflectGen)
 add_subdirectory(${ProjectName})
+
+include(${RootProjectDirPath}/Setup.cmake)
+include(${RootProjectDirPath}/Release.cmake)

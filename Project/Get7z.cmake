@@ -1,0 +1,20 @@
+if(WIN32)
+	set(ExeName7z 7za.exe)
+	set(ExeFilePath7z ${ProjectTempDirPath}/${ExeName7z})
+	if(NOT EXISTS "${ExeFilePath7z}")
+		set(SrcFilePath ${StorageAddrPath}/Tool/${ProjectPlatform}/7z/${ExeName7z})
+		set(DstFilePath ${ExeFilePath7z})
+		message(STATUS "Downloading ${DstFilePath} from ${SrcFilePath}")
+		file(DOWNLOAD ${SrcFilePath} ${DstFilePath}
+			 STATUS status
+			 #SHOW_PROGRESS
+		)
+		if(status EQUAL 0)
+			message(STATUS "File downloaded successfully.")
+		else()
+			message(FATAL_ERROR "File download failed.")
+		endif()
+	endif()
+else()
+	set(ExeFilePath7z 7z)
+endif()

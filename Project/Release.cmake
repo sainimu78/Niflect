@@ -1,42 +1,55 @@
-if(PROJECT_RELEASE)
-	set(ModuleTempDirPath ${RootTempDirPath}/${ModuleName})
-	if(WIN32)
-		set(ExeName7z 7za.exe)
-		set(ExeFilePath7z ${ModuleTempDirPath}/${ExeName7z})
-		list(APPEND ListSrcToDownload ${StorageAddrPath}/Tool/${ProjectPlatform}/7z/${ExeName7z})
-		list(APPEND ListDstDownloadTo ${ExeFilePath7z})
-	else()
-		set(ExeFilePath7z 7z)
-	endif()
+#if(PROJECT_RELEASE)	
+#	set(ZipFileName ${ProjectName}.zip)
+#	set(ZipFilePath ${CMAKE_INSTALL_PREFIX}/${ZipFileName})
+#	if(EXISTS "${ProjectInstalledDirPath}")
+#		message("SSSSSSSS ${ZipFilePath}, ${ProjectInstalledDirPath}")
+#		
+#		set(SrcFilePath ${ZipFilePath})
+#		set(DstDirPath ${ProjectInstalledDirPath})
+#		if(WIN32)
+#			string(REPLACE "/" "\\" SrcFilePath "${ZipFilePath}")
+#			string(REPLACE "/" "\\" DstDirPath "${ProjectInstalledDirPath}")
+#		endif()
+#		
+#		execute_process(
+#			COMMAND ${CMAKE_COMMAND} -E echo "Packaging ${ProjectName} ..."
+#			COMMAND ${ExeFilePath7z} a "${SrcFilePath}" "${DstDirPath}"
+#		)
+#		file(MAKE_DIRECTORY "${DstFilePath}")
+#		
+#		set(ReleasingFilePath ${PlatformReleaseDirPath}/${ZipFileName})
+#		set(DstFilePath ${ReleasingFilePath})
+#		if(WIN32)
+#			string(REPLACE "/" "\\" DstFilePath "${ReleasingFilePath}")
+#		endif()
+#		file(RENAME "${SrcFilePath}" "${DstFilePath}")# Move file
+#		#end
+#	else()
+#		message(FATAL_ERROR "${ProjectInstalledDirPath} does not exist")
+#	endif()
+#endif()
+#if(EXISTS "${RootTempDirPath}")
+#	file(REMOVE_RECURSE "${RootTempDirPath}")
+#endif()
+
+if(PROJECT_RELEASE)	
+	include(${RootProjectDirPath}/Get7z.cmake)
 	
-	list(LENGTH ListSrcToDownload ListCount0)
-	list(LENGTH ListDstDownloadTo ListCount1)
-	#math(EXPR MinCount "ListCount0 < ListCount1 ? ListCount0 : ListCount1")
-	foreach(Idx RANGE 0 ${MinCount})
-		list(GET ListSrcToDownload ${Idx} SrcItem)
-		list(GET ListDstDownloadTo ${Idx} Dstitem)
-		message(STATUS "Downloading ${Dstitem} from ${SrcItem}")
-		file(DOWNLOAD ${SrcItem} ${Dstitem}
-			 STATUS status
-			 #SHOW_PROGRESS
-		)
-		if(status EQUAL 0)
-			message(STATUS "File downloaded successfully.")
-		else()
-			message(FATAL_ERROR "File download failed.")
-		endif()
-	endforeach()
-	
-	set(ZipFileName ${ModuleName}.zip)
-	set(ZipFilePath ${ModuleTempDirPath}/${ZipFileName})
-	if(EXISTS "${ModuleInstalledDirPath}")
+	set(ZipFileName ${ProjectName}.zip)
+	set(ZipFilePath ${CMAKE_INSTALL_PREFIX}/${ZipFileName})
+	if(EXISTS "${ProjectInstalledDirPath}")
 		execute_process(
-			COMMAND ${CMAKE_COMMAND} -E echo "Packaging ${ModuleName} ..."
-			COMMAND ${ExeFilePath7z} a "${ZipFilePath}" "${ModuleInstalledDirPath}"
+			COMMAND ${CMAKE_COMMAND} -E echo "Packaging ${ProjectName} ..."
+			COMMAND ${ExeFilePath7z} a "${ZipFilePath}" "${ProjectInstalledDirPath}"
+			OUTPUT_VARIABLE zip_output
 		)
-		file(MAKE_DIRECTORY "${PlatformDeployDirPath}")
-		file(RENAME "${ZipFilePath}" "${PlatformDeployDirPath}/${ZipFileName}")
+		set(ReleasingFilePath ${PlatformReleaseDirPath}/${ZipFileName})
+		file(COPY "${ZipFilePath}" DESTINATION "${PlatformReleaseDirPath}")
+		file(REMOVE "${ZipFilePath}")
 	else()
-		message(FATAL_ERROR "${ModuleInstalledDirPath} does not exist")
+		message(FATAL_ERROR "${ProjectInstalledDirPath} does not exist")
 	endif()
+endif()
+if(EXISTS "${RootTempDirPath}")
+	#file(REMOVE_RECURSE "${RootTempDirPath}")
 endif()
