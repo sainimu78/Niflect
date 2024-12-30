@@ -1,5 +1,14 @@
-@echo off
-mkdir DefaultBuild
-cd DefaultBuild
-cmake ..\..\..\..\Project\Niflect -DCMAKE_INSTALL_PREFIX=Installed -DPROJECT_SETUP=OFF -DPROJECT_RELEASE=ON
-cd ..
+#!/bin/bash
+BuildDirPathDebug=./DefaultBuild/Debug
+BuildDirPathRelease=./DefaultBuild/Release
+InstallPrefix=../Installed
+Toolset="Unix Makefiles"
+OldDirPath=$(pwd)
+
+cd $BuildDirPathDebug
+cmake ../../../../../Project/Niflect -G "$Toolset" -DCMAKE_INSTALL_PREFIX="$InstallPrefix" -DPROJECT_SETUP=OFF -DPROJECT_RELEASE=ON -DCMAKE_BUILD_TYPE=Debug
+cd $OldDirPath
+
+cd $BuildDirPathRelease
+cmake ../../../../../Project/Niflect -G "$Toolset" -DCMAKE_INSTALL_PREFIX="$InstallPrefix" -DPROJECT_SETUP=OFF -DPROJECT_RELEASE=ON -DCMAKE_BUILD_TYPE=Release
+cd $OldDirPath
