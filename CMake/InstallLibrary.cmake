@@ -1,7 +1,7 @@
 install(TARGETS ${ModuleName}
-	RUNTIME DESTINATION "${ProjectInstallingTargetDirPath}/bin"
-	LIBRARY DESTINATION "${ProjectInstallingTargetDirPath}/lib"
-	ARCHIVE DESTINATION "${ProjectInstallingTargetDirPath}/lib"
+	RUNTIME DESTINATION "${ProjectInstallingTargetDirPath}/${BinDirName}"
+	LIBRARY DESTINATION "${ProjectInstallingTargetDirPath}/${LibDirName}"
+	ARCHIVE DESTINATION "${ProjectInstallingTargetDirPath}/${LibDirName}"
 )
 
 #foreach(It IN LISTS ListModuleInstallingHeaderDirPath)
@@ -14,7 +14,7 @@ install(DIRECTORY "${ModuleHeaderDirPath}" DESTINATION "${ProjectInstallingDirPa
 
 if(WIN32)
 	install(FILES "$<TARGET_FILE_DIR:${ModuleName}>/${ModuleName}.pdb"
-		DESTINATION "${ProjectInstallingTargetDirPath}/bin"
+		DESTINATION "${ProjectInstallingTargetDirPath}/${BinDirName}"
 		CONFIGURATIONS Debug
 	)
 endif()

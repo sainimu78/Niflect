@@ -4,13 +4,13 @@ set(LibRootDirPath ${ThirdPartyLibDirPath}/llvm-project)
 set(LibTargetName ${LibName}_${ModuleName})
 
 set(LibPlatformArchDirPath ${LibRootDirPath}/build/${ProjectPlatform}/${ProjectArch})
-set(BinPrefixDirPathDebug ${LibPlatformArchDirPath}/Debug/bin)
-set(BinPrefixDirPathRelease ${LibPlatformArchDirPath}/Release/bin)
+set(BinPrefixDirPathDebug ${LibPlatformArchDirPath}/Debug/${BinDirName})
+set(BinPrefixDirPathRelease ${LibPlatformArchDirPath}/Release/${BinDirName})
 set(BinFilePathDebug ${BinPrefixDirPathDebug}/${LibName}${ProjectSharedLibPostfix})
 set(BinFilePathRelease ${BinPrefixDirPathRelease}/${LibName}${ProjectSharedLibPostfix})
 if(WIN32)
-	set(LinkingFilePathDebug ${LibPlatformArchDirPath}/Debug/lib/${LibName}${ProjectStaticLibPostfix})
-	set(LinkingFilePathRelease ${LibPlatformArchDirPath}/Release/lib/${LibName}${ProjectStaticLibPostfix})
+	set(LinkingFilePathDebug ${LibPlatformArchDirPath}/Debug/${LibDirName}/${LibName}${ProjectStaticLibPostfix})
+	set(LinkingFilePathRelease ${LibPlatformArchDirPath}/Release/${LibDirName}/${LibName}${ProjectStaticLibPostfix})
 	set(PdbFilePath ${BinPrefixDirPathDebug}/${LibName}.pdb)
 else()
 	set(LinkingFilePathDebug ${BinFilePathDebug})
@@ -33,11 +33,11 @@ if(PROJECT_SETUP OR NOT EXISTS "${LibRootDirPath}")
 	endif()
 endif()
 
-install(FILES "${BinFilePathDebug}" DESTINATION "${ProjectInstallingTargetDirPathDebug}/bin" CONFIGURATIONS Debug)
-install(FILES "${BinFilePathRelease}" DESTINATION "${ProjectInstallingTargetDirPathRelease}/bin" CONFIGURATIONS Release)
+install(FILES "${BinFilePathDebug}" DESTINATION "${ProjectInstallingTargetDirPathDebug}/${BinDirName}" CONFIGURATIONS Debug)
+install(FILES "${BinFilePathRelease}" DESTINATION "${ProjectInstallingTargetDirPathRelease}/${BinDirName}" CONFIGURATIONS Release)
 if(WIN32)
 	install(FILES "${PdbFilePath}"
-		DESTINATION "${ProjectInstallingTargetDirPath}/bin"
+		DESTINATION "${ProjectInstallingTargetDirPath}/${BinDirName}"
 		CONFIGURATIONS Debug
 	)
 endif()
