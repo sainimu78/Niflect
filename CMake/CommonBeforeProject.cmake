@@ -11,34 +11,6 @@ FUNCTION(create_source_group relativeSourcePath)
   ENDFOREACH(currentSourceFile ${ARGN})
 ENDFUNCTION()
 
-function(download_zip_replace_dir ExeFilePath7z SrcAddrZipFilePath DstDownloadedFilePath DstUnzippedDirPath)
-	message(STATUS "Downloading ${DstDownloadedFilePath} from ${SrcAddrZipFilePath}")
-	file(DOWNLOAD ${SrcAddrZipFilePath} ${DstDownloadedFilePath}
-		STATUS status
-		#SHOW_PROGRESS
-	)
-	if(status EQUAL 0)
-		message(STATUS "File downloaded successfully.")
-		
-		file(REMOVE_RECURSE "${DstUnzippedDirPath}")
-		
-		set(DstDirPathUnzipTo ${DstUnzippedDirPath}/..)
-		set(DirPathToCreate "${DstDirPathUnzipTo}")
-		if(WIN32)
-			string(REPLACE "/" "\\" DirPathToCreate "${DstDirPathUnzipTo}")
-		endif()
-		
-		execute_process(
-			COMMAND ${CMAKE_COMMAND} -E echo "Unzipping ${DstDownloadedFilePath} ..."
-			COMMAND ${ExeFilePath7z} x "${DstDownloadedFilePath}" -o${DirPathToCreate}
-		)
-		
-		file(REMOVE "${DstDownloadedFilePath}")
-	else()
-		message(FATAL_ERROR "File download failed.")
-	endif()
-endfunction()
-
 function(download_files_reserved ListSrcToDownload ListDstDownloaded)
 	list(LENGTH ListSrcToDownload ListCount0)
 	list(LENGTH ListDstDownloaded ListCount1)
@@ -60,6 +32,55 @@ function(download_files_reserved ListSrcToDownload ListDstDownloaded)
 			message(FATAL_ERROR "File download failed.")
 		endif()
 	endforeach()
+endfunction()
+
+function(zip_directory DirPathToZip ZipFilePath)
+	if(WIN32)
+		include(${RootCMakeDirPath}/GetZip.cmake)
+		execute_process(
+			#COMMAND ${CMAKE_COMMAND} -E echo "Packaging ${ProjectName} ..."
+			COMMAND ${ExeFilePath7z} a "${ZipFilePath}" "${DirPathToZip}"
+			RESULT_VARIABLE ZIP_RESULT
+		)
+	else()
+		execute_process(
+			COMMAND zip -r "${ZipFilePath}" "${DirPathToZip}"
+			RESULT_VARIABLE ZIP_RESULT
+		)
+	endif()
+endfunction()
+
+function(unzip_file ZipFilePath DirPathUnzipTo)
+	if(WIN32)
+		include(${RootCMakeDirPath}/GetZip.cmake)
+		string(REPLACE "/" "\\" DirPathToCreate "${DirPathUnzipTo}")
+		execute_process(
+			COMMAND ${ExeFilePath7z} x "${ZipFilePath}" -o${DirPathToCreate}
+			RESULT_VARIABLE ZIP_RESULT
+		)
+	else()
+		execute_process(
+			COMMAND unzip -o "${ZipFilePath}" -d "${DirPathUnzipTo}"
+			RESULT_VARIABLE ZIP_RESULT
+		)
+	endif()
+endfunction()
+
+function(download_zip_replace_dir SrcAddrZipFilePath DstDownloadedFilePath DstUnzippedDirPath)
+	message(STATUS "Downloading ${DstDownloadedFilePath} from ${SrcAddrZipFilePath}")
+	file(DOWNLOAD ${SrcAddrZipFilePath} ${DstDownloadedFilePath}
+		STATUS status
+		#SHOW_PROGRESS
+	)
+	if(status EQUAL 0)
+		message(STATUS "File downloaded successfully.")
+		file(REMOVE_RECURSE "${DstUnzippedDirPath}")
+		set(DstDirPathUnzipTo ${DstUnzippedDirPath}/..)
+		unzip_file(${DstDownloadedFilePath} ${DstDirPathUnzipTo})		
+		file(REMOVE "${DstDownloadedFilePath}")
+	else()
+		message(FATAL_ERROR "File download failed.")
+	endif()
 endfunction()
 
 if (WIN32)
