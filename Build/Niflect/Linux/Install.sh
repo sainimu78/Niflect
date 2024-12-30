@@ -1,5 +1,6 @@
+#!/bin/bash
 cd DefaultBuild
-rmdir /s /q Installed
-cmake --install . --config Debug
-cmake --install . --config Release
+rm -rf Installed
+cmake --install ./Debug --config Debug
+cmake --install ./Release --config Release
 cd ..

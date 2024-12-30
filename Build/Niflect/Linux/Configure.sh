@@ -1,11 +1,10 @@
 #!/bin/bash
-
-Toolset="Unix Makefiles"
 BuildDirPathDebug=./DefaultBuild/Debug
 BuildDirPathRelease=./DefaultBuild/Release
 InstallPrefix=../Installed
-
+Toolset="Unix Makefiles"
 OldDirPath=$(pwd)
+
 mkdir -p $BuildDirPathDebug
 cd $BuildDirPathDebug
 rm -f "./CMakeCache.txt"
