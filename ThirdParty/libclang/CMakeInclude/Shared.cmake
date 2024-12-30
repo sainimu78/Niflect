@@ -74,8 +74,8 @@ if(x64)
 		)
 		target_include_directories(${ModuleName} PRIVATE "${LibPlatformArchDirPath}/include")
 	else()
-		set(libclangBinDebug "${CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG}/${${LibName}}${ProjectSharedLibPostfix}")
-		set(libclangBinRelease "${CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE}/${${LibName}}${ProjectSharedLibPostfix}")
+		set(libclangBinDebug "${CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG}/${LibName}${ProjectSharedLibPostfix}")
+		set(libclangBinRelease "${CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE}/${LibName}${ProjectSharedLibPostfix}")
 		set_target_properties(${LibTargetName} PROPERTIES
 			IMPORTED_LOCATION_DEBUG "${libclangBinDebug}"
 			IMPORTED_LOCATION_RELEASE "${libclangBinRelease}"
