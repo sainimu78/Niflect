@@ -33,8 +33,8 @@ if(PROJECT_SETUP OR NOT EXISTS "${LibRootDirPath}")
 	endif()
 endif()
 
-install(FILES "${BinFilePathDebug}" DESTINATION "${ProjectInstallingTargetDirPathDebug}/bin")
-install(FILES "${BinFilePathRelease}" DESTINATION "${ProjectInstallingTargetDirPathRelease}/bin")
+install(FILES "${BinFilePathDebug}" DESTINATION "${ProjectInstallingTargetDirPathDebug}/bin" CONFIGURATIONS Debug)
+install(FILES "${BinFilePathRelease}" DESTINATION "${ProjectInstallingTargetDirPathRelease}/bin" CONFIGURATIONS Release)
 if(WIN32)
 	install(FILES "${PdbFilePath}"
 		DESTINATION "${ProjectInstallingTargetDirPath}/bin"
