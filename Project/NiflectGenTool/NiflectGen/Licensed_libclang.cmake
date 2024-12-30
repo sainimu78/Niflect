@@ -1,2 +1,2 @@
-include(${RootThirdPartyPath}/libclang/CMakeInclude/Shared.cmake)
-#include(${RootThirdPartyPath}/libclang/CMakeInclude/Static.cmake)
+include(${RootThirdPartyDirPath}/libclang/CMakeInclude/Shared.cmake)
+#include(${RootThirdPartyDirPath}/libclang/CMakeInclude/Static.cmake)
