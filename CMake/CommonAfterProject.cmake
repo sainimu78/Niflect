@@ -94,7 +94,7 @@ set(StorageAddrPath http://WishingContributor:1@192.168.245.158/sainimu78_Storag
 if(WIN32)
 	set(StorageDirPath F:/sainimu78_Storage)
 else()
-	set(StorageDirPath /mnt/SharedFolder_Ubuntu)
+	set(StorageDirPath /mnt/Ubuntu_Storage)
 endif()
 set(PlatformReleaseDirPath ${StorageDirPath}/Release/${ProjectPlatform})
 set(ProjectInstalledDirPath ${CMAKE_INSTALL_PREFIX}/${ProjectName})
