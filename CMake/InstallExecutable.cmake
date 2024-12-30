@@ -6,4 +6,8 @@ if(WIN32)
 		DESTINATION "${ProjectInstallingTargetDirPath}/${BinDirName}"
 		CONFIGURATIONS Debug
 	)
+else()
+	install(TARGETS ${ModuleName}
+		LIBRARY DESTINATION "${ProjectInstallingTargetDirPath}/${LibDirName}"
+	)
 endif()
