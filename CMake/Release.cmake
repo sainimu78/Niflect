@@ -1,12 +1,12 @@
 if(PROJECT_RELEASE)	
-	include(${RootCMakeDirPath}/Get7z.cmake)
+	include(${RootCMakeDirPath}/GetZip.cmake)
 	
 	set(ZipFileName ${ProjectName}.zip)
 	set(ZipFilePath ${CMAKE_INSTALL_PREFIX}/${ZipFileName})
 	if(EXISTS "${ProjectInstalledDirPath}")
 		execute_process(
 			COMMAND ${CMAKE_COMMAND} -E echo "Packaging ${ProjectName} ..."
-			COMMAND ${ExeFilePath7z} a "${ZipFilePath}" "${ProjectInstalledDirPath}"
+			COMMAND ${ExeFilePathZip} a "${ZipFilePath}" "${ProjectInstalledDirPath}"
 			OUTPUT_VARIABLE zip_output
 		)
 		set(ReleasingFilePath ${PlatformReleaseDirPath}/${ZipFileName})
