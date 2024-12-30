@@ -1,3 +1,4 @@
+set(ProjectDirPath ${RootProjectDirPath}/${ProjectName})
 
 #message(STATUS "AAAAAAAAAAAAAAAAA  ${CMAKE_CXX_COMPILER}")
 

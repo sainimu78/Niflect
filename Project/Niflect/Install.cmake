@@ -1,0 +1,1 @@
+include(${RootCMakeDirPath}/InstallLibrary.cmake)
