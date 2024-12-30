@@ -4,11 +4,8 @@ if(PROJECT_RELEASE)
 	set(ZipFileName ${ProjectName}.zip)
 	set(ZipFilePath ${CMAKE_INSTALL_PREFIX}/${ZipFileName})
 	if(EXISTS "${ProjectInstalledDirPath}")
-		execute_process(
-			COMMAND ${CMAKE_COMMAND} -E echo "Packaging ${ProjectName} ..."
-			COMMAND ${ExeFilePathZip} a "${ZipFilePath}" "${ProjectInstalledDirPath}"
-			OUTPUT_VARIABLE zip_output
-		)
+		message("Zipping ${ProjectName} ...")
+		zip_directory(${ProjectInstalledDirPath} ${ZipFilePath})
 		set(ReleasingFilePath ${PlatformReleaseDirPath}/${ZipFileName})
 		file(COPY "${ZipFilePath}" DESTINATION "${PlatformReleaseDirPath}")
 		file(REMOVE "${ZipFilePath}")
