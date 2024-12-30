@@ -1,4 +1,4 @@
-@echo off
+#!/bin/bash
 mkdir DefaultBuild
 cd DefaultBuild
 del CMakeCache.txt
