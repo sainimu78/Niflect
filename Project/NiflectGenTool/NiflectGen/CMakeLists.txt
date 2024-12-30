@@ -31,4 +31,4 @@ target_link_libraries(${ModuleName} PRIVATE Niflect)
 
 include(Licensed_libclang.cmake)
 
-include(${RootProjectDirPath}/Install.cmake)
+include(${RootCMakeDirPath}/Install.cmake)
