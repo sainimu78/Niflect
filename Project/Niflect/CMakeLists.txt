@@ -4,9 +4,9 @@ include(../InitRootPath.cmake)
 
 set(ProjectName Niflect)
 
-include(${RootProjectDirPath}/CommonBeforeProject.cmake)
+include(${RootCMakeDirPath}/CommonBeforeProject.cmake)
 project(${ProjectName})
-include(${RootProjectDirPath}/CommonAfterProject.cmake)
+include(${RootCMakeDirPath}/CommonAfterProject.cmake)
 
 if(MSVC)
     set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT ${ProjectName})
@@ -14,4 +14,4 @@ endif()
 
 add_subdirectory(Niflect)
 
-include(${RootProjectDirPath}/Release.cmake)
+include(${RootCMakeDirPath}/Release.cmake)

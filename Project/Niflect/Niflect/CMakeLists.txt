@@ -4,4 +4,4 @@ include(${RootProjectDirPath}/Niflect/Niflect/Shared.cmake)
 
 set(ListModuleInstallingHeaderDirPath "")
 list(APPEND ListModuleInstallingHeaderDirPath ${ModuleHeaderDirPath})
-include(${RootProjectDirPath}/Install.cmake)
+include(${RootCMakeDirPath}/Install.cmake)

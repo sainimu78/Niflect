@@ -24,4 +24,4 @@ if(MSVC)
 	)
 endif()
 
-include(${RootProjectDirPath}/Install.cmake)
+include(${RootCMakeDirPath}/Install.cmake)
