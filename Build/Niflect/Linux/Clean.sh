@@ -1,6 +1,4 @@
-@echo off
-
-set ToolsetAndArch=%1
-
-cmake --build ./%ToolsetAndArch% --target clean --config Debug
-cmake --build ./%ToolsetAndArch% --target clean --config Release
+cd DefaultBuild
+cmake --build . --target clean --config Debug
+cmake --build . --target clean --config Release
+cd ..
