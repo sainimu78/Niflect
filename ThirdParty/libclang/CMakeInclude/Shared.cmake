@@ -41,8 +41,8 @@ if(WIN32)
 		CONFIGURATIONS Debug
 	)
 else()
-	install(FILES "${LibFilePathDebug}" DESTINATION "${ProjectInstallingTargetDirPathDebug}/${LibDirName}" CONFIGURATIONS Debug)
-	install(FILES "${LibFilePathRelease}" DESTINATION "${ProjectInstallingTargetDirPathRelease}/${LibDirName}" CONFIGURATIONS Release)
+	install(FILES "${LinkingFilePathDebug}" DESTINATION "${ProjectInstallingTargetDirPathDebug}/${LibDirName}" CONFIGURATIONS Debug)
+	install(FILES "${LinkingFilePathRelease}" DESTINATION "${ProjectInstallingTargetDirPathRelease}/${LibDirName}" CONFIGURATIONS Release)
 endif()
 	
 add_library(${LibTargetName} SHARED IMPORTED)
