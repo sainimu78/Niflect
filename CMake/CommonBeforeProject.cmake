@@ -45,6 +45,7 @@ function(zip_directory DirPathToZip ZipFilePath)
 	else()
 		execute_process(
 			COMMAND zip -r "${ZipFilePath}" "${DirPathToZip}"
+			WORKING_DIRECTORY "${DirPathToZip}/.."
 			RESULT_VARIABLE ZIP_RESULT
 		)
 	endif()
