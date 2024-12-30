@@ -254,7 +254,10 @@ namespace NiflectUtil
         return result;
 #else
         char buffer[PATH_MAX];
-        getcwd(buffer, sizeof(buffer));
+		if (getcwd(buffer, sizeof(buffer)) == NULL) {
+			ASSERT(false);
+			perror("getcwd error");
+		}
         return Niflect::CString(buffer);
 #endif
     }
