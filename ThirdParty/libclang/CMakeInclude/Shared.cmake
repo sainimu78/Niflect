@@ -8,16 +8,16 @@ set(BinDirPathDebug ${LibPlatformArchDirPath}/Debug/${BinDirName})
 set(BinDirPathRelease ${LibPlatformArchDirPath}/Release/${BinDirName})
 set(LibDirPathDebug ${LibPlatformArchDirPath}/Debug/${LibDirName})
 set(LibDirPathRelease ${LibPlatformArchDirPath}/Release/${LibDirName})
-set(BinFilePathPrefixDebug ${LibPlatformArchDirPath}/Debug/${BinDirName}/${LibName})
-set(BinFilePathPrefixRelease ${LibPlatformArchDirPath}/Release/${BinDirName}/${LibName})
+#set(BinFilePathPrefixDebug ${LibPlatformArchDirPath}/Debug/${BinDirName}/${LibName})
+#set(BinFilePathPrefixRelease ${LibPlatformArchDirPath}/Release/${BinDirName}/${LibName})
 set(LibFilePathPrefixDebug ${LibPlatformArchDirPath}/Debug/${LibDirName}/${LibName})
 set(LibFilePathPrefixRelease ${LibPlatformArchDirPath}/Release/${LibDirName}/${LibName})
-set(BinFilePathDebug ${BinFilePathPrefixDebug}${ProjectSharedLibPostfix})
-set(BinFilePathRelease ${BinFilePathPrefixRelease}${ProjectSharedLibPostfix})
+#set(BinFilePathDebug ${BinFilePathPrefixDebug}${ProjectSharedLibPostfix})
+#set(BinFilePathRelease ${BinFilePathPrefixRelease}${ProjectSharedLibPostfix})
 if(WIN32)
 	set(LinkingFilePathDebug ${LibFilePathPrefixDebug}${ProjectStaticLibPostfix})
 	set(LinkingFilePathRelease ${LibFilePathPrefixRelease}${ProjectStaticLibPostfix})
-	set(PdbFilePath ${BinFilePathPrefixDebug}.pdb)
+	#set(PdbFilePath ${BinFilePathPrefixDebug}.pdb)
 else()
 	set(LinkingFilePathDebug ${LibFilePathPrefixDebug}${ProjectSharedLibPostfix})
 	set(LinkingFilePathRelease ${LibFilePathPrefixRelease}${ProjectSharedLibPostfix})
@@ -45,6 +45,19 @@ if(PROJECT_SETUP OR NOT EXISTS "${LibRootDirPath}")
 	
 endif()
 
+#if(WIN32)
+#	install(FILES "${BinFilePathDebug}" DESTINATION "${ProjectInstallingTargetDirPathDebug}/${BinDirName}" CONFIGURATIONS Debug)
+#	install(FILES "${BinFilePathRelease}" DESTINATION "${ProjectInstallingTargetDirPathRelease}/${BinDirName}" CONFIGURATIONS Release)
+#	install(FILES "${PdbFilePath}"
+#		DESTINATION "${ProjectInstallingTargetDirPath}/${BinDirName}"
+#		CONFIGURATIONS Debug
+#	)
+#else()
+#	install(FILES "${LinkingFilePathDebug}" DESTINATION "${ProjectInstallingTargetDirPathDebug}/${LibDirName}" CONFIGURATIONS Debug)
+#	install(FILES "${LinkingFilePathRelease}" DESTINATION "${ProjectInstallingTargetDirPathRelease}/${LibDirName}" CONFIGURATIONS Release)
+#endif()
+
+# 区分不同 Configuration 是为支持仅以 Release 版本安装与发布
 if(WIN32)
 	install(DIRECTORY "${BinDirPathDebug}/"
 		DESTINATION "${ProjectInstallingTargetDirPathDebug}/${BinDirName}/"
@@ -72,36 +85,10 @@ else()
 		USE_SOURCE_PERMISSIONS
 	)
 endif()
-#if(WIN32)
-#	install(FILES "${BinFilePathDebug}" DESTINATION "${ProjectInstallingTargetDirPathDebug}/${BinDirName}" CONFIGURATIONS Debug)
-#	install(FILES "${BinFilePathRelease}" DESTINATION "${ProjectInstallingTargetDirPathRelease}/${BinDirName}" CONFIGURATIONS Release)
-#	install(FILES "${PdbFilePath}"
-#		DESTINATION "${ProjectInstallingTargetDirPath}/${BinDirName}"
-#		CONFIGURATIONS Debug
-#	)
-#else()
-#	install(FILES "${LinkingFilePathDebug}" DESTINATION "${ProjectInstallingTargetDirPathDebug}/${LibDirName}" CONFIGURATIONS Debug)
-#	install(FILES "${LinkingFilePathRelease}" DESTINATION "${ProjectInstallingTargetDirPathRelease}/${LibDirName}" CONFIGURATIONS Release)
-#endif()
-	
+
 add_library(${LibTargetName} SHARED IMPORTED)
 
 target_include_directories(${ModuleName} PRIVATE "${LibRootDirPath}/clang/include")
-
-#if(UNIX)
-#	message(STATUS "Target Is on UNIX")
-#	set(OsType Linux)
-#	set(DlPost .so)
-#	set(SlPost .a)
-#elseif(APPLE)
-#	message(STATUS "Target Is on APPLE")
-#	message(FATAL_ERROR "OsType & DynamicLibraryPrefix & DynamicLibraryPostfix are not specified")
-#elseif(WIN32)
-#	message(STATUS "Target Is on WIN32")
-#	set(OsType Windows)
-#	set(DlPost .dll)
-#	set(SlPost .lib)
-#endif()
 
 if(x64)
 	if(WIN32)
