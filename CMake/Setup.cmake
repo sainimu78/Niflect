@@ -1,6 +1,6 @@
 if(PROJECT_SETUP)
 	
 endif()
-#if(EXISTS "${RootTempDirPath}")
-	file(REMOVE_RECURSE "${RootTempDirPath}")
+#if(EXISTS "${c_RootTempDirPath}")
+	file(REMOVE_RECURSE "${c_RootTempDirPath}")
 #endif()

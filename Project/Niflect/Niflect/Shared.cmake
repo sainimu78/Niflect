@@ -1,6 +1,6 @@
 set(ModuleName Niflect)
 
-set(ModuleRootDirPath ${RootSourceDirPath}/${ModuleName})
+set(ModuleRootDirPath ${c_RootSourceDirPath}/${ModuleName})
 set(ModuleSourceDirPath ${ModuleRootDirPath}/src)
 file(GLOB_RECURSE ModuleSources ${ModuleSourceDirPath}/*.cpp)
 create_source_group(${ModuleSourceDirPath} ${ModuleSources})

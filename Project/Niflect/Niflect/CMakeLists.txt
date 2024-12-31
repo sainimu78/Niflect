@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.20.0)
 
-include(${ProjectDirPath}/Niflect/Shared.cmake)
+include(${c_ProjectDirPath}/Niflect/Shared.cmake)
 
-set(ListModuleInstallingHeaderDirPath "")
-list(APPEND ListModuleInstallingHeaderDirPath ${ModuleHeaderDirPath})
-include(${ProjectDirPath}/Install.cmake)
+set(v_ListModuleInstallingHeaderDirPath "")
+list(APPEND v_ListModuleInstallingHeaderDirPath ${ModuleHeaderDirPath})
+include(${c_ProjectDirPath}/Install.cmake)

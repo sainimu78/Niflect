@@ -2,16 +2,16 @@ cmake_minimum_required(VERSION 3.20.0)
 
 include(../InitRootPath.cmake)
 
-set(ProjectName Niflect)
+set(c_ProjectName Niflect)
 
-include(${RootCMakeDirPath}/ProjectBegin.cmake)
-project(${ProjectName})
-include(${RootCMakeDirPath}/ProjectEnd.cmake)
+include(${c_RootCMakeDirPath}/ProjectBegin.cmake)
+project(${c_ProjectName})
+include(${c_RootCMakeDirPath}/ProjectEnd.cmake)
 
 if(MSVC)
-    set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT ${ProjectName})
+    set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT ${c_ProjectName})
 endif()
 
 add_subdirectory(Niflect)
 
-include(${RootCMakeDirPath}/Release.cmake)
+include(${c_RootCMakeDirPath}/Release.cmake)
