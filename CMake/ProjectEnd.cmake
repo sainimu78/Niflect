@@ -84,8 +84,7 @@ set(ProjectInstallingTargetDirPath "$<$<CONFIG:Debug>:${ProjectInstallingDirPath
 
 install(FILES "${RootDirPath}/LICENSE.md" DESTINATION ${ProjectName})
 
-option(PROJECT_SETUP "Setup the project dependencies" OFF)
-option(PROJECT_RELEASE "Release the installed project" OFF)
+include(${RootCMakeDirPath}/Option.cmake)
 
 set(RootTempDirPath ${RootDirPath}/Build/${ProjectName}/${ProjectPlatform}/TempForSetupOrRelease)
 set(ProjectTempDirPath ${RootTempDirPath}/${ProjectName})
