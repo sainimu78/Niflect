@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.10.0)
 
 set(ModuleName NiflectGenTool)
 
-set(ModuleRootPath ${RootSourceDirPath}/${ModuleName})
+set(ModuleRootPath ${c_RootSourceDirPath}/${ModuleName})
 set(SourcePath ${ModuleRootPath})
 
 file(GLOB_RECURSE SrcAll ${SourcePath}/*.cpp ${SourcePath}/*.h)
@@ -15,7 +15,7 @@ target_link_libraries(${ModuleName} PRIVATE Niflect)
 target_link_libraries(${ModuleName} PRIVATE NiflectGen)
 
 target_include_directories(${ModuleName}
-	PRIVATE ${RootSourceDirPath}
+	PRIVATE ${c_RootSourceDirPath}
 )
 
 if(MSVC)
@@ -24,4 +24,4 @@ if(MSVC)
 	)
 endif()
 
-include(${ProjectDirPath}/Install.cmake)
+include(${c_ProjectDirPath}/Install.cmake)

@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.20.0)
 
 set(ModuleName NiflectGen)
 
-set(ModuleRootPath ${RootSourceDirPath}/${ModuleName})
+set(ModuleRootPath ${c_RootSourceDirPath}/${ModuleName})
 set(SourcePath ${ModuleRootPath})
 
 file(GLOB_RECURSE SrcAll ${SourcePath}/*.cpp ${SourcePath}/*.h)
@@ -19,7 +19,7 @@ target_precompile_headers(${ModuleName} PRIVATE ${SourcePath}/NiflectGenDevelopm
 #)
 
 target_include_directories(${ModuleName}
-	PUBLIC ${RootSourceDirPath}
+	PUBLIC ${c_RootSourceDirPath}
 	PUBLIC ${SourcePath}
 )
 
@@ -31,4 +31,4 @@ target_link_libraries(${ModuleName} PRIVATE Niflect)
 
 include(Licensed_libclang.cmake)
 
-include(${ProjectDirPath}/Install.cmake)
+include(${c_ProjectDirPath}/Install.cmake)
