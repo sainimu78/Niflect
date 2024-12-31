@@ -82,11 +82,11 @@ set(ProjectInstallingTargetDirPathDebug ${ProjectInstallingDirPath}/${InstalledP
 set(ProjectInstallingTargetDirPathRelease ${ProjectInstallingDirPath}/${InstalledPlatformArchDirPathRelease})
 set(ProjectInstallingTargetDirPath "$<$<CONFIG:Debug>:${ProjectInstallingDirPath}/build/${ProjectPlatform}/${ProjectArch}/${RelativeInstallTargetDirPathDebug}>$<$<CONFIG:Release>:${ProjectInstallingDirPath}/build/${ProjectPlatform}/${ProjectArch}/${RelativeInstallTargetDirPathRelease}>")
 
-install(FILES "${RootDirPath}/LICENSE.md" DESTINATION ${ProjectName})
+install(FILES "${c_RootDirPath}/LICENSE.md" DESTINATION ${ProjectName})
 
 include(${RootCMakeDirPath}/Option.cmake)
 
-set(RootTempDirPath ${RootDirPath}/Build/${ProjectName}/${ProjectPlatform}/TempForSetupOrRelease)
+set(RootTempDirPath ${c_RootDirPath}/Build/${ProjectName}/${ProjectPlatform}/TempForSetupOrRelease)
 set(ProjectTempDirPath ${RootTempDirPath}/${ProjectName})
 	
 set(StorageAddrPath http://WishingContributor:1@192.168.245.158/sainimu78_Storage)
