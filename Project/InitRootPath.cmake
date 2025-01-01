@@ -1,6 +1,2 @@
 get_filename_component(c_RootDirPath "${CMAKE_CURRENT_SOURCE_DIR}/../.." ABSOLUTE)
-set(c_RootGeneratedDirPath ${CMAKE_CURRENT_BINARY_DIR}/Generated)
-set(c_RootSourceDirPath ${c_RootDirPath}/Source)
-set(c_RootProjectDirPath ${c_RootDirPath}/Project)
-set(c_RootCMakeDirPath ${c_RootDirPath}/CMake)
-set(c_RootThirdPartyDirPath ${c_RootDirPath}/ThirdParty)
+include(${c_RootDirPath}/CMake/InitDefaultRootPaths.cmake)
