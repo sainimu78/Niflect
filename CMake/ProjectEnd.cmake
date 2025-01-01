@@ -86,8 +86,9 @@ install(FILES "${c_RootDirPath}/LICENSE.md" DESTINATION ${c_ProjectName})
 
 include(${c_RootCMakeDirPath}/Option.cmake)
 
-set(c_RootTempDirPath ${c_RootDirPath}/Build/${c_ProjectName}/${c_ProjectPlatform}/TempForSetupOrRelease)
-set(c_ProjectTempDirPath ${c_RootTempDirPath}/${c_ProjectName})
+file(RELATIVE_PATH ProjectRelativeDirPath "${c_RootProjectDirPath}" "${c_ProjectDirPath}")
+set(c_RootTempDirPath ${c_RootDirPath}/TempForSetupOrRelease)
+set(c_ProjectTempDirPath ${c_RootTempDirPath}/${ProjectRelativeDirPath}/${c_ProjectPlatform})
 	
 set(c_StorageAddrPath http://WishingContributor:1@192.168.245.158/sainimu78_Storage)
 if(WIN32)
