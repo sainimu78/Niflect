@@ -86,6 +86,27 @@ function(download_zip_replace_dir SrcAddrZipFilePath DstDownloadedFilePath DstUn
 	endif()
 endfunction()
 
+# 声明一个用于跟踪已下载文件的变量，使用 CACHE 将其持久化
+set(downloaded_files "" CACHE STRING "List of downloaded files")
+
+# 函数：检查文件是否已下载，若未下载则进行下载
+function(download_zip_replace_dir_if_not_exists SrcAddrZipFilePath DstDownloadedFilePath UnzippedDirPath result_var)
+    # 检查文件是否已在列表中
+    list(FIND downloaded_files "${DstDownloadedFilePath}" is_downloaded)
+
+    if(NOT is_downloaded EQUAL -1)
+        message(STATUS "Skip downloading ${DstDownloadedFilePath}")
+        set(${result_var} FALSE PARENT_SCOPE)  # 设置结果为 FALSE
+    else()
+        download_zip_replace_dir(${SrcAddrZipFilePath} ${DstDownloadedFilePath} ${UnzippedDirPath})
+    
+        # 将文件添加到已下载的列表
+        list(APPEND downloaded_files ${DstDownloadedFilePath})
+        set(downloaded_files "${downloaded_files}" CACHE STRING "List of downloaded files" FORCE)
+        set(${result_var} TRUE PARENT_SCOPE)  # 设置结果为 TRUE
+    endif()
+endfunction()
+
 if (WIN32)
 	#避免如 freopen 的 Warning C4996
     add_definitions(-D_CRT_SECURE_NO_WARNINGS)
