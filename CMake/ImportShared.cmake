@@ -20,11 +20,11 @@ endif()
 set(LibFilePathPrefixDebug ${LibDirPathDebug}/${LibFileNameDebug})
 set(LibFilePathPrefixRelease ${LibDirPathRelease}/${LibFileNameRelease})
 if(WIN32)
-	set(LinkingFilePathDebug ${LibFilePathPrefixDebug}${c_ProjectStaticLibPostfix})
-	set(LinkingFilePathRelease ${LibFilePathPrefixRelease}${c_ProjectStaticLibPostfix})
+	set(LinkingFilePathDebug ${LibFilePathPrefixDebug}${c_StaticLibFileExt})
+	set(LinkingFilePathRelease ${LibFilePathPrefixRelease}${c_StaticLibFileExt})
 else()
-	set(LinkingFilePathDebug ${LibFilePathPrefixDebug}${c_ProjectSharedLibPostfix})
-	set(LinkingFilePathRelease ${LibFilePathPrefixRelease}${c_ProjectSharedLibPostfix})
+	set(LinkingFilePathDebug ${LibFilePathPrefixDebug}${c_SharedLibFileExt})
+	set(LinkingFilePathRelease ${LibFilePathPrefixRelease}${c_SharedLibFileExt})
 endif()
 	
 set(DstDownloadedFilePath ${v_ImportedLibRootDirPath}/${v_ZipFileName})
@@ -84,8 +84,8 @@ if(x64)
 			IMPORTED_IMPLIB_MINSIZEREL "${LinkingFilePathRelease}"
 		)
 	else()
-		set(libclangBinDebug "${CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG}/${LibFileNameDebug}${c_ProjectSharedLibPostfix}")
-		set(libclangBinRelease "${CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE}/${LibFileNameRelease}${c_ProjectSharedLibPostfix}")
+		set(libclangBinDebug "${CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG}/${LibFileNameDebug}${c_SharedLibFileExt}")
+		set(libclangBinRelease "${CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE}/${LibFileNameRelease}${c_SharedLibFileExt}")
 		set_target_properties(${LibTargetName} PROPERTIES
 			IMPORTED_LOCATION_DEBUG "${libclangBinDebug}"
 			IMPORTED_LOCATION_RELEASE "${libclangBinRelease}"
