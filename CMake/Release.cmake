@@ -1,6 +1,4 @@
-if(PROJECT_RELEASE)	
-	include(${c_RootCMakeDirPath}/GetZip.cmake)
-	
+if(PROJECT_RELEASE)
 	set(ZipFileName ${c_ProjectName}.zip)
 	set(ZipFilePath ${CMAKE_INSTALL_PREFIX}/${ZipFileName})
 	if(EXISTS "${c_ProjectInstalledDirPath}")
