@@ -2,8 +2,8 @@
 set(LibDirPathDebug ${v_LibPlatformArchDirPath}/Debug/${c_LibDirName})
 set(LibDirPathRelease ${v_LibPlatformArchDirPath}/Release/${c_LibDirName})
 
-set(LibFileNameDebug ${v_ImportLibName})
-set(LibFileNameRelease ${v_ImportLibName})
+set(LibFileNameDebug ${v_ImportedLibName})
+set(LibFileNameRelease ${v_ImportedLibName})
 if(WIN32)
 else()
 	if(NOT LibFileNameDebug MATCHES "^lib")
@@ -27,7 +27,7 @@ else()
 	set(LinkingFilePathRelease ${LibFilePathPrefixRelease}${c_ProjectSharedLibPostfix})
 endif()
 	
-set(DstDownloadedFilePath ${v_ImportLibRootDirPath}/${v_ZipFileName})
+set(DstDownloadedFilePath ${v_ImportedLibRootDirPath}/${v_ZipFileName})
 if(PROJECT_SETUP OR NOT EXISTS "${v_UnzippedDirPath}")
 	download_zip_replace_dir(${v_SrcAddrZipFilePath} ${DstDownloadedFilePath} ${v_UnzippedDirPath})
 	file(COPY "${v_LibPlatformArchDirPath}/" DESTINATION "${c_ProjectPlatformArchDirPath}/")
@@ -68,7 +68,7 @@ if(v_LibIncludeDirPath)
 	target_include_directories(${ModuleName} PRIVATE "${v_LibIncludeDirPath}")
 endif()
 
-set(LibTargetName ${v_ImportLibName}_${ModuleName})
+set(LibTargetName ${v_ImportedLibName}_${ModuleName})
 add_library(${LibTargetName} SHARED IMPORTED)
 		
 if(v_LibPlatformArchIncludeDirPath)
@@ -96,7 +96,7 @@ if(x64)
 	
 	target_link_libraries(${ModuleName} PRIVATE ${LibTargetName})
 else()
-	message(ERROR "Doesn't support ${v_ImportLibName} for x86")
+	message(ERROR "Doesn't support ${v_ImportedLibName} for x86")
 endif()
 
 set(v_LibPlatformArchIncludeDirPath "")
