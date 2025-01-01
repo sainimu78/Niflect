@@ -89,9 +89,6 @@ set(v_LibPlatformArchIncludeDirPath "")
 
 #begin, Optional
 set(v_DebugLibFileNamePostfix "")
-#end
-
-#begin, Single option
 set(v_ImportedLibFilePathsDebug "")
 set(v_ImportedLibFilePathsRelease "")
 set(v_ImportedLibFileNames "")
