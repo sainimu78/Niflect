@@ -88,6 +88,11 @@ if(v_GenToolDebuggerAttaching)
 	list(APPEND ListOptCmdCallingGenTool cmd.exe /C start)
 	list(APPEND ListOptGenToolDebuggerAttaching "-debuggerattaching")
 endif()
+if(WIN32)
+else()
+	set(GenToolLibDirPath "${v_NiflectGenToolBinDirPath}/../${c_LibDirName}")
+	list(APPEND ListOptCmdCallingGenTool ${CMAKE_COMMAND} -E env LD_LIBRARY_PATH=${GenToolLibDirPath}:${CMAKE_LIBRARY_PATH})
+endif()
 
 add_custom_command(
     OUTPUT "${GeneratedModulePrivateH}"
