@@ -16,5 +16,5 @@ add_subdirectory(Niflect)
 add_subdirectory(NiflectGen)
 add_subdirectory(${c_ProjectName})
 
-include(${c_RootCMakeDirPath}/Setup.cmake)
 include(${c_RootCMakeDirPath}/Release.cmake)
+include(${c_RootCMakeDirPath}/Cleanup.cmake)

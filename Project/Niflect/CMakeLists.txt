@@ -15,3 +15,4 @@ endif()
 add_subdirectory(Niflect)
 
 include(${c_RootCMakeDirPath}/Release.cmake)
+include(${c_RootCMakeDirPath}/Cleanup.cmake)
