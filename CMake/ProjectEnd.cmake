@@ -1,4 +1,4 @@
-set(c_ProjectDirPath ${c_RootProjectDirPath}/${c_ProjectName})
+set(c_ProjectDirPath ${CMAKE_CURRENT_SOURCE_DIR})
 
 #message(STATUS "AAAAAAAAAAAAAAAAA  ${CMAKE_CXX_COMPILER}")
 
