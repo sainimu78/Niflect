@@ -32,29 +32,26 @@ target_include_directories(${ModuleName}
 	PUBLIC ${GenSourcePublic}
 )
 
-set(OptModuleHeaders "")
-foreach(It IN LISTS v_ModuleHeaders)
-    list(APPEND OptModuleHeaders "-h" "${It}")
+set(ListOptModuleHeaders "")
+foreach(It IN LISTS v_ListModuleHeaderFilePath)
+    list(APPEND ListOptModuleHeaders "-h" "${It}")
 endforeach()
-set(OptModuleIncludePaths "")
-foreach(It IN LISTS v_IncludePathsPrivate)
-	list(APPEND OptModuleIncludePaths "-I" "${It}")
-endforeach()
-foreach(It IN LISTS v_IncludePathsPublic)
-	list(APPEND OptModuleIncludePaths "-I" "${It}")
+set(ListOptModuleIncludeDirPath "")
+foreach(It IN LISTS v_ListModuleIncludeDirPath)
+	list(APPEND ListOptModuleIncludeDirPath "-I" "${It}")
 endforeach()
 
-set(OptAccessorSettingHeaders "")
-foreach(It IN LISTS v_AccessorSettingHeaders)
-	list(APPEND OptAccessorSettingHeaders "-a" "${It}")
+set(ListOptAccessorSettingHeaders "")
+foreach(It IN LISTS v_ListAccessorSettingHeaderFilePath)
+	list(APPEND ListOptAccessorSettingHeaders "-a" "${It}")
 endforeach()
 set(ListOptModuleAPIMacro "")
 if(v_ModuleAPIMacro)
     list(APPEND ListOptModuleAPIMacro "-am" "${v_ModuleAPIMacro}")
 endif()
 set(ListOptModuleAPIMacroHeader "")
-if(v_ModuleAPIMacroHeader)
-    list(APPEND ListOptModuleAPIMacroHeader "-amh" "${v_ModuleAPIMacroHeader}")
+if(v_ModuleAPIMacroHeaderFilePath)
+    list(APPEND ListOptModuleAPIMacroHeader "-amh" "${v_ModuleAPIMacroHeaderFilePath}")
 endif()
 
 set(GeneratedModulePrivateH ${GenSourcePrivate}/${ModuleName}_private.h)
@@ -62,7 +59,7 @@ set(GeneratedModulePrivateH ${GenSourcePrivate}/${ModuleName}_private.h)
 set(DebugIntegration OFF)
 if(DebugIntegration)
 	message(${ModuleName})
-	foreach(It IN LISTS OptModuleHeaders)
+	foreach(It IN LISTS ListOptModuleHeaders)
 		message(${It})
 	endforeach()
 	foreach(It IN LISTS ListOptModuleAPIMacro)
@@ -71,20 +68,20 @@ if(DebugIntegration)
 	foreach(It IN LISTS ListOptModuleAPIMacroHeader)
 		message(${It})
 	endforeach()
-	foreach(It IN LISTS OptAccessorSettingHeaders)
+	foreach(It IN LISTS ListOptAccessorSettingHeaders)
 		message(${It})
 	endforeach()
 	message("${NiflectRootPath}/include")
-	foreach(It IN LISTS OptModuleIncludePaths)
+	foreach(It IN LISTS ListOptModuleIncludeDirPath)
 		message(${It})
 	endforeach()
 endif()
 
 #在模块 cmake 中, 如 Wishing\Project\TestEditorCLI\TestEngine\CMakeLists.txt
-#定义变量 set(v_GenToolDebuggerAttaching ON) 即可启用可附加进程的调试模式
+#定义变量 set(v_EnabledDebuggerAttaching ON) 即可启用可附加进程的调试模式
 set(ListOptGenToolDebuggerAttaching "")
 set(ListOptCmdCallingGenTool "")
-if(v_GenToolDebuggerAttaching)
+if(v_EnabledDebuggerAttaching)
 	list(APPEND ListOptCmdCallingGenTool cmd.exe /C start)
 	list(APPEND ListOptGenToolDebuggerAttaching "-debuggerattaching")
 endif()
@@ -98,16 +95,16 @@ add_custom_command(
     OUTPUT "${GeneratedModulePrivateH}"
     COMMAND ${ListOptCmdCallingGenTool} "${GenToolExeFilePath}" 
             -n ${ModuleName} 
-            ${OptModuleHeaders}
+            ${ListOptModuleHeaders}
             ${ListOptModuleAPIMacro} 
             ${ListOptModuleAPIMacroHeader}
-            ${OptAccessorSettingHeaders} 
+            ${ListOptAccessorSettingHeaders} 
             -t "${NiflectRootPath}/include" 
-            ${OptModuleIncludePaths} 
+            ${ListOptModuleIncludeDirPath} 
             -g "${GenOutputDirPath}"
 			-gbt 
 			${ListOptGenToolDebuggerAttaching} 
-    DEPENDS ${v_ModuleHeaders}
+    DEPENDS ${v_ListModuleHeaderFilePath}
     COMMENT "${v_IntegratedToolName}: ${ModuleName}"
 )
 
@@ -116,6 +113,16 @@ add_custom_target(${GenToolTargetName} DEPENDS "${GeneratedModulePrivateH}")
 set_target_properties(${GenToolTargetName} PROPERTIES FOLDER "AutoGen")
 add_dependencies(${ModuleName} ${GenToolTargetName})
 
+#begin, Required
+set(v_IntegratedToolName "")
+set(v_NiflectGenToolBinDirPath "")
+set(v_ListAccessorSettingHeaderFilePath "")
+set(v_ListModuleIncludeDirPath "")
+#end
+
+#begin, Optional
 set(v_ModuleAPIMacro "")
-set(v_ModuleAPIMacroHeader "")
-set(v_GenToolDebuggerAttaching "")#清理标志, 避免影响其它模块
+set(v_ModuleAPIMacroHeaderFilePath "")
+set(v_ListModuleHeaderFilePath "")
+set(v_EnabledDebuggerAttaching "")#清理标志, 避免影响其它模块
+#endif
