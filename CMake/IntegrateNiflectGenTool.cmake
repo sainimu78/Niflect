@@ -79,11 +79,11 @@ endif()
 
 #在模块 cmake 中, 如 Wishing\Project\TestEditorCLI\TestEngine\CMakeLists.txt
 #定义变量 set(v_EnabledDebuggerAttaching ON) 即可启用可附加进程的调试模式
-set(ListOptGenToolDebuggerAttaching "")
+set(ListOptToolOption ${v_ListToolOption})
 set(ListOptCmdCallingGenTool "")
 if(v_EnabledDebuggerAttaching)
 	list(APPEND ListOptCmdCallingGenTool cmd.exe /C start)
-	list(APPEND ListOptGenToolDebuggerAttaching "-debuggerattaching")
+	list(APPEND ListOptToolOption "-debuggerattaching")
 endif()
 if(WIN32)
 else()
@@ -103,7 +103,7 @@ add_custom_command(
             ${ListOptModuleIncludeDirPath} 
             -g "${GenOutputDirPath}"
 			-gbt 
-			${ListOptGenToolDebuggerAttaching} 
+			${ListOptToolOption} 
     DEPENDS ${v_ListModuleHeaderFilePath}
     COMMENT "${v_IntegratedToolName}: ${ModuleName}"
 )
@@ -125,4 +125,5 @@ set(v_ModuleAPIMacro "")
 set(v_ModuleAPIMacroHeaderFilePath "")
 set(v_ListModuleHeaderFilePath "")
 set(v_EnabledDebuggerAttaching "")#清理标志, 避免影响其它模块
+set(v_ListToolOption "")
 #endif

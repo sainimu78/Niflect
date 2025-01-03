@@ -1,9 +1,6 @@
 set(DstDownloadedFilePath ${v_ImportedLibRootDirPath}/${v_ZipFileName})
 if(PROJECT_SETUP OR NOT EXISTS "${v_UnzippedDirPath}")
 	download_zip_replace_dir_if_not_exists(${v_SrcAddrZipFilePath} ${DstDownloadedFilePath} ${v_UnzippedDirPath} IsDownloaded)
-	if(IsDownloaded)
-		file(COPY "${v_LibPlatformArchDirPath}/" DESTINATION "${c_ProjectPlatformArchDirPath}/")
-	endif()
 endif()
 
 target_include_directories(${ModuleName} PRIVATE "${v_ListLibIncludeDirPath}")
@@ -47,6 +44,29 @@ target_link_libraries(${ModuleName} PRIVATE
 if(WIN32)
 	set(BinDirPathDebug ${v_LibPlatformArchDirPath}/Debug/${c_BinDirName})
 	set(BinDirPathRelease ${v_LibPlatformArchDirPath}/Release/${c_BinDirName})
+	
+	file(GLOB ListDeployingFilePathDebug "${BinDirPathDebug}/*")
+	if(LibFilePathsDebug)
+		list(GET ListDeployingFilePathDebug 0 Item0)
+		get_filename_component(FileName "${Item0}" NAME)
+		set(FilePathDebug ${ProjectBinDirPathDebug}/${FileName})
+	endif()
+	if(PROJECT_SETUP OR NOT EXISTS "${FilePathDebug}")
+		message("Deploying: ${BinDirPathDebug} ${ProjectBinDirPathDebug}")
+		file(COPY "${BinDirPathDebug}/" DESTINATION "${ProjectBinDirPathDebug}/")
+	endif()
+	
+	file(GLOB ListDeployingFilePathRelease "${BinDirPathRelease}/*")
+	if(LibFilePathsRelease)
+		list(GET ListDeployingFilePathRelease 0 Item0)
+		get_filename_component(FileName "${Item0}" NAME)
+		set(FilePathRelease ${ProjectBinDirPathRelease}/${FileName})
+	endif()
+	if(PROJECT_SETUP OR NOT EXISTS "${FilePathRelease}")
+		message("Deploying: ${BinDirPathRelease} ${ProjectBinDirPathRelease}")
+		file(COPY "${BinDirPathRelease}/" DESTINATION "${ProjectBinDirPathRelease}/")
+	endif()
+	
 	install(DIRECTORY "${BinDirPathDebug}/"
 		DESTINATION "${c_ProjectInstallingTargetDirPathDebug}/${c_BinDirName}/"
 		CONFIGURATIONS Debug
