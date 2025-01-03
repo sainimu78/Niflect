@@ -28,6 +28,10 @@ namespace Niflect
 		{
 			m_InitTypesFunc();
 		}
+		void InitTableTypesLayout()
+		{
+			m_table.InitTypesLayout();
+		}
 		const Niflect::CString& GetName() const
 		{
 			return m_name;
