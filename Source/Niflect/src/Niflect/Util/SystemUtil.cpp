@@ -29,10 +29,8 @@ namespace NiflectUtil
     static bool create_directory(const Niflect::CString& path)
     {
         struct stat info;
-        // 检查路径是否已存在
         if (stat(path.c_str(), &info) != 0)
         {
-            // 路径不存在，尝试创建
 #ifdef _WIN32
             if (_mkdir(path.c_str()) != 0)
             {
@@ -52,7 +50,6 @@ namespace NiflectUtil
         }
         else if (!(info.st_mode & S_IFDIR))
         {
-            // 路径存在但不是目录
             std::cerr << path << " exists but is not a directory." << std::endl;
             return false;
         }
@@ -117,10 +114,8 @@ namespace NiflectUtil
 
 //    bool RemoveDirectory(const std::string& dir_path) {
 //#ifdef _WIN32
-//        // Windows下使用 rmdir 命令
 //        std::string command = "rmdir /s /q \"" + dir_path + "\"";
 //#else
-//        // Unix/Linux/Mac下使用 rm -rf 命令
 //        std::string command = "rm -rf \"" + dir_path + "\"";
 //#endif
 //
@@ -274,7 +269,6 @@ namespace NiflectUtil
         auto currentPath = GetCurrentWorkingDirPath();
         Niflect::TArrayNif<Niflect::CString> parts;
 
-        // 将当前路径分割成部分
         size_t start = 0;
         size_t end = currentPath.find('/');
 
@@ -284,30 +278,25 @@ namespace NiflectUtil
             end = currentPath.find('/', start);
         }
 
-        // 处理最后的部分
         parts.push_back(currentPath.substr(start));
 
-        // 解析相对路径
         start = 0;
         end = relativePath.find('/');
 
         while (end != std::string::npos) {
             auto  token = relativePath.substr(start, end - start);
             if (token == "..") {
-                // 上层目录，移除当前目录的最后部分
                 if (!parts.empty()) {
                     parts.pop_back();
                 }
             }
             else if (token != "." && !token.empty()) {
-                // 当前目录或非空部分，添加到路径
                 parts.push_back(token);
             }
             start = end + 1;
             end = relativePath.find('/', start);
         }
 
-        // 处理最后的部分
         Niflect::CString token = relativePath.substr(start);
         if (token == "..") {
             if (!parts.empty()) {
@@ -318,12 +307,10 @@ namespace NiflectUtil
             parts.push_back(token);
         }
 
-        // 组合成绝对路径
         for (const auto& part : parts) {
             absolutePath += part + '/';
         }
 
-        // 去掉最后的斜杠
         if (!absolutePath.empty()) {
             absolutePath.pop_back();
         }
@@ -332,8 +319,6 @@ namespace NiflectUtil
 #ifdef TEST_TestResolvePath
     static void TestResolvePath()
     {
-        //不支持路径中间部分含 ../
-
         auto cw = NiflectUtil::GetCurrentWorkingDirPath();//F:/Fts/Proj/Test/aaaaaaaaa/Build
         auto cwUpper = NiflectUtil::GetParentDirPath(cw);//F:/Fts/Proj/Test/aaaaaaaaa
         Niflect::CString expected0(NiflectUtil::ConcatPath(cw, "MyClass.h"));//F:/Fts/Proj/Test/aaaaaaaaa/Build/MyClass.h
@@ -373,14 +358,11 @@ namespace NiflectUtil
 
 namespace NiflectUtil
 {
-    // 检查文件名是否匹配模式
     static bool match(const Niflect::CString& filename, const Niflect::CString& pattern) {
-        // 如果模式为空，则直接返回
         if (pattern.empty()) {
             return filename.empty();
     }
 
-        // dp数组，用于动态规划
         Niflect::TArrayNif<Niflect::TArrayNif<bool> > dp(filename.size() + 1, Niflect::TArrayNif<bool>(pattern.size() + 1, false));
         dp[0][0] = true;
 
@@ -405,27 +387,26 @@ namespace NiflectUtil
 }
 
 #ifdef _WIN32
-    // 在 Windows 下递归遍历目录
     static void search_directory_windows(const Niflect::CString& directory, const Niflect::CString& pattern, Niflect::TArrayNif<Niflect::CString>& vecFound) {
         Niflect::CString search_path = directory + "/*";
         WIN32_FIND_DATA find_data;
         HANDLE handle = FindFirstFile(search_path.c_str(), &find_data);
 
         if (handle == INVALID_HANDLE_VALUE) {
-            std::cerr << "无法打开目录: " << directory << std::endl;
+            std::cerr << "鏃犳硶鎵撳紑鐩綍: " << directory << std::endl;
             return;
         }
 
         do {
             Niflect::CString filename = find_data.cFileName;
             if (filename == "." || filename == "..") {
-                continue; // 跳过 "." 和 ".." 项
+                continue;
             }
 
             Niflect::CString full_path = directory + "/" + filename;
 
             if (find_data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
-                search_directory_windows(full_path, pattern, vecFound); // 递归搜索子目录
+                search_directory_windows(full_path, pattern, vecFound);
             }
             else {
                 if (match(filename, pattern)) {
@@ -438,24 +419,23 @@ namespace NiflectUtil
         FindClose(handle);
     }
 #else
-    // 在 Linux 下递归遍历目录
     static void search_directory_linux(const Niflect::CString& directory, const Niflect::CString& pattern, Niflect::TArrayNif<Niflect::CString>& vecFound) {
         DIR* dir = opendir(directory.c_str());
         if (!dir) {
-            std::cerr << "无法打开目录: " << directory << std::endl;
+            std::cerr << "鏃犳硶鎵撳紑鐩綍: " << directory << std::endl;
             return;
         }
 
         struct dirent* entry;
         while ((entry = readdir(dir))) {
             if (entry->d_name[0] == '.') {
-                continue; // 跳过 "." 和 ".." 项
+                continue;
             }
 
             Niflect::CString full_path = directory + "/" + entry->d_name;
 
             if (entry->d_type == DT_DIR) {
-                search_directory_linux(full_path, pattern, vecFound); // 递归搜索子目录
+                search_directory_linux(full_path, pattern, vecFound);
             }
             else {
                 if (match(entry->d_name, pattern)) {
@@ -472,9 +452,8 @@ namespace NiflectUtil
     {
         ASSERT(dirPath.back() == '/');
 
-        //测试参数:
         //F:/Fts/Proj/Test/Interedit/Source/ "*or?.cpp"
-        //结果:
+        //
         //F:/Fts/Proj/Test/Interedit/Source/\Engine\Test\TestAccessor2.cpp
         //F:/Fts/Proj/Test/Interedit/Source/\Niflect\Memory\Default\DefaultMemory.cpp
         //F:/Fts/Proj/Test/Interedit/Source/\Niflect\Memory\Generic\GenericMemory.cpp
@@ -506,7 +485,6 @@ namespace NiflectUtil
 namespace NiflectUtil
 {
 #ifdef _WIN32
-    // 在 Windows 下递归遍历目录
     static void CollectFilesRecurs_Windows(const Niflect::CString& rootDirPath, const Niflect::CString& relativeParentDirPath, const CCollectingOption& opt, uint32 depth) {
         auto directory = NiflectUtil::ConcatPath(rootDirPath, relativeParentDirPath);
         Niflect::CString searchPattern = directory;
@@ -518,21 +496,21 @@ namespace NiflectUtil
         HANDLE handle = FindFirstFile(searchPattern.c_str(), &find_data);
 
         if (handle == INVALID_HANDLE_VALUE) {
-            std::cerr << "无法打开目录: " << directory << std::endl;
+            std::cerr << "鏃犳硶鎵撳紑鐩綍: " << directory << std::endl;
             return;
         }
 
         do {
             Niflect::CString filename = find_data.cFileName;
             if (filename == "." || filename == "..") {
-                continue; // 跳过 "." 和 ".." 项
+                continue;
             }
 
             if (find_data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
                 if (opt.m_maxDepth == 0 || depth < opt.m_maxDepth)
                 {
                     auto relDirPath = NiflectUtil::ConcatPath(relativeParentDirPath, filename);
-                    CollectFilesRecurs_Windows(rootDirPath, relDirPath, opt, depth + 1); // 递归搜索子目录
+                    CollectFilesRecurs_Windows(rootDirPath, relDirPath, opt, depth + 1);
                 }
             }
             else {
@@ -545,19 +523,18 @@ namespace NiflectUtil
         FindClose(handle);
     }
 #else
-    // 在 Linux 下递归遍历目录
     static void CollectFilesRecurs_Linux(const Niflect::CString& rootDirPath, const Niflect::CString& relativeParentDirPath, const CCollectingOption& opt, uint32 depth) {
         auto directory = NiflectUtil::ConcatPath(rootDirPath, relativeParentDirPath);
         DIR* dir = opendir(directory.c_str());
         if (!dir) {
-            std::cerr << "无法打开目录: " << directory << std::endl;
+            std::cerr << "鏃犳硶鎵撳紑鐩綍: " << directory << std::endl;
             return;
         }
 
         struct dirent* entry;
         while ((entry = readdir(dir))) {
             if (entry->d_name[0] == '.') {
-                continue; // 跳过 "." 和 ".." 项
+                continue;
             }
 
             Niflect::CString filename = entry->d_name;
@@ -565,7 +542,7 @@ namespace NiflectUtil
                 if (opt.m_maxDepth == 0 || depth < opt.m_maxDepth)
                 {
                     auto relDirPath = NiflectUtil::ConcatPath(relativeParentDirPath, filename);
-                    CollectFilesRecurs_Linux(rootDirPath, relDirPath, opt, depth + 1); // 递归搜索子目录
+                    CollectFilesRecurs_Linux(rootDirPath, relDirPath, opt, depth + 1);
                 }
             }
             else {
@@ -599,7 +576,6 @@ namespace NiflectUtil
 
 
 
-//获取文件时间戳备用代码
 // 
 //#include <iostream>
 //#include <fstream>
@@ -655,7 +631,7 @@ namespace NiflectUtil
 //}
 //
 //int main() {
-//    std::string filepath = "example.txt"; // 这里输入您的文件名
+//    std::string filepath = "example.txt";
 //    std::string mod_time = get_file_modification_time(filepath);
 //    if (!mod_time.empty()) {
 //        std::cout << "Modification time of " << filepath << ": " << mod_time << std::endl;
