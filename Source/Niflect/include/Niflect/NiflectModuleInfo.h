@@ -20,10 +20,6 @@ namespace Niflect
 			m_RegisterTypesFunc = RegisterTypesFunc;
 			m_InitTypesFunc = InitTypesFunc;
 		}
-		const Niflect::CString& GetName() const
-		{
-			return m_name;
-		}
 		void RegisterTypes()
 		{
 			m_RegisterTypesFunc(&m_table);
@@ -31,6 +27,14 @@ namespace Niflect
 		void InitTypes()
 		{
 			m_InitTypesFunc();
+		}
+		const Niflect::CString& GetName() const
+		{
+			return m_name;
+		}
+		CNiflectTable* GetTable()
+		{
+			return &m_table;
 		}
 
 	private:
