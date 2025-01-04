@@ -108,7 +108,7 @@ function(download_zip_replace_dir_if_not_exists SrcAddrZipFilePath DstDownloaded
 endfunction()
 
 function(check_options_usage)
-	if(PROJECT_SETUP AND CMAKE_BUILD_TYPE)
+	if(PROJECT_SETUP AND DEFINED CMAKE_BUILD_TYPE)
 		message(FATAL_ERROR "The CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} has no effect when PROJECT_SETUP=${PROJECT_SETUP}.
 Please remove it from the invocation options if you intent to perform the PROJECT_SETUP process.
 If you are using a single-configuration generator (e.g., Unix Makefiles, Ninja), you can choose any specific configuration (e.g., Debug, Release) to carry out the PROJECT_SETUP process.")
