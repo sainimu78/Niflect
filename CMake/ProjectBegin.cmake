@@ -107,6 +107,12 @@ function(download_zip_replace_dir_if_not_exists SrcAddrZipFilePath DstDownloaded
     endif()
 endfunction()
 
+function(check_options_usage)
+	if(PROJECT_SETUP)
+		message(FATAL_ERROR "The CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} has no effect when PROJECT_SETUP=${PROJECT_SETUP}. Please remove it from the invocation options if you intent to perform the PROJECT_SETUP process")
+	endif()
+endfunction()
+
 if (WIN32)
 	#避免如 freopen 的 Warning C4996
     add_definitions(-D_CRT_SECURE_NO_WARNINGS)
@@ -116,3 +122,5 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)# 可将工程添加到目录中, 如 set_target_properties(NiflectGenTool_${ModuleName} PROPERTIES FOLDER "AutoGen")
+
+check_options_usage()
