@@ -1,7 +1,4 @@
-set(DstDownloadedFilePath ${v_ImportedLibRootDirPath}/${v_ZipFileName})
-if(PROJECT_SETUP OR NOT EXISTS "${v_UnzippedDirPath}")
-	download_zip_replace_dir_if_not_exists(${v_SrcAddrZipFilePath} ${DstDownloadedFilePath} ${v_UnzippedDirPath} IsDownloaded)
-endif()
+include(${c_RootCMakeDirPath}/InlineDownloadAndUnzip.cmake)
 
 target_include_directories(${ModuleName} PRIVATE "${v_ListLibIncludeDirPathPrivate}")
 
@@ -105,7 +102,6 @@ else()
 endif()
 
 #begin, Required
-set(v_ImportedLibName "")
 set(v_ImportedLibRootDirPath "")
 set(v_UnzippedDirPath "")
 set(v_ZipFileName "")
