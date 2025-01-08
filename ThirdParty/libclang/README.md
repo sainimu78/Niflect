@@ -23,7 +23,7 @@ git checkout llvmorg-17.0.6
 on Windows
 
 ```
-cmake -G "Visual Studio 17 2022" ../llvm -DLLVM_ENABLE_PROJECTS=clang -DCMAKE_BUILD_TYPE=Debug
+cmake -G "Visual Studio 17 2022" ../llvm -DLLVM_ENABLE_PROJECTS=clang
 
 LLVM.sln -> clang Libraries -> c-index-test
 ```
@@ -41,7 +41,7 @@ make libclang -j8
 on Windows
 
 ```
-cmake -G "Visual Studio 17 2022" ../llvm -DLLVM_ENABLE_PROJECTS=clang -DCMAKE_BUILD_TYPE=Debug -DLIBCLANG_BUILD_STATIC=ON -DLLVM_ENABLE_PIC=OFF
+cmake -G "Visual Studio 17 2022" ../llvm -DLLVM_ENABLE_PROJECTS=clang -DLIBCLANG_BUILD_STATIC=ON -DLLVM_ENABLE_PIC=OFF
 
 LLVM.sln -> clang Executables -> c-index-test
 ```
