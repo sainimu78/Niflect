@@ -290,8 +290,11 @@ namespace NiflectGen
         this->SaveFileToGenSource(genData.m_moduleRegGenData.m_privateH, genData.m_moduleRegGenData.m_privateHIncludePath, saving);
         this->SaveFileToGenSource(genData.m_moduleRegisteredTypeHeaderGenData.m_linesHeader, m_moduleRegInfo.m_moduleRegisteredTypeHeaderFilePath, saving);
 
+        size_t offset = 0;
         const unsigned char bom[] = { 0xEF, 0xBB, 0xBF };
         const bool writeEncodingMark = true;
+        if (writeEncodingMark)
+            offset = sizeof(bom);
 
         Niflect::TArray<uint32> vecIdxToWrite;
         for (uint32 idx0 = 0; idx0 < saving.m_vecFileInfo.size(); ++idx0)
@@ -301,9 +304,6 @@ namespace NiflectGen
             std::ifstream ifs;
             if (NiflectUtil::OpenFileStream(ifs, it0.m_filePath))
             {
-                size_t offset = 0;
-                if (writeEncodingMark)
-                    offset = sizeof(bom);
                 ifs.seekg(0, std::ios::end);
                 size_t fileSize = static_cast<size_t>(ifs.tellg()) - offset;
                 ifs.seekg(offset, std::ios::beg);
