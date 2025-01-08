@@ -10,6 +10,19 @@ namespace NiflectGen
 	class CDataCollector;
 	class CCodeGenData;
 
+	class CFilePathAndContent
+	{
+	public:
+		Niflect::CString m_filePath;
+		CCodeWriter m_writer;
+	};
+
+	class CSavingData
+	{
+	public:
+		std::vector<CFilePathAndContent> m_vecFileInfo;
+	};
+
 	class CGenerator
 	{
 	public:
@@ -29,8 +42,8 @@ namespace NiflectGen
 		const CModuleRegInfoValidated& GetModuleRegInfo() const { return m_moduleRegInfo; }
 
 	private:
-		void SaveCodeToFile(const CCodeLines& linesCode, const Niflect::CString& relativeFilePath) const;
-		void SaveFileToGenSource(const CCodeLines& linesCode, const Niflect::CString& relativeFilePath) const;
+		void SaveCodeToFile(const CCodeLines& linesCode, const Niflect::CString& relativeFilePath, CSavingData& saving) const;
+		void SaveFileToGenSource(const CCodeLines& linesCode, const Niflect::CString& relativeFilePath, CSavingData& saving) const;
 
 	private:
 		Niflect::TArrayNif<Niflect::CString> m_vecTypeBindingSettingFilePath;

@@ -11,11 +11,10 @@ namespace NiflectGen
 		constexpr const char* EmptyLine = "";
 	}
 
-	class CCodeWriterRef
+	class CCodeWriter
 	{
 	public:
-		CCodeWriterRef(Niflect::CString& code)
-			: m_code(code)
+		CCodeWriter()
 		{
 
 		}
@@ -36,20 +35,7 @@ namespace NiflectGen
 		}
 
 	public:
-		Niflect::CString& m_code;
-	};
-
-	class CCodeWriter : public CCodeWriterRef
-	{
-		typedef CCodeWriterRef inherited;
-	public:
-		CCodeWriter()
-			: inherited(m_stm)
-		{
-		}
-
-	private:
-		Niflect::CString m_stm;
+		Niflect::CString m_code;
 	};
 
 	static void DebugPrintCodeLines(const CCodeLines& lines)

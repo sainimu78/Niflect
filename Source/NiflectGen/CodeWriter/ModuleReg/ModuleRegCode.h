@@ -50,6 +50,7 @@ namespace NiflectGen
 		Niflect::CString m_moduleRegBasePath;
 		Niflect::CString m_genTimeBasePath;
 		Niflect::CString m_genSourceRootParentDir;
+		Niflect::CString m_moduleGenDirPath;
 		Niflect::CString m_moduleRegisteredTypeHeaderFilePath;
 		Niflect::CString m_moduleScopeSymbolPrefix;
 		Niflect::TArrayNif<Niflect::CString> m_vecParsingHeaderSearchPath;

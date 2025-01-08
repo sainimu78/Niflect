@@ -16,10 +16,10 @@ namespace NiflectGen
 
 		//m_genSourceRootParentDir 现为空, 预留附加一层输出目录
 
-		auto moduleGenDirPath = NiflectUtil::ConcatPath(info.m_genOutputDirPath, m_genSourceRootParentDir);
-		NiflectUtil::DeleteDirectory(moduleGenDirPath);
+		m_moduleGenDirPath = NiflectUtil::ConcatPath(info.m_genOutputDirPath, m_genSourceRootParentDir);
 		if (!info.m_genSourceOutputDirPath.empty())
 		{
+			ASSERT(false);//经检查, 此选项可能废弃
 			auto genSourceOutputDirPath = NiflectUtil::ConcatPath(info.m_genSourceOutputDirPath, m_genSourceRootParentDir);
 			NiflectUtil::DeleteDirectory(genSourceOutputDirPath);
 		}
@@ -38,7 +38,7 @@ namespace NiflectGen
 		//须添加在最后, NiflectMacro.h 应使用 _GenTime 中生成的, 而 NiflectMacro.h 仍须使用 m_toolHeaderSearchPath 中的其它头文件, 如 ConcatSymbols.h
 		m_writingHeaderSearchPaths.m_vecForRegularConversion.push_back(m_userProvided.m_toolHeaderSearchPath);
 		
-		m_genTimeBasePath = NiflectUtil::ConcatPath(moduleGenDirPath, NiflectGenDefinition::DirName::GenTime);
+		m_genTimeBasePath = NiflectUtil::ConcatPath(m_moduleGenDirPath, NiflectGenDefinition::DirName::GenTime);
 		GenerateBypassSTLHeaders(m_genTimeBasePath);
 		{
 			CGenLog log;

@@ -240,58 +240,104 @@ namespace NiflectGen
     //    }
     //    printf("");
     //}
-    void CGenerator::SaveCodeToFile(const CCodeLines& linesCode, const Niflect::CString& relativeFilePath) const
+    void CGenerator::SaveCodeToFile(const CCodeLines& linesCode, const Niflect::CString& relativeFilePath, CSavingData& saving) const
     {
         const auto* outputDirPath = &m_moduleRegInfo.m_userProvided.m_genOutputDirPath;
         if (!m_moduleRegInfo.m_userProvided.m_genSourceOutputDirPath.empty())
             outputDirPath = &m_moduleRegInfo.m_userProvided.m_genSourceOutputDirPath;
+        saving.m_vecFileInfo.push_back(CFilePathAndContent());
+        auto& item = saving.m_vecFileInfo.back();
         auto filePath = NiflectUtil::ConcatPath(m_moduleRegInfo.m_genSourceRootParentDir, relativeFilePath);
-        filePath = NiflectUtil::ConcatPath(*outputDirPath, filePath);
-        CCodeWriter writer;
-        writer.WriteLines(linesCode);
-        NiflectUtil::MakeDirectories(filePath);
-        std::ofstream ofs;
-        if (NiflectUtil::OpenFileStream(ofs, filePath))
-        {
-            // 写入BOM（Byte Order Mark），以明确表示文件是UTF-8编码
-            unsigned char bom[] = { 0xEF, 0xBB, 0xBF };
-            ofs.write(reinterpret_cast<const char*>(bom), sizeof(bom));
-            ofs << writer.m_code;
-            ofs.close();
-        }
-        else
-        {
-            ASSERT(false);
-        }
+        item.m_filePath = NiflectUtil::ConcatPath(*outputDirPath, filePath);
+        item.m_writer.WriteLines(linesCode);
     }
-    void CGenerator::SaveFileToGenSource(const CCodeLines& linesCode, const Niflect::CString& relativeFilePath) const
+    void CGenerator::SaveFileToGenSource(const CCodeLines& linesCode, const Niflect::CString& relativeFilePath, CSavingData& saving) const
     {
         auto relativeToGenSource = NiflectUtil::ConcatPath(m_moduleRegInfo.m_moduleGenSourceRoot, relativeFilePath);
-        this->SaveCodeToFile(linesCode, relativeToGenSource);
+        this->SaveCodeToFile(linesCode, relativeToGenSource, saving);
+    }
+    static bool fileContentEquals(const std::string& filePath, const std::string& newContent) {
+        std::ifstream file(filePath);
+        if (!file.is_open()) {
+            return false;
+        }
+
+        std::string existingContent((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+        return existingContent == newContent;
     }
     void CGenerator::Save2(const CCodeGenData& genData) const
     {
+        CSavingData saving;
         for (auto& it0 : genData.m_typeRegCreateTypeAccessorSpecGenData.m_vecCreateTypeAccessorSpecData)
         {
-            this->SaveFileToGenSource(it0.m_decl, it0.m_declHeaderFilePath);
-            this->SaveFileToGenSource(it0.m_impl, it0.m_implSourceFilePath);
+            this->SaveFileToGenSource(it0.m_decl, it0.m_declHeaderFilePath, saving);
+            this->SaveFileToGenSource(it0.m_impl, it0.m_implSourceFilePath, saving);
         }
         for (auto& it0 : genData.m_typeRegStaticGetTypeSpecGenData.m_vecStaticGetTypeSpecData)
         {
             if (it0.m_genH.size() > 0)
-                this->SaveFileToGenSource(it0.m_genH, it0.m_genHHeaderFilePath);
+                this->SaveFileToGenSource(it0.m_genH, it0.m_genHHeaderFilePath, saving);
             if (it0.m_impl.size() > 0)
-                this->SaveFileToGenSource(it0.m_impl, it0.m_implSourceFilePath);
+                this->SaveFileToGenSource(it0.m_impl, it0.m_implSourceFilePath, saving);
         }
         for (auto& it0 : genData.m_vecSplittedModuleRegGenData)
         {
-            this->SaveFileToGenSource(it0.m_h, it0.m_headerFilePath);
-            this->SaveFileToGenSource(it0.m_cpp, it0.m_sourceFilePath);
+            this->SaveFileToGenSource(it0.m_h, it0.m_headerFilePath, saving);
+            this->SaveFileToGenSource(it0.m_cpp, it0.m_sourceFilePath, saving);
         }
         if (genData.m_moduleRegGenData.m_genH.size() > 0)
-            this->SaveFileToGenSource(genData.m_moduleRegGenData.m_genH, genData.m_moduleRegGenData.m_genHIncludePath);
-        this->SaveFileToGenSource(genData.m_moduleRegGenData.m_privateH, genData.m_moduleRegGenData.m_privateHIncludePath);
-        this->SaveFileToGenSource(genData.m_moduleRegisteredTypeHeaderGenData.m_linesHeader, m_moduleRegInfo.m_moduleRegisteredTypeHeaderFilePath);
+            this->SaveFileToGenSource(genData.m_moduleRegGenData.m_genH, genData.m_moduleRegGenData.m_genHIncludePath, saving);
+        this->SaveFileToGenSource(genData.m_moduleRegGenData.m_privateH, genData.m_moduleRegGenData.m_privateHIncludePath, saving);
+        this->SaveFileToGenSource(genData.m_moduleRegisteredTypeHeaderGenData.m_linesHeader, m_moduleRegInfo.m_moduleRegisteredTypeHeaderFilePath, saving);
+
+        const unsigned char bom[] = { 0xEF, 0xBB, 0xBF };
+        const bool writeEncodingMark = true;
+
+        Niflect::TArray<uint32> vecIdxToWrite;
+        for (uint32 idx0 = 0; idx0 < saving.m_vecFileInfo.size(); ++idx0)
+        {
+            bool canWrite = false;
+            auto& it0 = saving.m_vecFileInfo[idx0];
+            std::ifstream ifs;
+            if (NiflectUtil::OpenFileStream(ifs, it0.m_filePath))
+            {
+                size_t offset = 0;
+                if (writeEncodingMark)
+                    offset = sizeof(bom);
+                ifs.seekg(0, std::ios::end);
+                size_t fileSize = static_cast<size_t>(ifs.tellg()) - offset;
+                ifs.seekg(offset, std::ios::beg);
+                Niflect::CString fileContent(fileSize, '\0');
+                ifs.read(&fileContent[0], fileSize);
+                canWrite = fileContent != it0.m_writer.m_code;
+            }
+            else
+            {
+                canWrite = true;
+            }
+            if (canWrite)
+            {
+                vecIdxToWrite.push_back(idx0);
+            }
+        }
+
+        //当生成内容全须写入时, 清空生成目录以清理残留文件
+        if (saving.m_vecFileInfo.size() == vecIdxToWrite.size())
+            NiflectUtil::DeleteDirectory(m_moduleRegInfo.m_moduleGenDirPath);
+
+        for (uint32 idx0 = 0; idx0 < vecIdxToWrite.size(); ++idx0)
+        {
+            auto& it0 = saving.m_vecFileInfo[vecIdxToWrite[idx0]];
+            NiflectUtil::MakeDirectories(it0.m_filePath);
+            std::ofstream ofs;
+            if (NiflectUtil::OpenFileStream(ofs, it0.m_filePath))
+            {
+                // 写入BOM（Byte Order Mark），以明确表示文件是UTF-8编码
+                ofs.write(reinterpret_cast<const char*>(bom), sizeof(bom));
+                ofs << it0.m_writer.m_code;
+                printf("Written: %s\n", it0.m_filePath.c_str());
+            }
+        }
     }
     void CGenerator::Cleanup() const
     {
