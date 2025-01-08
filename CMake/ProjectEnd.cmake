@@ -95,7 +95,7 @@ if(NOT EXISTS "${StorageConfigFilePath}")
 	# VPN: http://172.31.222.172/
 	# WLAN: http://192.168.31.233/
 	set(FileContent
-"set(c_StorageAddrPath \"http://WishingContributor:1@172.31.222.172/sainimu78_Storage\")
+"set(c_StorageAddrPath \"http://WishingContributor:1@192.168.31.233/sainimu78_Storage\")
 if(WIN32)
 	set(c_StorageDirPath \"F:/sainimu78_Storage\")
 else()
