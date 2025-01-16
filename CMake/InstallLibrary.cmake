@@ -4,13 +4,11 @@ install(TARGETS ${ModuleName}
 	ARCHIVE DESTINATION "${c_ProjectInstallingTargetDirPath}/${c_LibDirName}"
 )
 
-#foreach(It IN LISTS v_ListModuleInstallingHeaderDirPath)
-#	install(DIRECTORY "${It}" DESTINATION "${c_ProjectInstallingDirPath}")
-#endforeach()
+foreach(It IN LISTS v_ListModuleInstallingHeaderDirPath)
+	install(DIRECTORY "${It}" DESTINATION "${c_ProjectInstallingDirPath}")
+endforeach()
 
-install(DIRECTORY "${ModuleHeaderDirPath}" DESTINATION "${c_ProjectInstallingDirPath}")
-
-#install(FILES ${ModuleHeaders} DESTINATION include)
+#install(DIRECTORY "${ModuleHeaderDirPath}" DESTINATION "${c_ProjectInstallingDirPath}")
 
 if(WIN32)
 	install(FILES "$<TARGET_FILE_DIR:${ModuleName}>/${ModuleName}.pdb"
@@ -18,3 +16,5 @@ if(WIN32)
 		CONFIGURATIONS Debug
 	)
 endif()
+
+set(v_ListModuleInstallingHeaderDirPath "")
