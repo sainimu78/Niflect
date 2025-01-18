@@ -54,7 +54,7 @@ namespace NiflectUtil
 		auto pos = filePath.find_last_of(a);
 		if (pos != std::string::npos)
 		{
-			auto result = filePath.substr(0, pos - 1);
+			auto result = filePath.substr(0, pos - (a.length() - 1));
 			result += b;
 			return result;
 		}
@@ -69,6 +69,22 @@ namespace NiflectUtil
 			return result;
 		}
 		return filePath;
+	}
+	static bool GetFileExtSafe(const Niflect::CString& filePath, Niflect::CString& extracted, const Niflect::CString& ext = ".")
+	{
+		auto pos = filePath.find_last_of(ext);
+		if (pos != std::string::npos && pos != filePath.length() - 1)
+		{
+			extracted = filePath.substr(pos);
+			return true;
+		}
+		return false;
+	}
+	static Niflect::CString GetFileExt(const Niflect::CString& filePath, const Niflect::CString& ext = ".")
+	{
+		Niflect::CString extracted;
+		GetFileExtSafe(filePath, extracted, ext);
+		return extracted;
 	}
 	static Niflect::CString ConvertToSearchPath(const Niflect::CString& path)
 	{
