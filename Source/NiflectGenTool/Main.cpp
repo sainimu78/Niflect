@@ -226,7 +226,7 @@ namespace NiflectGen
 			}
 			else
 			{
-				LogInfo("Unknown option: %s\n", pszV);
+				printf("Unknown option: %s\n", pszV);
 			}
 		}
 	}

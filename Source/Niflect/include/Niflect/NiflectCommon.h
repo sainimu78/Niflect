@@ -1,12 +1,12 @@
 #pragma once
 #include <cassert>
 #include <cstddef>//std::size_t, offsetof
-#include "IndexingConst.h"
 #include <cstdio>//fflush
 
 //¹«¹²define, typedef, const
 
-#ifndef ASSERT
+enum { INDEX_NONE = -1 };
+
 typedef char int8;
 typedef unsigned char uint8;
 typedef short int16;
@@ -18,26 +18,10 @@ typedef unsigned long long uint64;
 
 #define ASSERT(b)\
 {\
-    fflush(stdout);\
+    if (!(b))\
+        fflush(stdout);\
     assert(b);\
 } do{} while(0)
-#endif
-
-#ifndef LogInfo
-#define LogInfo(fmt, ...)\
-{\
-    printf(fmt "\n", ##__VA_ARGS__);\
-    fflush(stdout);\
-} do{} while(0)
-#endif
-
-#ifndef LogError
-#define LogError(fmt, ...)\
-{\
-    printf(fmt "\n", ##__VA_ARGS__);\
-    ASSERT(false);\
-} do{} while(0)
-#endif
 
 #ifdef NIFLECT_API
 #else
