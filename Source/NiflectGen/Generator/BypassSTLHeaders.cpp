@@ -41,6 +41,7 @@ namespace std
 R"(#pragma once
 #include <xmemory>
 #include <type_traits>
+#include <utility>
 
 namespace std
 {
