@@ -1,7 +1,8 @@
 #pragma once
-#include <string>
+#include "Niflect/Base/Memory.h"
+#include <sstream>
 
-namespace StlCompliantType2
+namespace Niflect
 {
 	//begin, 旧的实现, 可兼容std::string, 使用Reflector::CMemoryStats测试, 发现无法复用基类的一些operator=导致多余的释放, 暂时保留备忘, 计划删除
 	//template <typename TAllocator>
@@ -33,7 +34,10 @@ namespace StlCompliantType2
 	//	}
 	//};
 	//end
-	
-	template <typename TAllocator>
-	using CBasicString = std::basic_string<char, std::char_traits<char>, TAllocator>;
+
+	template <typename TChar, typename TAllocator>
+	using TSTLStringStream = std::basic_stringstream<TChar, std::char_traits<TChar>, TAllocator>;
+
+	using CStringStream = TSTLStringStream<char, THeapAllocator<char> >;
+
 }

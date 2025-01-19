@@ -51,9 +51,9 @@ namespace Niflect
 		}
 
 	private:
-		// 略特殊, 因为改变了全局CMemory的allocator, 因此如果动态成员仍用CMemory的分配函数, 将导致嵌套执行本类的Alloc
-		// 因此使用DefaultMemory, 当然使用CRT或std::vector都是可行的, 只要不用CMemory的分配即可
-		StlCompliantType2::TVector<SChunk, TGenericHeapAllocator<SChunk, CDefaultMemory> > m_vecChunk;
+		//略显特殊, 因为改变了全局 CMemory 的 allocator, 因此如果动态成员仍用 CMemory 的分配函数, 将导致嵌套执行本类的 Alloc
+		//因此使用 DefaultMemory, 当然使用 CRT 或 std::vector 的默认 Allocator 都是可行的, 只要不用 CMemory 的分配即可
+		std::vector<SChunk, TGenericHeapAllocator<SChunk, CDefaultMemory> > m_vecChunk;
 		const uint32 m_chunkSize;
 	};
 }
