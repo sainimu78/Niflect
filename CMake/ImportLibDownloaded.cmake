@@ -102,18 +102,18 @@ else()
 endif()
 
 #begin, Required
-set(v_ImportedLibRootDirPath "")
-set(v_UnzippedDirPath "")
-set(v_ZipFileName "")
-set(v_SrcAddrZipFilePath "")
-set(v_LibPlatformArchDirPath "")
-set(v_ListLibIncludeDirPathPrivate "")
-set(v_LibPlatformArchIncludeDirPath "")
+unset(v_ImportedLibRootDirPath)
+unset(v_UnzippedDirPath)
+unset(v_ZipFileName)
+unset(v_SrcAddrZipFilePath)
+unset(v_LibPlatformArchDirPath)
+unset(v_ListLibIncludeDirPathPrivate)
+unset(v_LibPlatformArchIncludeDirPath)
 #end
 
 #begin, Optional
-set(v_DebugLibFileNamePostfix "")
-set(v_ListImportedLibFilePathDebugPrivate "")
-set(v_ListImportedLibFilePathReleasePrivate "")
-set(v_ListImportedLibFileName "")
+unset(v_DebugLibFileNamePostfix)
+unset(v_ListImportedLibFilePathDebugPrivate)
+unset(v_ListImportedLibFilePathReleasePrivate)
+unset(v_ListImportedLibFileName)
 #end

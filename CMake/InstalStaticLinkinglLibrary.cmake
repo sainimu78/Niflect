@@ -17,4 +17,4 @@ if(WIN32)
 	)
 endif()
 
-set(v_ListModuleInstallingHeaderDirPath "")
+unset(v_ListModuleInstallingHeaderDirPath)

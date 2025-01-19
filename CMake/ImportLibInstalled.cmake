@@ -47,15 +47,15 @@ if(v_ListImportedLibFileName)
 endif()
 
 #begin, Required
-set(v_ListLibIncludeDirPathPrivate "")
+unset(v_ListLibIncludeDirPathPrivate)
 #end
 
 #begin, Optional
-set(v_LibPlatformArchDirPath "")
-set(v_DebugLibFileNamePostfix "")
-set(v_ListImportedLibFilePathDebugPrivate "")
-set(v_ListImportedLibFilePathReleasePrivate "")
-set(v_ListImportedLibFileName "")
-set(v_InstalledLibDirPathDebug "")
-set(v_InstalledLibDirPathRelease "")
+unset(v_LibPlatformArchDirPath)
+unset(v_DebugLibFileNamePostfix)
+unset(v_ListImportedLibFilePathDebugPrivate)
+unset(v_ListImportedLibFilePathReleasePrivate)
+unset(v_ListImportedLibFileName)
+unset(v_InstalledLibDirPathDebug)
+unset(v_InstalledLibDirPathRelease)
 #end

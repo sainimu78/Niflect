@@ -114,16 +114,16 @@ set_target_properties(${GenToolTargetName} PROPERTIES FOLDER "AutoGen")
 add_dependencies(${ModuleName} ${GenToolTargetName})
 
 #begin, Required
-set(v_IntegratedToolName "")
-set(v_NiflectGenToolBinDirPath "")
-set(v_ListAccessorSettingHeaderFilePath "")
-set(v_ListModuleIncludeDirPath "")
+unset(v_IntegratedToolName)
+unset(v_NiflectGenToolBinDirPath)
+unset(v_ListAccessorSettingHeaderFilePath)
+unset(v_ListModuleIncludeDirPath)
 #end
 
 #begin, Optional
-set(v_ModuleAPIMacro "")
-set(v_ModuleAPIMacroHeaderFilePath "")
-set(v_ListModuleHeaderFilePath "")
-set(v_EnabledDebuggerAttaching "")#清理标志, 避免影响其它模块
-set(v_ListToolOption "")
+unset(v_ModuleAPIMacro)
+unset(v_ModuleAPIMacroHeaderFilePath)
+unset(v_ListModuleHeaderFilePath)
+unset(v_EnabledDebuggerAttaching)#清理标志, 避免影响其它模块
+unset(v_ListToolOption)
 #endif
