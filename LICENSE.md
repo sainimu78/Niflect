@@ -1,6 +1,6 @@
 ==============================================================================
 
-The Niflect Project is under the Apache License v2.0:
+The Niflect is under the Apache License v2.0:
 ==============================================================================
                                  Apache License
                            Version 2.0, January 2004
@@ -208,19 +208,19 @@ The Niflect Project is under the Apache License v2.0:
 
 Software from third parties:
 ==============================================================================
-The Niflect Project contains third party software which is under different license
+The Niflect contains third party software which is under different license
 terms. It is your responsibility to comply with the applicable licenses. 
 Information on third party materials, and the applicable license terms, are 
 referenced in or included with the materials, such as in separate LICENSE.txt 
 or LICENSE.md files accompanying the materials.
 
 In addition to the above, please note that all third party softwares utilized in 
-the Niflect Project are specifically referenced in the form of Licensed_*.cmake 
+the Niflect are specifically referenced in the form of Licensed_*.cmake 
 scripts. These scripts include the names and details of the respective softwares. 
 Furthermore, all third party softwares used across the project are organized 
 and stored in the ThirdParty directory.
 
-Information on the usage of third party softwares in the Niflect Project can be viewed by running the following command:
+Information on the usage of third party softwares in the Niflect can be viewed by running the following command:
 
 on Windows
 
