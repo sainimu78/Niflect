@@ -251,8 +251,17 @@ namespace NiflectGen
 
 						printf("Charset: %s\n", detectedCharset.c_str());
 
-						//auto stdStr = boost::locale::conv::to_utf<char>(it0.m_writer.m_code.c_str(), "gb18030");// detectedCharset.c_str());
-						//it0.m_writer.m_code = stdStr.c_str();
+						//接 boost 的 locale, 也可考虑改用 C++ 17
+						//find_package(Boost 1.73 REQUIRED COMPONENTS
+						//	locale
+						//)
+						//if (Boost_FOUND)
+						//	target_link_libraries(${ ModuleName }
+						//		PRIVATE Boost::locale
+						//	)
+						//endif()
+						auto stdStr = boost::locale::conv::to_utf<char>(it0.m_writer.m_code.c_str(), "gb18030");// detectedCharset.c_str());
+						it0.m_writer.m_code = stdStr.c_str();
 					}
 				}
 #endif
