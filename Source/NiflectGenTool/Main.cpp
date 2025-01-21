@@ -325,7 +325,8 @@ int main(int argc, const char** argv)
 					std::cin.get();
 				}
 
-				if (gen->InitModuleRegInfo(info))
+				auto log = CreateGenLog();
+				if (gen->Init(info, log.Get()))
 				{
 					CCodeGenData genData;
 					gen->Generate(genData);
@@ -339,6 +340,5 @@ int main(int argc, const char** argv)
 			}
 		}
 	}
-	printf("Done\n");
 	return 0;
 }

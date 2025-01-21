@@ -2,6 +2,7 @@
 #include "Niflect/NiflectBase.h"
 #include <functional>
 #include "clang-c/Index.h"
+#include "NiflectGen/Log/Log.h"
 
 namespace NiflectGen
 {
@@ -52,5 +53,6 @@ namespace NiflectGen
 	bool IsCAccessorClassDecl(const CXCursor& cursor);
 	Niflect::CString GetCursorFilePath(const CXCursor& cursor);
 	Niflect::CString GetMacroExpansionTokensInString(const CXCursor& cursor);
-	Niflect::CString GetCursorFormattedLocationInfo(const CXCursor& cursor);;
+
+	CLogLocationInfo GetCursorLogLocationInfo(const CXCursor& cursor);
 }

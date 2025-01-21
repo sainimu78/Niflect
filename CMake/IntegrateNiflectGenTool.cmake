@@ -105,7 +105,7 @@ add_custom_command(
 			-gbt 
 			${ListOptToolOption} 
     DEPENDS ${v_ListModuleHeaderFilePath}
-    COMMENT "${v_IntegratedToolName}: ${ModuleName}"
+    COMMENT "${v_IntegratedToolName} of ${ModuleName}: Starting"
 )
 
 set(GenToolTargetName ${v_IntegratedToolName}_${ModuleName})

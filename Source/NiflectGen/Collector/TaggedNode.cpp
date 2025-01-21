@@ -221,7 +221,7 @@ namespace NiflectGen
 		}
 		else
 		{
-			GenLogError(context.m_log, NiflectUtil::FormatString("%s, is an unsupported Nata specification. Nata can only be specifed through an invocation within the Macro Tag, such as using NIF_F(CMyNata().SetOption0(true))", data.m_nataCode.c_str()));
+			GenLogError(context.m_log, GetCursorLogLocationInfo(m_macroCursor), NiflectUtil::FormatString("%s, is an unsupported Nata specification. Nata can only be specifed through an invocation within the Macro Tag, such as using NIF_F(CMyNata().SetOption0(true))", data.m_nataCode.c_str()));
 		}
 	}
 	void CTaggedNode2::AddChildAndInitDefault(const CSharedTaggedNode& taggedNode, const CXCursor& cursor, const CXCursor& macroCursor)
@@ -360,7 +360,7 @@ namespace NiflectGen
 					if (idx1 != vecInfo.size() - 1)
 						strDef += ';';
 				}
-				GenLogError(log, NiflectUtil::FormatString("Undefined builtin metadata keyword: %s (Supported: %s), at: %s", strUndef.c_str(), strDef.c_str(), GetCursorFormattedLocationInfo(this->GetCursor()).c_str()));
+				GenLogError(log, GetCursorLogLocationInfo(this->GetCursor()), NiflectUtil::FormatString("Undefined builtin metadata keyword: %s (Supported: %s)", strUndef.c_str(), strDef.c_str()));
 			}
 			if (movedPos > 0)
 				firstLine = firstLine.substr(movedPos, firstLine.length() - movedPos);

@@ -120,7 +120,7 @@ namespace NiflectGen
 			{
 				//不计划支持 Field 的类型为 BindingType 的别名, 因为这样可能滥用别名, 导致与 AccessorBinding 的对应关系不直观, 如需要使用别名, 应在 AccessorBinding 中指定, 在 Field 中使用时, 应直接使用别名
 				//如认为确实需要实现支持此用法, 可考虑在查找过程中, 引入逐级 aliasChain 查找对应的 BindingType
-				GenLogError(context.m_log, NiflectUtil::FormatString("The accessor of the field %s::%s is not specified", m_resocursorName.c_str(), CXStringToCString(clang_getCursorSpelling(fieldCursor)).c_str()));
+				GenLogError(context.m_log, GetCursorLogLocationInfo(fieldCursor), NiflectUtil::FormatString("The accessor of the field %s::%s is not specified", m_resocursorName.c_str(), CXStringToCString(clang_getCursorSpelling(fieldCursor)).c_str()));
 				break;
 			}
 			//DebugPrintIndexedNodeRecurs(indexedRoot, indexedRoot, context.m_bindingAccessorMapping, 0);

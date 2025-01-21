@@ -17,7 +17,8 @@ namespace TestGen
 		auto moduleHeader = NiflectUtil::FormatString("%s%u.h", CONCAT_HARDCODED_STRINGS_2(ROOT_TEST_PATH, "/TestModuleHeaderFieldResocursorName"), idx);
 		info.m_vecModuleHeader2.push_back(moduleHeader);
 		Test::InitArgs(info);
-		gen.InitModuleRegInfo(info);
+		CGenLog log;
+		gen.Init(info, &log);
 	}
 
 	static void TestSuccess_FieldResocursorName0()

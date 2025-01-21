@@ -69,7 +69,7 @@ namespace NiflectGen
 			}
 			else
 			{
-				GenLogError(context.m_log, "The member must be a field");
+				GenLogError(context.m_log, GetCursorLogLocationInfo(cursor), "The member must be a field");
 			}
 		}
 		return addedTaggedChild;

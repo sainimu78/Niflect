@@ -433,13 +433,13 @@ namespace NiflectGen
 
 		return result;
 	}
-	Niflect::CString GetCursorFormattedLocationInfo(const CXCursor& cursor)
+	CLogLocationInfo GetCursorLogLocationInfo(const CXCursor& cursor)
 	{
 		CXFile cxFile;
 		unsigned line, column, offset;
 		auto cxLoc = clang_getCursorLocation(cursor);
 		clang_getSpellingLocation(cxLoc, &cxFile, &line, &column, &offset);
 		auto filePathAbs = CXStringToCString(clang_getFileName(cxFile));
-		return NiflectUtil::FormatString("%s:%u:%u", filePathAbs.c_str(), line, column);
+		return CLogLocationInfo(filePathAbs, line, column);
 	}
 }

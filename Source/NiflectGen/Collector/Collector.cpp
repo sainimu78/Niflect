@@ -803,7 +803,7 @@ namespace NiflectGen
 			else
 			{
 				auto spelling = CXStringToCString(clang_getCursorSpelling(cursor));
-				GenLogError(log, NiflectUtil::FormatString("The type of %s must be either a class, a struct, or an enum", spelling.c_str()));
+				GenLogError(log, GetCursorLogLocationInfo(cursor), NiflectUtil::FormatString("The type of %s must be either a class, a struct, or an enum", spelling.c_str()));
 			}
 		}
 		return addedTaggedChidl;

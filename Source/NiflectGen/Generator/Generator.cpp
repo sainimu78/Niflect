@@ -35,6 +35,7 @@ namespace NiflectGen
     CGenerator::CGenerator()
         : m_collectorHolder(MakeShared<CDataCollector>())
         , m_collector(*m_collectorHolder)
+        , m_log(NULL)
     {
     }
     void CGenerator::AddTypeBindingSettingHeader(const Niflect::CString& filePath)
@@ -62,8 +63,9 @@ namespace NiflectGen
     {
         m_vecHeaderSearchPath.push_back(dirPath);
     }
-    bool CGenerator::InitModuleRegInfo(const CModuleRegInfo& userProvied)
+    bool CGenerator::Init(const CModuleRegInfo& userProvied, CGenLog* log)
     {
+        m_log = log;
         return m_moduleRegInfo.Init(userProvied);
     }
     void CGenerator::Generate(CCodeGenData& genData, TestInterfaceFunc TestFunc)
@@ -144,8 +146,7 @@ namespace NiflectGen
                     fp = fopen(absFilePath.c_str(), "w");
                 }
 #pragma warning( default : 4996 )
-                CGenLog log;
-                CCollectingContext context(&log);
+                CCollectingContext context(m_log);
                 CVisitingDebugData debugData;
                 debugData.Init(cursor, fp);
                 context.m_debugData = &debugData;
@@ -153,14 +154,14 @@ namespace NiflectGen
                 m_collector.Collect(cursor, &taggedRoot, context, collectionData);
                 if (true)
                 {
-                    CResolvingContext resolvingContext(&log);
+                    CResolvingContext resolvingContext(m_log);
                     CResolver resolver(collectionData, m_moduleRegInfo);
                     CResolvedData resolvedData;
                     resolver.Resolve4(&taggedRoot, resolvingContext, resolvedData);
 
                     //#3, Generate code
                     CTemplateBasedCppWriter writer(resolvedData, m_moduleRegInfo);
-                    CWritingContext writingContext(&log);
+                    CWritingContext writingContext(m_log);
                     writer.Write3(writingContext, genData);
                 }
                 debugData.Check();
@@ -335,9 +336,14 @@ namespace NiflectGen
                 // 写入BOM（Byte Order Mark），以明确表示文件是UTF-8编码
                 ofs.write(reinterpret_cast<const char*>(bom), sizeof(bom));
                 ofs << it0.m_writer.m_code;
-                printf("Written: %s\n", it0.m_filePath.c_str());
+                GenLogInfo(m_log, NiflectUtil::FormatString("Written: %s", it0.m_filePath.c_str()));
             }
         }
+
+        Niflect::CString summary = "Finished";
+        if (vecIdxToWrite.size() == 0)
+            summary = "No changes";
+        GenLogInfo(m_log, NiflectUtil::FormatString("NiflectGenTool of %s, %s", m_moduleRegInfo.m_userProvided.m_moduleName.c_str(), summary.c_str()));
     }
     void CGenerator::Cleanup() const
     {
