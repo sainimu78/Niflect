@@ -5,6 +5,9 @@
 #include "NiflectGen/Util/CursorUtil.h"
 #include "NiflectGen/Log/Log.h"
 #include "NiflectGen/Base/NiflectGenDefinition.h"
+#ifdef NATA_ENCODING_CONVERSION
+#include "uchardet/uchardet.h"
+#endif
 
 namespace NiflectGen
 {
@@ -122,6 +125,50 @@ namespace NiflectGen
 		Niflect::CString m_nataCode;
 	};
 
+#ifdef NATA_ENCODING_CONVERSION
+#define BUFFER_SIZE 65536
+	static Niflect::CString detectEncoding(const Niflect::CString& filePath)
+	{
+		FILE* fp = fopen(filePath.c_str(), "r");
+		if (fp == NULL)
+		{
+			/* Error opening the test file. */
+			fprintf(stderr,
+				"uchardet-tests: error opening the test file\n");
+			ASSERT(false);
+		}
+		uchardet_t  handle = uchardet_new();
+		char        buffer[BUFFER_SIZE];
+		int         i;
+
+		while (!feof(fp))
+		{
+			size_t len = fread(buffer, 1, BUFFER_SIZE, fp);
+			int retval = uchardet_handle_data(handle, buffer, len);
+			if (retval != 0)
+			{
+				fprintf(stderr,
+					"uchardet-tests: handle data error.\n");
+				exit(1);
+			}
+		}
+		uchardet_data_end(handle);
+
+		Niflect::CString detected;
+		const char* charset = uchardet_get_charset(handle);
+		for (i = 0; charset[i]; i++)
+		{
+			/* Our test files are lowercase. */
+			detected += tolower(charset[i]);
+		}
+
+		uchardet_delete(handle);
+		fclose(fp);
+
+		return detected;
+	}
+#endif
+
 	bool ssssssssssss(const CXCursor& cursor, CMacroExpansionNataData& data)
 	{
 		CXSourceRange range = clang_getCursorExtent(cursor);
@@ -192,6 +239,32 @@ namespace NiflectGen
 
 				data.m_nataCode.resize(end_offset - begin_offset);
 				memcpy(&data.m_nataCode[0], contents + begin_offset, data.m_nataCode.size());
+
+#ifdef NATA_ENCODING_CONVERSION
+				//如须支持转编码, 应考虑在之前的洲中记录 cursor 所在文件对应的编码, 在此处附近转换为 UTF8, 但须确认其可行行, 是否对整个文件内容转换, 结果才可确保正确
+				//现认为转编码不是必要的, metadata 不应为非英文, 应在 UI 翻译阶段再转换
+				{
+					auto filePath = GetCursorFilePath(cursor);
+					//if (filePath == "I:/F/Fts/Proj/Test/Wishing/Build/TestEditorCLI/Windows/DefaultBuild/Generated/TestModule1/_GenSource/_ModuleReg/_Splitted/_TestModule1_0_private.h")
+					{
+						auto detectedCharset = detectEncoding(filePath);
+
+						printf("Charset: %s\n", detectedCharset.c_str());
+
+						//接 boost 的 locale, 也可考虑改用 C++ 17
+						//find_package(Boost 1.73 REQUIRED COMPONENTS
+						//	locale
+						//)
+						//if (Boost_FOUND)
+						//	target_link_libraries(${ ModuleName }
+						//		PRIVATE Boost::locale
+						//	)
+						//endif()
+						auto stdStr = boost::locale::conv::to_utf<char>(it0.m_writer.m_code.c_str(), "gb18030");// detectedCharset.c_str());
+						it0.m_writer.m_code = stdStr.c_str();
+					}
+				}
+#endif
 			}
 		}
 
