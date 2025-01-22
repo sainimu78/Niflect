@@ -2,6 +2,7 @@
 #include "Niflect/NiflectCommon.h"
 #include "Niflect/Memory/AllocatorInterface.h"
 #include "Niflect/Memory/Generic/GenericHeapAllocator.h"
+#include "Niflect/Memory/Generic/GenericInstance.h"
 
 namespace Niflect
 {
