@@ -14,6 +14,7 @@ export CFLAGS="-m64"
 export CXXFLAGS="-m64"
 #export CFLAGS="-m32"
 #export CXXFLAGS="-m32"
+#export CFLAGS="-m64 -g -O0"
 
 mkdir -p $BuildDirPathDebug
 cd $BuildDirPathDebug
