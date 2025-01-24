@@ -28,9 +28,10 @@ namespace NiflectGen
 	void CGenLog::WriteItem(const CLogLocationInfo& indicator, ELogTextType type, const CString& text)
 	{
 		const char* pszTextType = NULL;
+		bool isNormal = false;
 		switch (type)
 		{
-		case ELogTextType::Info: pszTextType = ""; break;
+		case ELogTextType::Info: pszTextType = ""; isNormal = true; break;
 		case ELogTextType::Warning: pszTextType = "warning: "; break;
 		case ELogTextType::Error: pszTextType = "error: "; break;
 		default:
@@ -44,7 +45,7 @@ namespace NiflectGen
 				strLoc = NiflectUtil::FormatString("%s(%u,%u): ", indicator.m_filePath.c_str(), indicator.m_line, indicator.m_column);
 			printf("%s%s%s\n", strLoc.c_str(), pszTextType, text.c_str());
 		}
-		if (m_opt.m_assertionOnAddingItem)
+		if ((!isNormal) && m_opt.m_assertionOnAddingItem)
 		{
 			ASSERT(false);
 		}

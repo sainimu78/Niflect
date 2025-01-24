@@ -343,12 +343,15 @@ namespace NiflectGen
         if (saving.m_vecFileInfo.size() == vecIdxToSave.size())
             NiflectUtil::DeleteDirectory(m_moduleRegInfo.m_moduleGenDirPath);
 
-        for (uint32 idx0 = 0; idx0 < vecIdxToSave.size(); ++idx0)
+        uint32 cnt = static_cast<uint32>(vecIdxToSave.size());
+        if (cnt > 0)
+            printf("Written %u file%s:\n", cnt, cnt > 1 ? "s" : "");
+        for (uint32 idx0 = 0; idx0 < cnt; ++idx0)
         {
             auto& savingIdx = vecIdxToSave[idx0];
             auto& it0 = saving.m_vecFileInfo[savingIdx];
             if (WriteToDisk(it0))
-                GenLogInfo(m_log, NiflectUtil::FormatString("Written: %s", it0.m_filePath.c_str()));
+                GenLogInfo(m_log, it0.m_filePath.c_str());
         }
         if (forceSavingIdx != INDEX_NONE)
         {
