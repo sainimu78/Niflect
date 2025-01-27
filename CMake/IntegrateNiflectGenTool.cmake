@@ -1,4 +1,4 @@
-include(${c_RootCMakeDirPath}/IntegrateTool.cmake)
+include(${c_RootCMakeDirPath}/InlineIntegrateTool.cmake)
 
 #begin, 区分 Debug 与 Release 两种版本的 GenTool, add_custom_command 中变量不用引号
 #set(GenToolRootPath ${c_RootThirdPartyDirPath}/${v_IntegratedToolName}/${v_IntegratedToolName})
