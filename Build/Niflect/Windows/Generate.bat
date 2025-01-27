@@ -1,3 +1,3 @@
 @echo off
-@del DefaultBuild\CMakeCache.txt
-@Update.bat
+@set ProjectDirPath=..\..\..\..\Project\Niflect
+@..\..\..\CMake\Platform\Windows\Generate.bat
