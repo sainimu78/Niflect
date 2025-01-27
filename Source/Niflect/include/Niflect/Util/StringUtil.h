@@ -166,7 +166,7 @@ namespace NiflectUtil
 		Niflect::CString parentDirPath;
 		if (GetParentDirPathSafe(fileOrDirPath, parentDirPath))
 			return parentDirPath;
-		return fileOrDirPath;
+		return parentDirPath;
 	}
 	static Niflect::CString GetFileName(const Niflect::CString& filePath)
 	{

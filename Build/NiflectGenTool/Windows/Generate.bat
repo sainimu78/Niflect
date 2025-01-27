@@ -1,3 +1,3 @@
 @echo off
-del DefaultBuild\CMakeCache.txt
-Update.bat
+@del DefaultBuild\CMakeCache.txt
+@Update.bat

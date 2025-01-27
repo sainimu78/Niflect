@@ -1,5 +1,15 @@
-cd DefaultBuild
-rmdir /s /q Installed
+@echo off
+@cd DefaultBuild
+@rmdir /s /q Installed
 ::cmake --install . --config Debug
-cmake --install . --config Release
-cd ..
+::if %ERRORLEVEL% neq 0 (
+::    echo "### cmake generating failed ###"
+::    pause
+::) else (
+	@cmake --install . --config Release
+	@if %ERRORLEVEL% neq 0 (
+		echo "### cmake generating failed ###"
+		pause
+	)
+::)
+@cd ..

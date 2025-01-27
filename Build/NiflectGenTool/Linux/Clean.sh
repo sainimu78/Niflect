@@ -1,5 +1,12 @@
 #!/bin/bash
 cd DefaultBuild
 cmake --build ./Debug --target clean --config Debug
-cmake --build ./Release --target clean --config Release
+if [ $? -ne 0 ]; then
+    echo "CMake configuration failed for Debug build."
+else
+	cmake --build ./Release --target clean --config Release
+	if [ $? -ne 0 ]; then
+		echo "CMake configuration failed for Release build."
+	fi
+fi
 cd ..
