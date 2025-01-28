@@ -11,6 +11,7 @@
 #include "Niflect/Util/SystemUtil.h"
 #include <cstring>//strcmp
 #include <iostream>//std::cin.get()
+#include "CommandLineArgParser.h"
 
 //代码中的用语
 //1. StaticRegStage, 在静态初始化阶段的注册过程

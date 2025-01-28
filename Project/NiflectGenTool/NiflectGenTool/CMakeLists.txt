@@ -22,4 +22,6 @@ if(MSVC)
 	)
 endif()
 
+include(Licensed_CommandLineArgParser.cmake)
+
 include(${c_ProjectDirPath}/Install.cmake)
