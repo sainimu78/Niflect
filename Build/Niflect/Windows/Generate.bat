@@ -1,3 +1,3 @@
 @echo off
 @set ProjectDirPath=..\..\..\..\Project\Niflect
-@..\..\..\CMake\Platform\Windows\Generate.bat
+@..\..\..\ThirdParty\CMakeProjectFramework\PlatformSpecificScript\Windows\Generate.bat

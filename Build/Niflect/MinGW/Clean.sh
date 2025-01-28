@@ -1,2 +1,2 @@
 #!/bin/bash
-../../../CMake/Platform/MinGW/Clean.sh
+../../../CMakeProjectFramework/PlatformSpecificScript/MinGW/Clean.sh

@@ -1,2 +1,2 @@
 @echo off
-@..\..\..\CMake\Platform\Windows\Install.bat
+@..\..\..\ThirdParty\CMakeProjectFramework\PlatformSpecificScript\Windows\Install.bat

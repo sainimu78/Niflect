@@ -10,4 +10,4 @@ if(WIN32)
 endif()
 list(APPEND v_ListImportedLibFileName ${v_ImportedLibName})
 
-include(${c_RootCMakeDirPath}/ImportLibDownloaded.cmake)
+include(${c_RootCMakeProjectFrameworkDirPath}/ImportLibDownloaded.cmake)

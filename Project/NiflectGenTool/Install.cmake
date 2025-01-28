@@ -1,1 +1,1 @@
-include(${c_RootCMakeDirPath}/InstallExecutable.cmake)
+include(${c_RootCMakeProjectFrameworkDirPath}/InstallExecutable.cmake)
