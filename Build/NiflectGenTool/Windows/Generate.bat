@@ -1,2 +1,2 @@
 @echo off
-@..\..\..\CMake\Platform\Windows\Generate.bat
+@..\..\..\ThirdParty\CMakeProjectFramework\PlatformSpecificScript\Windows\Generate.bat

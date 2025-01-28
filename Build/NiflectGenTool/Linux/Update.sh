@@ -1,3 +1,3 @@
 #!/bin/bash
 export ProjectDirPath=../../../../../Project/NiflectGenTool
-../../../CMake/Platform/Linux/Update.sh
+../../../ThirdParty/CMakeProjectFramework/PlatformSpecificScript/Linux/Update.sh

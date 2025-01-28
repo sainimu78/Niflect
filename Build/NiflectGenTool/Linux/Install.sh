@@ -1,2 +1,2 @@
 #!/bin/bash
-../../../CMake/Platform/Linux/InstallRelease.sh
+../../../ThirdParty/CMakeProjectFramework/PlatformSpecificScript/Linux/InstallRelease.sh

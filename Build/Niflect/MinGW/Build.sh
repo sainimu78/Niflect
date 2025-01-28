@@ -1,2 +1,2 @@
 #!/bin/bash
-../../../CMakeProjectFramework/PlatformSpecificScript/MinGW/Build.sh
+../../../ThirdParty/CMakeProjectFramework/PlatformSpecificScript/MinGW/Build.sh

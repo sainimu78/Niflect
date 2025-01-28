@@ -1,2 +1,2 @@
 @echo off
-@..\..\..\CMake\Platform\Windows\InstallRelease.bat
+@..\..\..\ThirdParty\CMakeProjectFramework\PlatformSpecificScript\Windows\InstallRelease.bat

@@ -1,2 +1,2 @@
 #!/bin/bash
-../../../CMake/Platform/Linux/Clean.sh
+../../../ThirdParty/CMakeProjectFramework/PlatformSpecificScript/Linux/Clean.sh

@@ -1,2 +1,2 @@
 #!/bin/bash
-../../../CMake/Platform/Linux/Build.sh
+../../../ThirdParty/CMakeProjectFramework/PlatformSpecificScript/Linux/Build.sh

@@ -1,2 +1,2 @@
 #!/bin/bash
-../../../CMakeProjectFramework/PlatformSpecificScript/Linux/Generate.sh
+../../../ThirdParty/CMakeProjectFramework/PlatformSpecificScript/Linux/Generate.sh
