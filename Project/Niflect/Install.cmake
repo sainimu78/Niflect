@@ -1,1 +1,1 @@
-include(${c_RootCMakeProjectFrameworkDirPath}/InstalStaticLinkinglLibrary.cmake)
+include(${c_RootCMakeProjectFrameworkDirPath}/InstallStaticLinkinglLibrary.cmake)
