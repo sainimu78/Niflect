@@ -246,6 +246,10 @@ namespace NiflectUtil
 
 		return tokens;                       // 返回分割后的子字符串向量
 	}
+	static Niflect::TArrayNif<Niflect::CString> SplitPath(const Niflect::CString& path)
+	{
+		return NiflectUtil::Split(path, '/');
+	}
 	static Niflect::CString Trim(const Niflect::CString& str)
 	{
 		auto is_space = [](unsigned char c) { return std::isspace(c); };
