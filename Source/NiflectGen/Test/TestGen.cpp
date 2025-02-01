@@ -358,13 +358,13 @@ namespace TestGen
 			info.m_vecAccessorSettingHeader.push_back(CONCAT_HARDCODED_STRINGS_2(ROOT_TEST_PATH, "/TestAccessorSettingCodeGen0.h"));
 			info.m_moduleApiMacro = "TEST_MY_API";
 			Test::InitArgs(info);
-			gen->Init(info, NULL);
+			CGenLog log;
+			gen->Init(info, &log);
 			CCodeGenData genData;
-			gen->Generate(genData, [&gen, &genData](void* cursorAddr)
+			gen->Generate(genData, [&gen, &genData, &log](void* cursorAddr)
 				{
 					auto& cursor = *static_cast<CXCursor*>(cursorAddr);
 					CTaggedNode2 taggedRoot;
-					CGenLog log;
 					CCollectingContext context(&log);
 					CCollectionData collectionData;
 					CDataCollector collector;
