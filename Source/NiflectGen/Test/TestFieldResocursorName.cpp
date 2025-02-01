@@ -693,7 +693,7 @@ namespace TestGen
 					ASSERT(log.m_vecText.size() == 0);
 					Niflect::TArrayNif<Niflect::CString> vecSignature;
 					resolvedData.m_signatureMapping.DebugGenSignatures(vecSignature);
-					//1维容器模板套结构模板
+					//Raw 指针
 					Niflect::TArrayNif<Niflect::CString> vecExpected;
 					vecExpected.push_back("TestMyFinding::CMyClass_0");
 					vecExpected.push_back("TestMyScope::CMyResource*");
