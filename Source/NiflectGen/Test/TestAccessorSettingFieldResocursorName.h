@@ -31,4 +31,6 @@ namespace EngineTypeBindingSettingScope
 	NIF_AS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, TestAccessor2::TMyTransform<float> >;
 	NIF_AS_A() TSetting<TestMyScope::CMyAssetAccessor, TestMyScope::CMyAsset*>;
 	NIF_AS_A() TSetting<TestMyScope::CMyResourceAccessor, TestMyScope::CMyResource*>;
+	template <typename TInstance, typename T>
+	NIF_AS_E() TSetting<TestMyScope::TSharedMyResourceAccessor<TInstance>, TestMyScope::TSharedMyResource<T> >;
 }

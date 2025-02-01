@@ -2,7 +2,7 @@
 #include "Niflect/Util/ConcatSymbols.h"
 
 //General Accessor 设置, 简称 A 型设置
-//可被绑定为此设置指定 Accessor 的类型有
+//可被绑定由此设置指定 Accessor 的类型有
 //1. 容器模板(Container Template 1D), 如 std::vector, std::map
 //2. 结构模板(Structural Template nD, n>=2), 如 std::pair
 //3. 特化模板, 如 std::vector<bool>
@@ -33,7 +33,7 @@
 #define NIF_AS_D() using CONCAT_SYMBOLS_3(__NiflectGen_AccessorSetting_D,_,__LINE__) = 
 
 //Pointer Template Accessor 设置, 简称 E 型设置
-//可被绑定为此设置指定 Accessor 的类型为指针模板如 std::shared_ptr
+//可被绑定由此设置指定 Accessor 的类型为特定用途的指针模板, 指针模板的定义形式类似于 std::shared_ptr, 但为特定用途
 //此设置在模块范围内可多次使用, 以指定不同的类型的 Accessor 或覆盖其它设置指定的 Accessor
 //TSetting 模板须指定的模板参数个数为2
 #define NIF_AS_E() using CONCAT_SYMBOLS_3(__NiflectGen_AccessorSetting_E,_,__LINE__) = 
