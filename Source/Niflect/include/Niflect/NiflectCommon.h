@@ -18,9 +18,10 @@ typedef unsigned long long uint64;
 
 #define ASSERT(b)\
 {\
-    if (!(b))\
+    bool cond = (b);\
+    if (!cond)\
         fflush(stdout);\
-    assert(b);\
+    assert(cond);\
 } do{} while(0)
 
 #ifdef NIFLECT_API
