@@ -240,7 +240,8 @@ namespace TestGen
 							{
 								accessorResocursorName = NiflectGenDefinition::NiflectFramework::AccessorTypeName::CompoundField;
 							}
-							ASSERT(vecExpected[idx0++] == accessorResocursorName);
+							ASSERT(vecExpected[idx0] == accessorResocursorName);
+							idx0++;
 						}
 					}
 					ASSERT(vecExpected.size() == idx0);
@@ -290,8 +291,10 @@ namespace TestGen
 					auto& vecCollected = collectionData.m_accessorBindingMapping->m_settings.m_vecAccessorBindingSetting;
 					for (auto& it : vecCollected)
 					{
-						ASSERT(it.m_accessorSettingResolvedInfo.m_resoInfo.m_resocursorName == vecExpectedA[idxA++]);
-						ASSERT(it.m_bindingResocursorName == vecExpectedB[idxB++]);
+						ASSERT(it.m_accessorSettingResolvedInfo.m_resoInfo.m_resocursorName == vecExpectedA[idxA]);
+						ASSERT(it.m_bindingResocursorName == vecExpectedB[idxB]);
+						idxA++;
+						idxB++;
 					}
 					ASSERT(idxA == vecCollected.size());
 					ASSERT(idxB == vecCollected.size());
@@ -327,7 +330,7 @@ namespace TestGen
 					ASSERT(log.m_vecText.size() == 0);
 					Niflect::TArrayNif<Niflect::CString> vecExpected;
 					vecExpected.push_back(moduleHeader);//类本身ResocursorNode所在头文件
-					vecExpected.push_back("Niflect/NiflectBase.h");
+					vecExpected.push_back("Niflect/Base/String.h");
 					vecExpected.push_back("Engine/Test/TestMyTransform.h");
 					vecExpected.push_back("_GenTime/string");
 					vecExpected.push_back(moduleHeader);//自定义TMyArray所在头文件
