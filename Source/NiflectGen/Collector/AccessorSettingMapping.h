@@ -134,6 +134,48 @@ namespace NiflectGen
 		CGenLog* m_log;
 	};
 
+	class CPointerCursor
+	{
+	public:
+		CPointerCursor()
+			: m_cxType{}
+			, m_cursor(g_invalidCursor)
+			, m_dim(0)
+		{
+		}
+		CPointerCursor(const CXType& cxType, const CXCursor& cursor, uint32 dim)
+			: m_cxType(cxType)
+			, m_cursor(cursor)
+			, m_dim(dim)
+		{
+		}
+		bool IsValid() const
+		{
+			return m_dim > 0;
+		}
+
+	public:
+		CXType m_cxType;
+		CXCursor m_cursor;
+		uint32 m_dim;
+	};
+
+	struct SPointerCursorHash {
+		std::size_t operator()(const CPointerCursor& c) const noexcept {
+			return c.m_dim + SCursorHash()(c.m_cursor);
+		}
+	};
+
+	struct SPointerCursorEqual {
+		bool operator()(const CPointerCursor& a, const CPointerCursor& b) const noexcept {
+			if (a.m_dim == b.m_dim)
+				return SCursorEqual()(a.m_cursor, b.m_cursor);
+			return false;
+		}
+	};
+	template <typename TValue>
+	using TPointerCursorMap = Niflect::TUnorderedMap<CPointerCursor, TValue, SPointerCursorHash, SPointerCursorEqual>;
+
 	class CAccessorBindingMapping2
 	{
 	public:
@@ -150,6 +192,7 @@ namespace NiflectGen
 		TCursorMap<uint32> m_mapCursorToIndex;
 		TCXTypeMap<uint32> m_mapCXTypeToIndex;
 		TCursorMap<uint32> m_mapSpecializedCursorToIndex; //包括特化模板与 TaggedType 对应的类型
+		TPointerCursorMap<uint32> m_mapPointerCursorToIndex;
 	};
 	using CSharedAccessorBindingMapping = Niflect::TSharedPtr<CAccessorBindingMapping2>;
 
@@ -159,4 +202,6 @@ namespace NiflectGen
 		const CTaggedTypesMapping& m_tagged;
 		const CUntaggedTemplatesMapping& m_untaggedTemplate;
 	};
+
+	CPointerCursor GetPointerCursorFromPointerType(const CXType& pointerType);
 }

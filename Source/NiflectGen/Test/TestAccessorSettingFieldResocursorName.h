@@ -5,6 +5,8 @@
 #include "Niflect/CommonlyUsed/STLValueTypeAccessor.h"
 #include "Niflect/CommonlyUsed/STLContainerTypeAccessor.h"
 #include "Engine/Test/TestMyTransform.h"
+#include "Engine/Test/TestMyResource.h"
+#include "Engine/Test/TestMyAsset.h"
 
 namespace EngineTypeBindingSettingScope
 {
@@ -27,6 +29,6 @@ namespace EngineTypeBindingSettingScope
 	NIF_AS_A() TSetting<TSTLArrayAccessor<TInstance>, std::vector<T> >;
 	NIF_AS_A() TSetting<TBuiltinTypeAccessor<int32>, int32>;
 	NIF_AS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, TestAccessor2::TMyTransform<float> >;
-	//template <typename T0>
-	//NIF_AS_A() TSetting<CCompoundAccessor, TestAccessor2::TMyTransform<T0> >;
+	NIF_AS_A() TSetting<TestMyScope::CMyAssetAccessor, TestMyScope::CMyAsset*>;
+	NIF_AS_A() TSetting<TestMyScope::CMyResourceAccessor, TestMyScope::CMyResource*>;
 }

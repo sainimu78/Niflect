@@ -669,6 +669,43 @@ namespace TestGen
 				});
 		}
 	}
+	static void TestSuccess_FieldResocursorName15()
+	{
+		auto memTest = Niflect::GetDefaultMemoryStats();
+		{
+			auto gen = CreateGenerator();
+			InitGenFieldResocursorName(*gen, 15);
+			CCodeGenData genData;
+			gen->Generate(genData, [&gen](void* cursorAddr)
+				{
+					auto& cursor = *static_cast<CXCursor*>(cursorAddr);
+					CTaggedNode2 taggedRoot;
+					CGenLog log;
+					CCollectingContext context(&log);
+					CCollectionData collectionData;
+					CDataCollector collector;
+					collector.Collect(cursor, &taggedRoot, context, collectionData);
+					ASSERT(log.m_vecText.size() == 0);
+					CResolvingContext resolvingContext(&log);
+					CResolver resolver(collectionData, gen->GetModuleRegInfo());
+					CResolvedData resolvedData;
+					resolver.Resolve4(&taggedRoot, resolvingContext, resolvedData);
+					ASSERT(log.m_vecText.size() == 0);
+					Niflect::TArrayNif<Niflect::CString> vecSignature;
+					resolvedData.m_signatureMapping.DebugGenSignatures(vecSignature);
+					//1维容器模板套结构模板
+					Niflect::TArrayNif<Niflect::CString> vecExpected;
+					vecExpected.push_back("TestMyFinding::CMyClass_0");
+					vecExpected.push_back("TestMyScope::CMyResource*");
+					vecExpected.push_back("TestMyScope::CMyAsset*");
+					vecExpected.push_back("Niflect::TArray<TestMyScope::CMyAsset*>");
+					vecExpected.push_back("+TestMyScope::CMyAsset*");
+					ASSERT(vecSignature.size() == vecExpected.size());
+					for (uint32 idx = 0; idx < vecExpected.size(); ++idx)
+						ASSERT(vecSignature[idx] == vecExpected[idx]);
+				});
+		}
+	}
 	void TestSuccess_FieldResocursorName()
 	{
 		TestSuccess_FieldResocursorName0();
@@ -686,5 +723,6 @@ namespace TestGen
 		TestSuccess_FieldResocursorName12();
 		TestSuccess_FieldResocursorName13();
 		TestSuccess_FieldResocursorName14();
+		TestSuccess_FieldResocursorName15();
 	}
 }
