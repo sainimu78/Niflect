@@ -85,16 +85,30 @@ namespace NiflectGen
 
 		Niflect::CString header;
 		{
-			auto itFound = m_mapCXTypeToIndex.find(ctx.m_fieldOrArgCXType);
-			if (itFound != m_mapCXTypeToIndex.end())
+			auto pointerCursor = GetPointerCursorFromPointerType(ctx.m_fieldOrArgCXType);
+			if (pointerCursor.IsValid())
 			{
-				foundAccessorBindingIdx = itFound->second;
-				if (const CXCursor* refCursor = FindRefCursorInDetailCursors(ctx))
+				auto itFound = m_mapPointerCursorToIndex.find(pointerCursor);
+				if (itFound != m_mapPointerCursorToIndex.end())
 				{
-					//It's a non-builtin pointer type
-					auto cursor = clang_getCursorReferenced(*refCursor);
-					header = GetCursorFilePath(cursor);
+					foundAccessorBindingIdx = itFound->second;
+					header = GetCursorFilePath(pointerCursor.m_cursor);
 					ASSERT(!header.empty());
+				}
+			}
+			else
+			{
+				auto itFound = m_mapCXTypeToIndex.find(ctx.m_fieldOrArgCXType);
+				if (itFound != m_mapCXTypeToIndex.end())
+				{
+					foundAccessorBindingIdx = itFound->second;
+					if (const CXCursor* refCursor = FindRefCursorInDetailCursors(ctx))
+					{
+						//It's a non-builtin pointer type
+						auto cursor = clang_getCursorReferenced(*refCursor);
+						header = GetCursorFilePath(cursor);
+						ASSERT(!header.empty());
+					}
 				}
 			}
 		}
@@ -251,6 +265,17 @@ namespace NiflectGen
 			originalType = clang_getPointeeType(originalType);
 		}
 		return stars;
+	}
+	CPointerCursor GetPointerCursorFromPointerType(const CXType& pointerType)
+	{
+		auto originalType = pointerType;
+		uint32 dim = 0;
+		while (originalType.kind == CXType_Pointer)
+		{
+			originalType = clang_getPointeeType(originalType);
+			dim++;
+		}
+		return CPointerCursor(pointerType, clang_getTypeDeclaration(originalType), dim);
 	}
 	static void GenerateResocursorNameRecurs(const CSubcursor& parentSubcursor, EGenerateAccessorBindingCursorNameVisitingState& visitingState, Niflect::CString& text)
 	{

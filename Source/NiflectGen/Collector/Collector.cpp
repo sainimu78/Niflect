@@ -1497,6 +1497,7 @@ namespace NiflectGen
 		auto& mapCursorToIndex = accessorBindingMapping->m_mapCursorToIndex;
 		auto& mapSpecializedCursorToIndex = accessorBindingMapping->m_mapSpecializedCursorToIndex;//特化作单独容器是为减少FieldFinding时的查找规模
 		auto& mapCXTypeToIndex = accessorBindingMapping->m_mapCXTypeToIndex;
+		auto& mapPointerCursorToIndex = accessorBindingMapping->m_mapPointerCursorToIndex;
 		for (uint32 idx0 = 0; idx0 < accessorSettings.m_vecAccessorBindingSetting.size(); ++idx0)
 		{
 			auto& it0 = accessorSettings.m_vecAccessorBindingSetting[idx0];
@@ -1506,9 +1507,19 @@ namespace NiflectGen
 
 			if (clang_getCursorKind(bSubcursor.m_cursorDecl) == CXCursor_NoDeclFound)
 			{
-				auto ret = mapCXTypeToIndex.insert({ bSubcursor.m_CXType, idx0 });
-				ok = ret.second;
-				idxDupWith = ret.first->second;
+				auto pointerCursor = GetPointerCursorFromPointerType(bSubcursor.m_CXType);
+				if (pointerCursor.IsValid())
+				{
+					auto ret = mapPointerCursorToIndex.insert({ pointerCursor, idx0 });
+					ok = ret.second;
+					idxDupWith = ret.first->second;
+				}
+				else
+				{
+					auto ret = mapCXTypeToIndex.insert({ bSubcursor.m_CXType, idx0 });
+					ok = ret.second;
+					idxDupWith = ret.first->second;
+				}
 			}
 			else
 			{
