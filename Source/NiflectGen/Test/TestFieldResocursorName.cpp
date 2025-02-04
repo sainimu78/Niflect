@@ -700,6 +700,7 @@ namespace TestGen
 					vecExpected.push_back("TestMyScope::CMyAsset*");
 					vecExpected.push_back("Niflect::TArray<TestMyScope::CMyAsset*>");
 					vecExpected.push_back("+TestMyScope::CMyAsset*");
+					vecExpected.push_back("TestMyScope::CMyResource**");
 					ASSERT(vecSignature.size() == vecExpected.size());
 					for (uint32 idx = 0; idx < vecExpected.size(); ++idx)
 						ASSERT(vecSignature[idx] == vecExpected[idx]);

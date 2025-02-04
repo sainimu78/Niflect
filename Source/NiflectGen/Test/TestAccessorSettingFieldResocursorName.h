@@ -33,4 +33,5 @@ namespace EngineTypeBindingSettingScope
 	NIF_AS_A() TSetting<TestMyScope::CMyResourceAccessor, TestMyScope::CMyResource*>;
 	template <typename TInstance, typename T>
 	NIF_AS_E() TSetting<TestMyScope::TSharedMyResourceAccessor<TInstance>, TestMyScope::TSharedMyResource<T> >;
+	NIF_AS_A() TSetting<TestMyScope::CMyResourcePtrPtrAccessor, TestMyScope::CMyResource**>;
 }

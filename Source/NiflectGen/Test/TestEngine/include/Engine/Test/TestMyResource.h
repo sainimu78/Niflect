@@ -48,4 +48,17 @@ namespace TestMyScope
 		//		return false;
 		//	}
 	};
+
+	class CMyResourcePtrPtrAccessor : public Niflect::CAccessor
+	{
+		//protected:
+		//	virtual bool SaveInstanceImpl(const AddrType base, CRwNode* rw) const override
+		//	{
+		//		return false;
+		//	}
+		//	virtual bool LoadInstanceImpl(AddrType base, const CRwNode* rw) const override
+		//	{
+		//		return false;
+		//	}
+	};
 }
