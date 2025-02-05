@@ -17,12 +17,12 @@ typedef unsigned int uint32;
 typedef unsigned long long uint64;
 
 #define ASSERT(b)\
-{\
+do {\
     bool cond = (b);\
     if (!cond)\
         fflush(stdout);\
     assert(cond);\
-} do{} while(0)
+} while(0)
 
 #ifdef NIFLECT_API
 #else
