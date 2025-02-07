@@ -236,12 +236,12 @@ namespace NiflectGen
 
 int main(int argc, const char** argv)
 {
-	if (true)//if (false)//
+	if (false)//if (true)//
 	{
 		TestGen::TestCollector();
 	}
 
-	if (false)//if (true)//
+	if (true)//if (false)//
 	{
 		using namespace NiflectGen;
 
