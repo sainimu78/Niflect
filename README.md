@@ -163,12 +163,12 @@ and the result
 
 ## [Experiment 2] Being C++ Native
 
-C++ programmers may need to :
+C++ programmers may need to do these 2 annoying tasks :
 
 - Modify a code generation tool for C++ type bindings or for types in other languages, such as C#.
 - Parse various string formats to retrieve metadata about types and fields.
 
-This may be necessary because the C++ reflection framework is not fully native.
+This must be necessary because the C++ reflection framework for programmers is not fully native.
 
 Due to this, being native is an essential requirement for C++ programmers.
 
