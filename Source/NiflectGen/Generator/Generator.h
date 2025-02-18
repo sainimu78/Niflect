@@ -8,7 +8,6 @@ typedef std::function<void(void* cursorAddr)> TestInterfaceFunc;
 
 namespace NiflectGen
 {
-	class CDataCollector;
 	class CCodeGenData;
 
 	class CFilePathAndContent
@@ -51,8 +50,6 @@ namespace NiflectGen
 		Niflect::TArrayNif<Niflect::CString> m_vecFileForSearchingCpp;
 		Niflect::TArrayNif<Niflect::CString> m_vecFileForSearchingH;
 		Niflect::TArrayNif<Niflect::CString> m_vecHeaderSearchPath;
-		Niflect::TSharedPtr<CDataCollector> m_collectorHolder;//仅为不包含头文件, 避免使用该类的工程需要添加clang头文件路径
-		CDataCollector& m_collector;
 		CModuleRegInfoValidated m_moduleRegInfo;
 		CGenLog* m_log;
 	};

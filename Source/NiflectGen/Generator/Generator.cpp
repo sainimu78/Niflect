@@ -33,9 +33,7 @@ namespace NiflectGen
     //}
 
     CGenerator::CGenerator()
-        : m_collectorHolder(MakeShared<CDataCollector>())
-        , m_collector(*m_collectorHolder)
-        , m_log(NULL)
+        : m_log(NULL)
     {
     }
     void CGenerator::AddTypeBindingSettingHeader(const Niflect::CString& filePath)
@@ -151,7 +149,8 @@ namespace NiflectGen
                 debugData.Init(cursor, fp);
                 context.m_debugData = &debugData;
                 CCollectionData collectionData;
-                m_collector.Collect(cursor, &taggedRoot, context, collectionData);
+                CDataCollector collector(m_moduleRegInfo);
+                collector.Collect(cursor, &taggedRoot, context, collectionData);
                 if (true)
                 {
                     CResolvingContext resolvingContext(m_log);

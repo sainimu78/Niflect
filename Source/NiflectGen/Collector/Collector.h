@@ -5,6 +5,7 @@
 #include "NiflectGen/Log/Log.h"
 #include "NiflectGen/Collector/TaggedNode.h"
 #include "NiflectGen/Util/CursorMap.h"
+#include "NiflectGen/CodeWriter/ModuleReg/ModuleRegCode.h"
 
 namespace NiflectGen
 {
@@ -92,7 +93,7 @@ namespace NiflectGen
 		friend class CScopeTemplateDecl;
 		friend CXChildVisitResult VisitorCallback(CXCursor cursor, CXCursor parent, CXClientData data);
 	public:
-		CDataCollector();
+		CDataCollector(const CModuleRegInfoValidated& moduleRegInfo);
 
 	public:
 		void Collect(const CXCursor& cursor, CTaggedNode2* taggedParent, CCollectingContext& context, CCollectionData& collectionData);
@@ -115,6 +116,7 @@ namespace NiflectGen
 		const CXCursor& GetVisitingNamespaceReserved() const;//备用
 
 	private:
+		const CModuleRegInfoValidated& m_moduleRegInfo;
 		Niflect::TArrayNif<CXCursor> m_stkNamespaceCursor;//备用
 		CMacroTagCollection2 m_macroTagCollection;
 		CTaggedTypeCollector m_taggedTypeCollector;

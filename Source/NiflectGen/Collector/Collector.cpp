@@ -833,8 +833,9 @@ namespace NiflectGen
 #else
 #endif
 
-	CDataCollector::CDataCollector()
-		: m_taggedTypeCollector(m_macroTagCollection)
+	CDataCollector::CDataCollector(const CModuleRegInfoValidated& moduleRegInfo)
+		: m_moduleRegInfo(moduleRegInfo)
+		, m_taggedTypeCollector(m_macroTagCollection)
 		, m_collectingClassBaseCursorDecl(true)
 	{
 	}

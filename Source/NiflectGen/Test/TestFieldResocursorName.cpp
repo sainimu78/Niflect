@@ -35,7 +35,7 @@ namespace TestGen
 					CGenLog log;
 					CCollectingContext context(&log);
 					CCollectionData collectionData;
-					CDataCollector collector;
+					CDataCollector collector(gen->GetModuleRegInfo());
 					collector.Collect(cursor, &taggedRoot, context, collectionData);
 					ASSERT(log.m_vecText.size() == 0);
 					CResolvingContext resolvingContext(&log);
@@ -74,7 +74,7 @@ namespace TestGen
 					CGenLog log;
 					CCollectingContext context(&log);
 					CCollectionData collectionData;
-					CDataCollector collector;
+					CDataCollector collector(gen->GetModuleRegInfo());
 					collector.Collect(cursor, &taggedRoot, context, collectionData);
 					ASSERT(log.m_vecText.size() == 0);
 					CResolvingContext resolvingContext(&log);
@@ -110,7 +110,7 @@ namespace TestGen
 					CGenLog log;
 					CCollectingContext context(&log);
 					CCollectionData collectionData;
-					CDataCollector collector;
+					CDataCollector collector(gen->GetModuleRegInfo());
 					collector.Collect(cursor, &taggedRoot, context, collectionData);
 					ASSERT(log.m_vecText.size() == 0);
 					CResolvingContext resolvingContext(&log);
@@ -146,7 +146,7 @@ namespace TestGen
 					CGenLog log;
 					CCollectingContext context(&log);
 					CCollectionData collectionData;
-					CDataCollector collector;
+					CDataCollector collector(gen->GetModuleRegInfo());
 					collector.Collect(cursor, &taggedRoot, context, collectionData);
 					ASSERT(log.m_vecText.size() == 0);
 					CResolvingContext resolvingContext(&log);
@@ -184,7 +184,7 @@ namespace TestGen
 					CGenLog log;
 					CCollectingContext context(&log);
 					CCollectionData collectionData;
-					CDataCollector collector;
+					CDataCollector collector(gen->GetModuleRegInfo());
 					collector.Collect(cursor, &taggedRoot, context, collectionData);
 					ASSERT(log.m_vecText.size() == 0);
 					CResolvingContext resolvingContext(&log);
@@ -222,7 +222,7 @@ namespace TestGen
 					CGenLog log;
 					CCollectingContext context(&log);
 					CCollectionData collectionData;
-					CDataCollector collector;
+					CDataCollector collector(gen->GetModuleRegInfo());
 					collector.Collect(cursor, &taggedRoot, context, collectionData);
 					ASSERT(log.m_vecText.size() == 0);
 					CResolvingContext resolvingContext(&log);
@@ -262,7 +262,7 @@ namespace TestGen
 					CGenLog log;
 					CCollectingContext context(&log);
 					CCollectionData collectionData;
-					CDataCollector collector;
+					CDataCollector collector(gen->GetModuleRegInfo());
 					collector.Collect(cursor, &taggedRoot, context, collectionData);
 					ASSERT(log.m_vecText.size() == 0);
 					CResolvingContext resolvingContext(&log);
@@ -304,7 +304,7 @@ namespace TestGen
 					CGenLog log;
 					CCollectingContext context(&log);
 					CCollectionData collectionData;
-					CDataCollector collector;
+					CDataCollector collector(gen->GetModuleRegInfo());
 					collector.Collect(cursor, &taggedRoot, context, collectionData);
 					ASSERT(log.m_vecText.size() == 0);
 					CResolvingContext resolvingContext(&log);
@@ -344,7 +344,7 @@ namespace TestGen
 					CGenLog log;
 					CCollectingContext context(&log);
 					CCollectionData collectionData;
-					CDataCollector collector;
+					CDataCollector collector(gen->GetModuleRegInfo());
 					collector.Collect(cursor, &taggedRoot, context, collectionData);
 					ASSERT(log.m_vecText.size() == 0);
 					CResolvingContext resolvingContext(&log);
@@ -386,7 +386,7 @@ namespace TestGen
 					CGenLog log;
 					CCollectingContext context(&log);
 					CCollectionData collectionData;
-					CDataCollector collector;
+					CDataCollector collector(gen->GetModuleRegInfo());
 					collector.Collect(cursor, &taggedRoot, context, collectionData);
 					ASSERT(log.m_vecText.size() == 0);
 					CResolvingContext resolvingContext(&log);
@@ -430,7 +430,7 @@ namespace TestGen
 					CGenLog log;
 					CCollectingContext context(&log);
 					CCollectionData collectionData;
-					CDataCollector collector;
+					CDataCollector collector(gen->GetModuleRegInfo());
 					collector.Collect(cursor, &taggedRoot, context, collectionData);
 					ASSERT(log.m_vecText.size() == 0);
 					CResolvingContext resolvingContext(&log);
@@ -477,7 +477,7 @@ namespace TestGen
 					CGenLog log;
 					CCollectingContext context(&log);
 					CCollectionData collectionData;
-					CDataCollector collector;
+					CDataCollector collector(gen->GetModuleRegInfo());
 					collector.Collect(cursor, &taggedRoot, context, collectionData);
 					ASSERT(log.m_vecText.size() == 0);
 					CResolvingContext resolvingContext(&log);
@@ -549,7 +549,7 @@ namespace TestGen
 					CGenLog log;
 					CCollectingContext context(&log);
 					CCollectionData collectionData;
-					CDataCollector collector;
+					CDataCollector collector(gen->GetModuleRegInfo());
 					collector.Collect(cursor, &taggedRoot, context, collectionData);
 					ASSERT(log.m_vecText.size() == 0);
 					CResolvingContext resolvingContext(&log);
@@ -585,7 +585,7 @@ namespace TestGen
 					CGenLog log;
 					CCollectingContext context(&log);
 					CCollectionData collectionData;
-					CDataCollector collector;
+					CDataCollector collector(gen->GetModuleRegInfo());
 					collector.Collect(cursor, &taggedRoot, context, collectionData);
 					ASSERT(log.m_vecText.size() == 0);
 					CResolvingContext resolvingContext(&log);
@@ -643,7 +643,7 @@ namespace TestGen
 					CGenLog log;
 					CCollectingContext context(&log);
 					CCollectionData collectionData;
-					CDataCollector collector;
+					CDataCollector collector(gen->GetModuleRegInfo());
 					collector.Collect(cursor, &taggedRoot, context, collectionData);
 					ASSERT(log.m_vecText.size() == 0);
 					CResolvingContext resolvingContext(&log);
@@ -683,7 +683,7 @@ namespace TestGen
 					CGenLog log;
 					CCollectingContext context(&log);
 					CCollectionData collectionData;
-					CDataCollector collector;
+					CDataCollector collector(gen->GetModuleRegInfo());
 					collector.Collect(cursor, &taggedRoot, context, collectionData);
 					ASSERT(log.m_vecText.size() == 0);
 					CResolvingContext resolvingContext(&log);
@@ -721,7 +721,7 @@ namespace TestGen
 					CGenLog log;
 					CCollectingContext context(&log);
 					CCollectionData collectionData;
-					CDataCollector collector;
+					CDataCollector collector(gen->GetModuleRegInfo());
 					collector.Collect(cursor, &taggedRoot, context, collectionData);
 					ASSERT(log.m_vecText.size() == 0);
 					CResolvingContext resolvingContext(&log);

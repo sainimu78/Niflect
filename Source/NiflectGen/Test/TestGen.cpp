@@ -22,7 +22,7 @@ namespace TestGen
 			Test::InitArgs(info);
 			gen->Init(info, NULL);
 			CCodeGenData genData;
-			gen->Generate(genData, [](void* cursorAddr)
+			gen->Generate(genData, [&gen](void* cursorAddr)
 				{
 					auto& cursor = *static_cast<CXCursor*>(cursorAddr);
 					CTaggedNode2 taggedRoot;
@@ -30,7 +30,7 @@ namespace TestGen
 					//log.Config(CGenLogOption().SetAssertionOnAddingItem(false).SetCachedItems(true));
 					CCollectingContext context(&log);
 					CCollectionData collectionData;
-					CDataCollector collector;
+					CDataCollector collector(gen->GetModuleRegInfo());
 					collector.Collect(cursor, &taggedRoot, context, collectionData);
 					auto& vec = collectionData.m_accessorBindingMapping->m_settings.m_vecAccessorBindingSetting;
 					ASSERT(log.m_vecText.size() == 0);
@@ -52,14 +52,14 @@ namespace TestGen
 			Test::InitArgs(info);
 			gen->Init(info, NULL);
 			CCodeGenData genData;
-			gen->Generate(genData, [](void* cursorAddr)
+			gen->Generate(genData, [&gen](void* cursorAddr)
 				{
 					auto& cursor = *static_cast<CXCursor*>(cursorAddr);
 					CTaggedNode2 taggedRoot;
 					CGenLog log;
 					CCollectingContext context(&log);
 					CCollectionData collectionData;
-					CDataCollector collector;
+					CDataCollector collector(gen->GetModuleRegInfo());
 					collector.Collect(cursor, &taggedRoot, context, collectionData);
 					auto& vec = collectionData.m_accessorBindingMapping->m_settings.m_vecAccessorBindingSetting;
 					ASSERT(log.m_vecText.size() == 0);
@@ -76,7 +76,7 @@ namespace TestGen
 			Test::InitArgs(info);
 			gen->Init(info, NULL);
 			CCodeGenData genData;
-			gen->Generate(genData, [](void* cursorAddr)
+			gen->Generate(genData, [&gen](void* cursorAddr)
 				{
 					auto& cursor = *static_cast<CXCursor*>(cursorAddr);
 					CTaggedNode2 taggedRoot;
@@ -84,7 +84,7 @@ namespace TestGen
 					log.Config(CGenLogOption().SetAssertionOnAddingItem(false).SetCachedItems(true));
 					CCollectingContext context(&log);
 					CCollectionData collectionData;
-					CDataCollector collector;
+					CDataCollector collector(gen->GetModuleRegInfo());
 					collector.Collect(cursor, &taggedRoot, context, collectionData);
 					auto& vec = collectionData.m_accessorBindingMapping->m_settings.m_vecAccessorBindingSetting;
 					ASSERT(log.m_vecText.size() == 4);
@@ -101,14 +101,14 @@ namespace TestGen
 			Test::InitArgs(info);
 			gen->Init(info, NULL);
 			CCodeGenData genData;
-			gen->Generate(genData, [](void* cursorAddr)
+			gen->Generate(genData, [&gen](void* cursorAddr)
 				{
 					auto& cursor = *static_cast<CXCursor*>(cursorAddr);
 					CTaggedNode2 taggedRoot;
 					CGenLog log;
 					CCollectingContext context(&log);
 					CCollectionData collectionData;
-					CDataCollector collector;
+					CDataCollector collector(gen->GetModuleRegInfo());
 					collector.Collect(cursor, &taggedRoot, context, collectionData);
 					ASSERT(log.m_vecText.size() == 0);
 					auto& vec0 = collectionData.m_accessorBindingMapping->m_settings.m_vecAccessorBindingSetting;
@@ -212,7 +212,7 @@ namespace TestGen
 					CGenLog log;
 					CCollectingContext context(&log);
 					CCollectionData collectionData;
-					CDataCollector collector;
+					CDataCollector collector(gen->GetModuleRegInfo());
 					collector.Collect(cursor, &taggedRoot, context, collectionData);
 					ASSERT(log.m_vecText.size() == 0);
 					CResolvingContext resolvingContext(&log);
@@ -258,14 +258,14 @@ namespace TestGen
 			Test::InitArgs(info);
 			gen->Init(info, NULL);
 			CCodeGenData genData;
-			gen->Generate(genData, [&info](void* cursorAddr)
+			gen->Generate(genData, [&gen](void* cursorAddr)
 				{
 					auto& cursor = *static_cast<CXCursor*>(cursorAddr);
 					CTaggedNode2 taggedRoot;
 					CGenLog log;
 					CCollectingContext context(&log);
 					CCollectionData collectionData;
-					CDataCollector collector;
+					CDataCollector collector(gen->GetModuleRegInfo());
 					collector.Collect(cursor, &taggedRoot, context, collectionData);
 					ASSERT(log.m_vecText.size() == 0);
 					Niflect::TArrayNif<Niflect::CString> vecExpectedA;
@@ -320,7 +320,7 @@ namespace TestGen
 					CGenLog log;
 					CCollectingContext context(&log);
 					CCollectionData collectionData;
-					CDataCollector collector;
+					CDataCollector collector(gen->GetModuleRegInfo());
 					collector.Collect(cursor, &taggedRoot, context, collectionData);
 					ASSERT(log.m_vecText.size() == 0);
 					CResolvingContext resolvingContext(&log);
@@ -370,7 +370,7 @@ namespace TestGen
 					CTaggedNode2 taggedRoot;
 					CCollectingContext context(&log);
 					CCollectionData collectionData;
-					CDataCollector collector;
+					CDataCollector collector(gen->GetModuleRegInfo());
 					collector.Collect(cursor, &taggedRoot, context, collectionData);
 					ASSERT(log.m_vecText.size() == 0);
 					CResolvingContext resolvingContext(&log);
