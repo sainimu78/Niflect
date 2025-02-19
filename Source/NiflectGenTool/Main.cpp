@@ -12,6 +12,7 @@
 #include <cstring>//strcmp
 #include <iostream>//std::cin.get()
 #include "CommandLineArgParser.h"
+#include "CMakeProjectFramework/ProjectVersion.h"
 
 //代码中的用语
 //1. StaticRegStage, 在静态初始化阶段的注册过程
@@ -169,7 +170,11 @@ namespace NiflectGen
 		for (int idx = 1; idx < argc; ++idx)
 		{
 			auto& pszV = argv[idx];
-			if (strcmp(pszV, "-n") == 0)
+			if (strcmp(pszV, "-v") == 0)
+			{
+				printf("Version: %d.%d.%d\n", g_versionMajor, g_versionMinor, g_versionPatch);
+			}
+			else if (strcmp(pszV, "-n") == 0)
 			{
 				info.m_moduleName = GetNextArgValue(argv, idx);
 			}
