@@ -17,4 +17,5 @@ add_subdirectory(NiflectGen)
 add_subdirectory(${c_ProjectName})
 
 include(${c_RootCMakeProjectFrameworkDirPath}/Release.cmake)
+#include(${c_RootCMakeProjectFrameworkDirPath}/GenerateReleaseVersionInfo.cmake)
 include(${c_RootCMakeProjectFrameworkDirPath}/Cleanup.cmake)

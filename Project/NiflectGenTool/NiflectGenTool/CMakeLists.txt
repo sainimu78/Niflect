@@ -25,4 +25,4 @@ endif()
 include(Licensed_CommandLineArgParser.cmake)
 
 include(${c_ProjectDirPath}/Install.cmake)
-include(${c_RootCMakeProjectFrameworkDirPath}/Versioning.cmake)
+include(${c_RootCMakeProjectFrameworkDirPath}/IntegrateProjectVersion.cmake)
