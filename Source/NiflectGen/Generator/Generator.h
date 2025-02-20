@@ -10,9 +10,8 @@ namespace NiflectGen
 {
 	class CCodeGenData;
 
-	class CFilePathAndContent
+	struct SFilePathAndContent
 	{
-	public:
 		Niflect::CString m_filePath;
 		CCodeWriter m_writer;
 	};
@@ -20,7 +19,7 @@ namespace NiflectGen
 	class CSavingData
 	{
 	public:
-		std::vector<CFilePathAndContent> m_vecFileInfo;
+		std::vector<SFilePathAndContent> m_vecFileInfo;
 	};
 
 	class CGenerator

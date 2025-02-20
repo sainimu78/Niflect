@@ -156,6 +156,7 @@ namespace NiflectGenDefinition
 			constexpr const char* ModuleRegisteredTypeHeader = "_RegisteredType.h";
 			constexpr const char* BypassingHeader = "NiflectSTLDeclaration.h";
 			constexpr const char* BypassSTLDefaultHeaderFileName = "NiflectSTLDeclaration.h";
+			constexpr const char* FinishedFlag = "FinishedFlag.txt";
 		}
 		namespace FilePath
 		{

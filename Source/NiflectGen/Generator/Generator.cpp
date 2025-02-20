@@ -245,7 +245,7 @@ namespace NiflectGen
         const auto* outputDirPath = &m_moduleRegInfo.m_userProvided.m_genOutputDirPath;
         if (!m_moduleRegInfo.m_userProvided.m_genSourceOutputDirPath.empty())
             outputDirPath = &m_moduleRegInfo.m_userProvided.m_genSourceOutputDirPath;
-        saving.m_vecFileInfo.push_back(CFilePathAndContent());
+        saving.m_vecFileInfo.push_back(SFilePathAndContent());
         auto& item = saving.m_vecFileInfo.back();
         auto filePath = NiflectUtil::ConcatPath(m_moduleRegInfo.m_genSourceRootParentDir, relativeFilePath);
         item.m_filePath = NiflectUtil::ConcatPath(*outputDirPath, filePath);
@@ -266,14 +266,15 @@ namespace NiflectGen
         return existingContent == newContent;
     }
     const unsigned char bom[] = { 0xEF, 0xBB, 0xBF };
-    static bool WriteToDisk(const CFilePathAndContent& info)
+    static bool WriteToDisk(const SFilePathAndContent& info)
     {
         NiflectUtil::MakeDirectories(info.m_filePath);
         std::ofstream ofs;
         if (NiflectUtil::OpenFileStream(ofs, info.m_filePath))
         {
             // 写入BOM（Byte Order Mark），以明确表示文件是UTF-8编码
-            ofs.write(reinterpret_cast<const char*>(bom), sizeof(bom));
+            if (!info.m_writer.m_code.empty())
+                ofs.write(reinterpret_cast<const char*>(bom), sizeof(bom));
             ofs << info.m_writer.m_code;
             return true;
         }
@@ -281,7 +282,6 @@ namespace NiflectGen
     }
     void CGenerator::Save2(const CCodeGenData& genData) const
     {
-        uint32 forceSavingIdx = INDEX_NONE;
         CSavingData saving;
         for (auto& it0 : genData.m_typeRegCreateTypeAccessorSpecGenData.m_vecCreateTypeAccessorSpecData)
         {
@@ -302,9 +302,19 @@ namespace NiflectGen
         }
         if (genData.m_moduleRegGenData.m_genH.size() > 0)
             this->SaveFileToGenSource(genData.m_moduleRegGenData.m_genH, genData.m_moduleRegGenData.m_genHIncludePath, saving);
-        forceSavingIdx = static_cast<uint32>(saving.m_vecFileInfo.size());
         this->SaveFileToGenSource(genData.m_moduleRegGenData.m_privateH, genData.m_moduleRegGenData.m_privateHIncludePath, saving);
         this->SaveFileToGenSource(genData.m_moduleRegisteredTypeHeaderGenData.m_linesHeader, m_moduleRegInfo.m_moduleRegisteredTypeHeaderFilePath, saving);
+
+        {
+            if (!m_moduleRegInfo.m_userProvided.m_genSourceOutputDirPath.empty())
+                ASSERT(false);//经检查, 此选项可能废弃
+
+            //此文件为接入 cmake 所依赖的文件, 如无变化不写入则 cmake 无法确认是否工具已正确执行, 导致每次构建都会执行工具
+            //接入 cmake 相关的代码见 IntegrateNiflectGenTool.cmake 中 add_custom_command(OUTPUT "${GeneratedModulePrivateH}"
+            auto finishedFlagFilePath = NiflectUtil::ConcatPath(m_moduleRegInfo.m_userProvided.m_genOutputDirPath, NiflectGenDefinition::NiflectFramework::FileName::FinishedFlag);
+            if (!WriteToDisk(SFilePathAndContent{ finishedFlagFilePath }))
+                GenLogError(m_log, NiflectUtil::FormatString("Failed to write %s", saving.m_vecFileInfo.back().m_filePath.c_str()));
+        }
 
         size_t offset = 0;
         const bool writeEncodingMark = true;
@@ -331,11 +341,7 @@ namespace NiflectGen
                 canWrite = true;
             }
             if (canWrite)
-            {
-                if (forceSavingIdx == idx0)
-                    forceSavingIdx = INDEX_NONE;
                 vecIdxToSave.push_back(idx0);
-            }
         }
 
         //当生成内容全须写入时, 清空生成目录以清理残留文件
@@ -351,12 +357,6 @@ namespace NiflectGen
             auto& it0 = saving.m_vecFileInfo[savingIdx];
             if (WriteToDisk(it0))
                 GenLogInfo(m_log, it0.m_filePath.c_str());
-        }
-        if (forceSavingIdx != INDEX_NONE)
-        {
-            //此文件为接入 cmake 所依赖的文件, 如无变化不写入则 cmake 无法确认是否工具已正确执行, 导致每次构建都会执行工具
-            //接入 cmake 相关的代码见 IntegrateNiflectGenTool.cmake 中 add_custom_command(OUTPUT "${GeneratedModulePrivateH}"
-            WriteToDisk(saving.m_vecFileInfo[forceSavingIdx]);
         }
 
         Niflect::CString summary = "Finished";
