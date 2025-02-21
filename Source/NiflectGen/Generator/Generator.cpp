@@ -305,17 +305,6 @@ namespace NiflectGen
         this->SaveFileToGenSource(genData.m_moduleRegGenData.m_privateH, genData.m_moduleRegGenData.m_privateHIncludePath, saving);
         this->SaveFileToGenSource(genData.m_moduleRegisteredTypeHeaderGenData.m_linesHeader, m_moduleRegInfo.m_moduleRegisteredTypeHeaderFilePath, saving);
 
-        {
-            if (!m_moduleRegInfo.m_userProvided.m_genSourceOutputDirPath.empty())
-                ASSERT(false);//经检查, 此选项可能废弃
-
-            //此文件为接入 cmake 所依赖的文件, 如无变化不写入则 cmake 无法确认是否工具已正确执行, 导致每次构建都会执行工具
-            //接入 cmake 相关的代码见 IntegrateNiflectGenTool.cmake 中 add_custom_command(OUTPUT "${GeneratedModulePrivateH}"
-            auto finishedFlagFilePath = NiflectUtil::ConcatPath(m_moduleRegInfo.m_userProvided.m_genOutputDirPath, NiflectGenDefinition::NiflectFramework::FileName::FinishedFlag);
-            if (!WriteToDisk(SFilePathAndContent{ finishedFlagFilePath }))
-                GenLogError(m_log, NiflectUtil::FormatString("Failed to write %s", saving.m_vecFileInfo.back().m_filePath.c_str()));
-        }
-
         size_t offset = 0;
         const bool writeEncodingMark = true;
         if (writeEncodingMark)
@@ -330,7 +319,9 @@ namespace NiflectGen
             if (NiflectUtil::OpenFileStream(ifs, it0.m_filePath))
             {
                 ifs.seekg(0, std::ios::end);
-                size_t fileSize = static_cast<size_t>(ifs.tellg()) - offset;
+                auto fileSize = static_cast<size_t>(ifs.tellg());
+                if (fileSize >= offset)
+                    fileSize -= offset;
                 ifs.seekg(offset, std::ios::beg);
                 Niflect::CString fileContent(fileSize, '\0');
                 ifs.read(&fileContent[0], fileSize);
@@ -363,6 +354,17 @@ namespace NiflectGen
         if (vecIdxToSave.size() == 0)
             summary = "No changes";
         GenLogInfo(m_log, NiflectUtil::FormatString("NiflectGenTool of %s, %s", m_moduleRegInfo.m_userProvided.m_moduleName.c_str(), summary.c_str()));
+
+        {
+            if (!m_moduleRegInfo.m_userProvided.m_genSourceOutputDirPath.empty())
+                ASSERT(false);//经检查, 此选项可能废弃
+
+            //此文件为接入 cmake 所依赖的文件, 如无变化不写入则 cmake 无法确认是否工具已正确执行, 导致每次构建都会执行工具
+            //接入 cmake 相关的代码见 IntegrateNiflectGenTool.cmake 中 add_custom_command(OUTPUT "${GeneratedModulePrivateH}"
+            auto finishedFlagFilePath = NiflectUtil::ConcatPath(m_moduleRegInfo.m_userProvided.m_genOutputDirPath, NiflectGenDefinition::NiflectFramework::FileName::FinishedFlag);
+            if (!WriteToDisk(SFilePathAndContent{ finishedFlagFilePath }))
+                GenLogError(m_log, NiflectUtil::FormatString("Failed to write %s", saving.m_vecFileInfo.back().m_filePath.c_str()));
+        }
     }
     void CGenerator::Cleanup() const
     {
