@@ -1,3 +1,3 @@
-set(c_ProjectVersionMajor 1)
-set(c_ProjectVersionMinor 2)
-set(c_ProjectVersionPatch 3)
+set(c_ProjectVersionMajor 0)
+set(c_ProjectVersionMinor 6)
+set(c_ProjectVersionPatch 1)
