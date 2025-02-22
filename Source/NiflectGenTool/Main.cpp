@@ -182,6 +182,10 @@ namespace NiflectGen
 			{
 				info.m_vecModuleHeader2.push_back(GetNextArgPath(argv, idx));
 			}
+			else if (strcmp(pszV, "-ph") == 0)
+			{
+				info.m_vecModulePrecompileHeader.push_back(GetNextArgPath(argv, idx));
+			}
 			else if (strcmp(pszV, "-am") == 0)
 			{
 				info.m_moduleApiMacro = GetNextArgValue(argv, idx);
