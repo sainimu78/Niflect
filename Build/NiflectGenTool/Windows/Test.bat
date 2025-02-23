@@ -1,3 +1,3 @@
 @echo off
-@set TestDirPath=..\..\..\..\Test\NiflectGenTool
+@set TestDirPath=..\..\..\..\Project\NiflectGenToolTest
 @..\..\..\ThirdParty\CMakeProjectFramework\PlatformSpecificScript\Windows\Test.bat

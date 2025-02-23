@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.20)
 
-include(../../Project/InitRootPath.cmake)
+include(../InitRootPath.cmake)
 
 set(c_ProjectName MyTestExample)
 
@@ -12,12 +12,12 @@ enable_testing()
 
 set(ModuleName MyTestExample_0)
 add_executable(${ModuleName} TestExample_0.cpp)
-include(${c_RootCMakeProjectFrameworkThirdPartyDirPath}/googletest/Shared.cmake)
+include(Licensed_googletest.cmake)
 add_test(NAME ${ModuleName} COMMAND ${ModuleName}) # 支持 ctest
 
 set(ModuleName MyTestExample_1)
 add_executable(${ModuleName} TestExample_1.cpp)
-include(${c_RootCMakeProjectFrameworkThirdPartyDirPath}/googletest/Shared.cmake)
+include(Licensed_googletest.cmake)
 add_test(NAME ${ModuleName} COMMAND ${ModuleName}) # 支持 ctest
 
 include(${c_RootCMakeProjectFrameworkDirPath}/Cleanup.cmake)

@@ -1,3 +1,3 @@
 #!/bin/bash
-export TestDirPath=../../../../../Test/NiflectGenTool
+export TestDirPath=../../../../../Project/NiflectGenToolTest
 ../../../ThirdParty/CMakeProjectFramework/PlatformSpecificScript/Linux/Test.sh
