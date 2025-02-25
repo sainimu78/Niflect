@@ -1,4 +1,4 @@
-#include "Niflect/NiflectModule.h"
+#include "Niflect/NiflectModuleManager.h"
 #ifdef WIN32
 #include <Windows.h>
 #else
@@ -55,5 +55,37 @@ namespace Niflect
 			ASSERT(false);
 		}
 		return ok;
+	}
+
+	void CNiflectModuleManager2::InitRegisteredModules()
+	{
+		for (auto& it0 : m_vecModule)
+			it0.m_info.RegisterTypes();
+		for (auto& it0 : m_vecModule)
+			it0.m_info.InitTypes();
+		for (auto& it0 : m_vecModule)
+			it0.m_info.InitTableTypesLayout();
+	}
+	bool CNiflectModuleManager2::RegisterModuleStatically(const Niflect::CString& name, const ModuleRegisterTypesFunc& RegisterTypesFunc, const ModuleInitTypesFunc& InitTypesFunc)
+	{
+		uint32 idx = this->GetModulesCount();
+		m_vecModule.push_back(CNiflectModule2());
+		auto& module = m_vecModule.back();
+		module.m_indexInManager = idx;
+		module.m_info.InitMeta(name, RegisterTypesFunc, InitTypesFunc);
+		return true;
+	}
+	uint32 CNiflectModuleManager2::GetModulesCount() const
+	{
+		return static_cast<uint32>(m_vecModule.size());
+	}
+
+	CNiflectModuleManager2* GetModuleManager()
+	{
+		using CSharedModuleManager = Niflect::TSharedPtr<CNiflectModuleManager2>;
+		static CSharedModuleManager s_mgr;
+		if (s_mgr == NULL)
+			s_mgr = Niflect::MakeShared<CNiflectModuleManager2>();
+		return s_mgr.Get();
 	}
 }

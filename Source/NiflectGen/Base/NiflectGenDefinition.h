@@ -167,6 +167,7 @@ namespace NiflectGenDefinition
 			constexpr const char* NiflectTableHeader = "Niflect/NiflectTable.h";
 			constexpr const char* NiflectMacroHeader = "Niflect/NiflectMacro.h";
 			constexpr const char* NiflectModuleInfoHeader = "Niflect/NiflectModuleInfo.h";
+			constexpr const char* NiflectModuleManagerHeader = "Niflect/NiflectModuleManager.h";
 		}
 		namespace Setting
 		{

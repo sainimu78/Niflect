@@ -388,7 +388,7 @@ namespace NiflectGen
                         if (toGenCApiStaticModuleRegGetModuleInfoFunction)
                             vecHeaderData.push_back(moduleGenHFilePath);
                         else
-                            vecHeaderData.push_back(NiflectGenDefinition::NiflectFramework::FilePath::NiflectModuleInfoHeader);
+                            vecHeaderData.push_back(NiflectGenDefinition::NiflectFramework::FilePath::NiflectModuleManagerHeader);
                     }
                     CIncludesHelper::ConvertFromHeaderFilePaths(vecHeaderData, m_moduleRegInfo.m_writingHeaderSearchPaths, linesInclude);
                     MapLabelToLines(map, LABEL_0, linesInclude);
