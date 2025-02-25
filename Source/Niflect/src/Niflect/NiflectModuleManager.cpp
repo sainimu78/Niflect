@@ -80,12 +80,20 @@ namespace Niflect
 		return static_cast<uint32>(m_vecModule.size());
 	}
 
+	using CSharedModuleManager = Niflect::TSharedPtr<CNiflectModuleManager2>;
+	static CSharedModuleManager g_mgr;
+	CNiflectModuleManager2* InitializeModuleManager()
+	{
+		ASSERT(g_mgr == NULL);
+		g_mgr = Niflect::MakeShared<CNiflectModuleManager2>();
+		return g_mgr.Get();
+	}
+	void FinalizeModuleManager()
+	{
+		g_mgr = NULL;
+	}
 	CNiflectModuleManager2* GetModuleManager()
 	{
-		using CSharedModuleManager = Niflect::TSharedPtr<CNiflectModuleManager2>;
-		static CSharedModuleManager s_mgr;
-		if (s_mgr == NULL)
-			s_mgr = Niflect::MakeShared<CNiflectModuleManager2>();
-		return s_mgr.Get();
+		return g_mgr.Get();
 	}
 }
