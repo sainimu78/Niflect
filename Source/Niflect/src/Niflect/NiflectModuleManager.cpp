@@ -82,13 +82,13 @@ namespace Niflect
 
 	using CSharedModuleManager = Niflect::TSharedPtr<CNiflectModuleManager2>;
 	static CSharedModuleManager g_mgr;
-	CNiflectModuleManager2* InitializeModuleManager()
+	CNiflectModuleManager2* CNiflectModuleManager2::InitializeSingleton()
 	{
 		ASSERT(g_mgr == NULL);
 		g_mgr = Niflect::MakeShared<CNiflectModuleManager2>();
 		return g_mgr.Get();
 	}
-	void FinalizeModuleManager()
+	void CleanupModuleManager()
 	{
 		g_mgr = NULL;
 	}

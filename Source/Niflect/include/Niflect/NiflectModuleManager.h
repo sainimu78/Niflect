@@ -65,14 +65,14 @@ namespace Niflect
 
 	private:
 		NIFLECT_API bool RegisterModuleStatically(const Niflect::CString& name, const ModuleRegisterTypesFunc& RegisterTypesFunc, const ModuleInitTypesFunc& InitTypesFunc);
+		NIFLECT_API static CNiflectModuleManager2* InitializeSingleton();
 
 	private:
 		Niflect::TArrayNif<CNiflectModule2> m_vecModule;
 	};
 
-	NIFLECT_API CNiflectModuleManager2* InitializeModuleManager();
-	NIFLECT_API void FinalizeModuleManager();
 	NIFLECT_API CNiflectModuleManager2* GetModuleManager();
+	NIFLECT_API void CleanupModuleManager();
 
 	class CNiflectModuleRegger
 	{
@@ -81,7 +81,7 @@ namespace Niflect
 		{
 			auto mgr = GetModuleManager();
 			if (mgr == NULL)
-				mgr = InitializeModuleManager();
+				mgr = CNiflectModuleManager2::InitializeSingleton();
 			mgr->RegisterModuleStatically(name, RegisterTypesFunc, InitTypesFunc);
 		}
 	};
