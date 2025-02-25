@@ -31,7 +31,12 @@ namespace Niflect
 R"(#pragma once
 )" MAKELABEL(LABEL_0) R"(
 
-extern "C" )" MAKELABEL(LABEL_5) R"( Niflect::CNiflectModuleInfo* )" MAKELABEL(LABEL_6) "" MAKELABEL(LABEL_4) "();";
+extern "C" )" MAKELABEL(LABEL_5) " Niflect::CNiflectModuleInfo* " MAKELABEL(LABEL_6) "" MAKELABEL(LABEL_4) "();";
+		static const char* StaticModuleRegHeader2 =
+R"(#pragma once
+)" MAKELABEL(LABEL_0) R"(
+
+extern "C" )" MAKELABEL(LABEL_5) " Niflect::CNiflectModuleInfo* " MAKELABEL(LABEL_6) "" MAKELABEL(LABEL_4) "();";
 		static const char* StaticModuleRegImpl =
 R"(namespace Niflect
 {
@@ -48,10 +53,28 @@ R"(namespace Niflect
 	CSharedModuleInfo CRegger_)" MAKELABEL(LABEL_4) R"(::s_info;
 	static CRegger_)" MAKELABEL(LABEL_4) R"( g_staticRegger_)" MAKELABEL(LABEL_4) R"((")" MAKELABEL(LABEL_4) R"(", &GeneratedInitialReg, &GeneratedInitTypes);
 })";
+#define FUNCNAMEHARDCODEDSTRING_GetModuleInfoPrivate "NiflectGeneratedGetModuleInfoPrivate"
+		static const char* StaticModuleRegImpl2 =
+R"(Niflect::CNiflectModuleInfo* )" FUNCNAMEHARDCODEDSTRING_GetModuleInfoPrivate R"(()
+{
+	using namespace Niflect;
+	static CSharedModuleInfo s_info;
+	if (s_info == NULL)
+	{
+		s_info = Niflect::MakeShared<CNiflectModuleInfo>();
+		s_info->InitMeta(")" MAKELABEL(LABEL_4) R"(", &GeneratedInitialReg, &GeneratedInitTypes);
+	}
+	return s_info.Get();
+})";
 		static const char* StaticModuleRegGetModuleC =
 "Niflect::CNiflectModuleInfo* " MAKELABEL(LABEL_6) "" MAKELABEL(LABEL_4) R"(()
 {
 	return Niflect::CRegger_)" MAKELABEL(LABEL_4) R"(::s_info.Get();
+})";
+		static const char* StaticModuleRegGetModuleC2 =
+"Niflect::CNiflectModuleInfo* " MAKELABEL(LABEL_6) "" MAKELABEL(LABEL_4) R"(()
+{
+	return )" FUNCNAMEHARDCODEDSTRING_GetModuleInfoPrivate R"(();
 })";
 	}
 }

@@ -226,6 +226,10 @@ namespace NiflectGen
 			{
 				info.m_toGenStaticModuleReg = true;
 			}
+			else if (strcmp(pszV, "-gmi") == 0)
+			{
+				info.m_toGenCreateModuleInfoFunction = true;
+			}
 			else if (strcmp(pszV, "-fs") == 0)
 			{
 				info.m_genFileMode = EGeneratingHeaderAndSourceFileMode::ESourceAndHeader;

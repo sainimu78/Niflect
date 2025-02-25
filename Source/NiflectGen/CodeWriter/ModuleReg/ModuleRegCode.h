@@ -19,6 +19,7 @@ namespace NiflectGen
 		CModuleRegInfo()
 			: m_toGenGeneratedBodyThisType(false)
 			, m_toGenStaticModuleReg(false)
+			, m_toGenCreateModuleInfoFunction(false)
 			, m_genFileMode(EGeneratingHeaderAndSourceFileMode::EHeaderOnly)
 		{
 		}
@@ -35,6 +36,7 @@ namespace NiflectGen
 		Niflect::CString m_toolHeaderSearchPath;
 		bool m_toGenGeneratedBodyThisType;
 		bool m_toGenStaticModuleReg;
+		bool m_toGenCreateModuleInfoFunction;
 		EGeneratingHeaderAndSourceFileMode m_genFileMode;
 	};
 
