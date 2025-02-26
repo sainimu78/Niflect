@@ -20,11 +20,16 @@ add_executable(${ModuleName} TestExample_1.cpp)
 include(Licensed_googletest.cmake)
 add_test(NAME ${ModuleName} COMMAND ${ModuleName}) # 支持 ctest
 
+add_subdirectory(Niflect)
+
+add_subdirectory(Test0)
+set(DefaultModuleName Test0)
+
 include(${c_RootCMakeProjectFrameworkDirPath}/Cleanup.cmake)
 
 if(MSVC)
-    set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT ${ModuleName})
-	set_target_properties(${ModuleName} PROPERTIES
+    set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT ${DefaultModuleName})
+	set_target_properties(${DefaultModuleName} PROPERTIES
 		VS_DEBUGGER_WORKING_DIRECTORY "$<IF:$<CONFIG:Debug>,${CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG},${CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE}>"
 	)
 endif()
