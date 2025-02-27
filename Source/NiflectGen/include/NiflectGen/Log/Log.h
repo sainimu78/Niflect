@@ -1,6 +1,6 @@
 #pragma once
 #include "Niflect/NiflectBase.h"
-#include "NiflectGenCommon.h"
+#include "NiflectGen/NiflectGenCommon.h"
 
 namespace NiflectGen
 {

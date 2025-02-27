@@ -1,6 +1,7 @@
 #pragma once
 #include "NiflectGen/NiflectGenCommon.h"
 #include "NiflectGen/CodeWriter/ModuleReg/ModuleRegCode.h"
+#include "NiflectGen/Generator/GenData.h"
 #include "NiflectGen/Log/Log.h"
 
 //仅为避免引用clang头文件将cursor类型定义为void*
@@ -8,8 +9,6 @@ typedef std::function<void(void* cursorAddr)> TestInterfaceFunc;
 
 namespace NiflectGen
 {
-	class CCodeGenData;
-
 	struct SFilePathAndContent
 	{
 		Niflect::CString m_filePath;

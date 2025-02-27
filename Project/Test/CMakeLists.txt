@@ -21,9 +21,11 @@ include(Licensed_googletest.cmake)
 add_test(NAME ${ModuleName} COMMAND ${ModuleName}) # 支持 ctest
 
 add_subdirectory(Niflect)
+add_subdirectory(NiflectGen)
 
 add_subdirectory(Test0)
-set(DefaultModuleName Test0)
+add_subdirectory(Test1)
+set(DefaultModuleName Test1)
 
 include(${c_RootCMakeProjectFrameworkDirPath}/Cleanup.cmake)
 
