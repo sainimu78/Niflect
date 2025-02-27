@@ -1,8 +1,8 @@
 set(ModuleName Test1)
 
-file(GLOB_RECURSE SrcAll *.cpp *.h)
+#file(GLOB_RECURSE SrcAll *.cpp *.h)
 
-add_executable(${ModuleName} ${SrcAll})
+add_executable(${ModuleName} SaveLoadByModuleInfo.cpp)
 
 target_link_libraries(${ModuleName} PRIVATE Niflect)
 target_link_libraries(${ModuleName} PRIVATE NiflectGen)

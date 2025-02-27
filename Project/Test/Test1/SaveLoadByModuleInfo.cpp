@@ -4,22 +4,28 @@
 #include "Niflect/Util/StringUtil.h"
 #include "Niflect/Util/ConcatHardCodedStrings.h"
 #include "Niflect/Util/SystemUtil.h"
+#include <thread>
+
 #define ROOT_DIR_PATH "../../../../../.."
 
-TEST(SaveLoad, ExampleJson2) {
+TEST(SaveLoad, BuildTest) {
     using namespace NiflectGen;
 	auto log = CreateGenLog();
 	auto rootDirPath = NiflectUtil::ResolvePath(ROOT_DIR_PATH);
-	auto test1SourceDirPath = NiflectUtil::ConcatPath(rootDirPath, "/Project/Test/Test1");
+	auto test1BeingTestedSourceDirPath = NiflectUtil::ConcatPath(rootDirPath, "/Project/Test/Test1/BeingTested");
 	auto niflectSourceDirPath = NiflectUtil::ConcatPath(rootDirPath, "/Source/Niflect/include");
-	auto buildDirPath = NiflectUtil::GetCurrentWorkingDirPath();
+	auto exeDirPath = NiflectUtil::GetCurrentWorkingDirPath();
+	auto generatedDirPath = NiflectUtil::ConcatPath(exeDirPath, "/Test1_Generated");
+	auto beingTestedBuildDirPath = NiflectUtil::ConcatPath(generatedDirPath, "/Build");
+
 	CModuleRegInfo info;
-	info.m_moduleName = "Test1_Module";
-	info.m_vecModuleHeader2.push_back(NiflectUtil::ConcatPath(test1SourceDirPath, "SaveLoadByModuleInfo.h"));
-	info.m_vecAccessorSettingHeader.push_back(NiflectUtil::ConcatPath(test1SourceDirPath, "Test1AccessorSetting.h"));
-	info.m_vecModuleHeaderSearchPath2.push_back(NiflectUtil::ConcatPath(test1SourceDirPath, "/"));
+	info.m_moduleName = "Test1BeingTestedModule";
+	info.m_vecModuleHeader2.push_back(NiflectUtil::ConcatPath(test1BeingTestedSourceDirPath, "Test1BeingTestedHeader.h"));
+	info.m_vecAccessorSettingHeader.push_back(NiflectUtil::ConcatPath(test1BeingTestedSourceDirPath, "Test1BeingTestedAccessorSetting.h"));
+	info.m_vecModuleHeaderSearchPath2.push_back(NiflectUtil::ConcatPath(test1BeingTestedSourceDirPath, "/"));
 	info.m_toolHeaderSearchPath = NiflectUtil::ConcatPath(niflectSourceDirPath, "/");
-	info.m_genOutputDirPath = NiflectUtil::ConcatPath(buildDirPath, "/Test1_Generated");
+	info.m_genOutputDirPath = NiflectUtil::ConcatPath(generatedDirPath, "/NiflectGenerated");
+	info.m_toGenCreateModuleInfoFunction = true;
 	auto gen = CreateGenerator();
 	if (gen->Init(info, log.Get()))
 	{
@@ -28,7 +34,31 @@ TEST(SaveLoad, ExampleJson2) {
 		gen->Save2(genData);
 		gen->Cleanup();
 	}
-    EXPECT_EQ(1, 1);
+
+	NiflectUtil::DeleteDirectory(beingTestedBuildDirPath);
+	NiflectUtil::MakeDirectories(NiflectUtil::ConcatPath(beingTestedBuildDirPath, "/"));
+	NiflectUtil::SetCurrentWorkingDirPath(beingTestedBuildDirPath);
+	NiflectUtil::CmdExec(NiflectUtil::FormatString("cmake %s", test1BeingTestedSourceDirPath.c_str()));
+	while (!NiflectUtil::FileExists(NiflectUtil::ConcatPath(beingTestedBuildDirPath, "BeingTestedExe.sln")))
+		std::this_thread::sleep_for(std::chrono::seconds(1));
+	NiflectUtil::CmdExec("cmake --build . --target clean");
+	NiflectUtil::CmdExec("cmake --build .");
+	NiflectUtil::SetCurrentWorkingDirPath(exeDirPath);
+
+	Niflect::CString testedResult;
+	auto generateedExePath = NiflectUtil::ConcatPath(beingTestedBuildDirPath, "Debug/bin/BeingTestedExe");
+#ifdef WIN32
+	auto winPath = generateedExePath + ".exe";
+	while (!NiflectUtil::FileExists(winPath))
+		std::this_thread::sleep_for(std::chrono::seconds(1));
+	std::replace(winPath.begin(), winPath.end(), '/', '\\');
+	NiflectUtil::CmdExec(winPath, testedResult);
+#else
+	while (!NiflectUtil::FileExists(generateedExePath))
+		std::this_thread::sleep_for(std::chrono::seconds(1));
+	NiflectUtil::CmdExec(generateedExePath, testedResult);
+#endif
+    EXPECT_STREQ(testedResult.c_str(), "Modules count: 1");
 }
 
 int main(int argc, char** argv) {

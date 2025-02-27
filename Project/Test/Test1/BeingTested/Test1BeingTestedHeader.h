@@ -1,5 +1,5 @@
 #pragma once
-#include "SaveLoadByModuleInfo_gen.h"
+#include "Test1BeingTestedHeader_gen.h"
 
 NIF_T()
 class CTest1_Class_0

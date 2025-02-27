@@ -416,8 +416,6 @@ namespace NiflectGen
             }
             if (context.m_moduleRegInfo.m_userProvided.m_toGenStaticModuleReg)
             {
-                if (context.m_moduleRegInfo.m_userProvided.m_moduleApiMacro.empty())
-                    GenLogError(context.m_log, "The API macro is not specified");
                 if (toGenStaticModuleRegHeader)
                 {
                     CCodeTemplate tpl1;
@@ -433,6 +431,8 @@ namespace NiflectGen
                         MapLabelToLines(map, LABEL_0, linesInclude);
                     }
                     MapLabelToText(map, LABEL_4, context.m_moduleRegInfo.m_userProvided.m_moduleName);
+                    if (context.m_moduleRegInfo.m_userProvided.m_moduleApiMacro.empty())
+                        GenLogError(context.m_log, "The API macro is not specified");
                     MapLabelToText(map, LABEL_5, context.m_moduleRegInfo.m_userProvided.m_moduleApiMacro);
                     MapLabelToText(map, LABEL_6, NiflectGenDefinition::NiflectFramework::FuncNamePrefix::GeneratedGetModuleInfo);
                     Niflect::TSet<Niflect::CString> setReplacedLabel;
@@ -444,6 +444,8 @@ namespace NiflectGen
                     ReadTemplateFromRawData(tpl1, HardCodedTemplate::StaticModuleRegImpl);
                     CLabelToCodeMapping map;
                     MapLabelToText(map, LABEL_4, context.m_moduleRegInfo.m_userProvided.m_moduleName);
+                    if (context.m_moduleRegInfo.m_userProvided.m_moduleApiMacro.empty())
+                        GenLogError(context.m_log, "The API macro is not specified");
                     MapLabelToText(map, LABEL_5, context.m_moduleRegInfo.m_userProvided.m_moduleApiMacro);
                     Niflect::TSet<Niflect::CString> setReplacedLabel;
                     tpl1.ReplaceLabels(map, linesStaticModuleReg, &setReplacedLabel);
@@ -462,8 +464,6 @@ namespace NiflectGen
             }
             if (context.m_moduleRegInfo.m_userProvided.m_toGenCreateModuleInfoFunction)
             {
-                if (context.m_moduleRegInfo.m_userProvided.m_moduleApiMacro.empty())
-                    GenLogError(context.m_log, "The API macro is not specified");
                 if (toGenCApiStaticModuleRegGetModuleInfoFunction)
                 {
                     CCodeTemplate tpl1;
@@ -479,6 +479,8 @@ namespace NiflectGen
                         MapLabelToLines(map, LABEL_0, linesInclude);
                     }
                     MapLabelToText(map, LABEL_4, context.m_moduleRegInfo.m_userProvided.m_moduleName);
+                    if (context.m_moduleRegInfo.m_userProvided.m_moduleApiMacro.empty())
+                        GenLogError(context.m_log, "The API macro is not specified");
                     MapLabelToText(map, LABEL_5, context.m_moduleRegInfo.m_userProvided.m_moduleApiMacro);
                     MapLabelToText(map, LABEL_6, NiflectGenDefinition::NiflectFramework::FuncNamePrefix::GeneratedGetModuleInfo);
                     Niflect::TSet<Niflect::CString> setReplacedLabel;

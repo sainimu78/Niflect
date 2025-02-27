@@ -9,6 +9,7 @@ namespace NiflectUtil
 	NIFLECT_API bool DirectoryExists(const Niflect::CString& dir);
 	NIFLECT_API bool FileExists(const Niflect::CString& path);
 	NIFLECT_API Niflect::CString GetCurrentWorkingDirPath();
+	NIFLECT_API bool SetCurrentWorkingDirPath(const Niflect::CString& path);
 	NIFLECT_API Niflect::CString ResolvePath(const Niflect::CString& relativePath);
 
 	struct SCollectingContext
@@ -38,7 +39,7 @@ namespace NiflectUtil
 
 	NIFLECT_API void CollectFiles(const Niflect::CString& dirPath, const CCollectingOption& opt);
 
-	NIFLECT_API bool CmdExec(const char* cmd, Niflect::CString* result = NULL);
-	NIFLECT_API bool CmdExec(const char* cmd, Niflect::CString& result);
-	NIFLECT_API bool CmdExecNonblocking(const char* cmd);
+	NIFLECT_API bool CmdExec(const Niflect::CString& cmd, Niflect::CString* result = NULL);
+	NIFLECT_API bool CmdExec(const Niflect::CString& cmd, Niflect::CString& result);
+	NIFLECT_API bool CmdExecNonblocking(const Niflect::CString& cmd);
 }

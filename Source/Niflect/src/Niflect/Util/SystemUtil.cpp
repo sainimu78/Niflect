@@ -256,6 +256,26 @@ namespace NiflectUtil
         return Niflect::CString(buffer);
 #endif
     }
+    bool SetCurrentWorkingDirPath(const Niflect::CString& path) {
+#ifdef _WIN32
+        Niflect::CString winPath = path;
+        std::replace(winPath.begin(), winPath.end(), '/', '\\');
+
+        if (!SetCurrentDirectoryA(winPath.c_str())) {
+            DWORD error = GetLastError();
+            ASSERT(false && "SetCurrentDirectory failed");
+            return false;
+        }
+        return true;
+#else
+        if (chdir(path.c_str()) != 0) {
+            perror("chdir() error");
+            ASSERT(false && "chdir failed");
+            return false;
+        }
+        return true;
+#endif
+    }
 }
 namespace NiflectUtil
 {
@@ -668,18 +688,18 @@ namespace NiflectUtil
     //    }
     //}
 
-    bool CmdExec(const char* cmd, Niflect::CString* result)
+    bool CmdExec(const Niflect::CString& cmd, Niflect::CString* result)
     {
         bool ok = false;
 #ifdef WIN32
         Niflect::CStringStream ss;
-        ok = system_hide(cmd, result != NULL, ss);
+        ok = system_hide(cmd.c_str(), result != NULL, ss);
         if ((ok == true) && (result != NULL))
             *result = ss.str();// LoadFromStringStream(ss, *pLstStr);
 #else
         char buffer[128];
         Niflect::CStringStream ss;
-        FILE* pipe = CmdExecPOpen(cmd, "r");
+        FILE* pipe = CmdExecPOpen(cmd.c_str(), "r");
         ok = pipe != NULL;// throw "popen() failed!";
         if ((ok == true) && (result != NULL))
         {
@@ -700,11 +720,11 @@ namespace NiflectUtil
 #endif
         return ok;
     }
-    bool CmdExec(const char* cmd, Niflect::CString& result)
+    bool CmdExec(const Niflect::CString& cmd, Niflect::CString& result)
     {
         return CmdExec(cmd, &result);
     }
-    bool CmdExecNonblocking(const char* cmd)
+    bool CmdExecNonblocking(const Niflect::CString& cmd)
     {
         Niflect::CString str = cmd;
 #ifdef WIN32
