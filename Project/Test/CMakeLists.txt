@@ -31,7 +31,4 @@ include(${c_RootCMakeProjectFrameworkDirPath}/Cleanup.cmake)
 
 if(MSVC)
     set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT ${DefaultModuleName})
-	set_target_properties(${DefaultModuleName} PROPERTIES
-		VS_DEBUGGER_WORKING_DIRECTORY "$<IF:$<CONFIG:Debug>,${CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG},${CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE}>"
-	)
 endif()

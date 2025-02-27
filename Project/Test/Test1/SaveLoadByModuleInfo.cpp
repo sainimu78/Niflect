@@ -6,17 +6,16 @@
 #include "Niflect/Util/SystemUtil.h"
 #include <thread>
 
-#define ROOT_DIR_PATH "../../../../../.."
-
 TEST(SaveLoad, BuildTest) {
     using namespace NiflectGen;
 	auto log = CreateGenLog();
-	auto rootDirPath = NiflectUtil::ResolvePath(ROOT_DIR_PATH);
-	auto test1BeingTestedSourceDirPath = NiflectUtil::ConcatPath(rootDirPath, "/Project/Test/Test1/BeingTested");
-	auto niflectSourceDirPath = NiflectUtil::ConcatPath(rootDirPath, "/Source/Niflect/include");
 	auto exeDirPath = NiflectUtil::GetCurrentWorkingDirPath();
-	auto generatedDirPath = NiflectUtil::ConcatPath(exeDirPath, "/Test1_Generated");
-	auto beingTestedBuildDirPath = NiflectUtil::ConcatPath(generatedDirPath, "/Build");
+	auto rootDirPath = NiflectUtil::ResolvePath("../../../../..");
+	auto test1BeingTestedSourceDirPath = NiflectUtil::ConcatPath(rootDirPath, "Project/Test/Test1/BeingTested");
+	auto niflectSourceDirPath = NiflectUtil::ConcatPath(rootDirPath, "Source/Niflect/include");
+	auto generatedDirPath = NiflectUtil::ConcatPath(exeDirPath, "Test1_Generated");
+	auto beingTestedBuildDirPath = NiflectUtil::ConcatPath(generatedDirPath, "Build");
+	auto niflectGeneratedDirPath = NiflectUtil::ConcatPath(generatedDirPath, "NiflectGenerated");
 
 	CModuleRegInfo info;
 	info.m_moduleName = "Test1BeingTestedModule";
@@ -24,7 +23,7 @@ TEST(SaveLoad, BuildTest) {
 	info.m_vecAccessorSettingHeader.push_back(NiflectUtil::ConcatPath(test1BeingTestedSourceDirPath, "Test1BeingTestedAccessorSetting.h"));
 	info.m_vecModuleHeaderSearchPath2.push_back(NiflectUtil::ConcatPath(test1BeingTestedSourceDirPath, "/"));
 	info.m_toolHeaderSearchPath = NiflectUtil::ConcatPath(niflectSourceDirPath, "/");
-	info.m_genOutputDirPath = NiflectUtil::ConcatPath(generatedDirPath, "/NiflectGenerated");
+	info.m_genOutputDirPath = niflectGeneratedDirPath;
 	info.m_toGenCreateModuleInfoFunction = true;
 	auto gen = CreateGenerator();
 	if (gen->Init(info, log.Get()))
@@ -34,6 +33,8 @@ TEST(SaveLoad, BuildTest) {
 		gen->Save2(genData);
 		gen->Cleanup();
 	}
+	while (!NiflectUtil::FileExists(NiflectUtil::ConcatPath(niflectGeneratedDirPath, "FinishedFlag.txt")))
+		std::this_thread::sleep_for(std::chrono::seconds(1));
 
 	NiflectUtil::DeleteDirectory(beingTestedBuildDirPath);
 	NiflectUtil::MakeDirectories(NiflectUtil::ConcatPath(beingTestedBuildDirPath, "/"));
