@@ -37,4 +37,8 @@ namespace NiflectUtil
 	};
 
 	NIFLECT_API void CollectFiles(const Niflect::CString& dirPath, const CCollectingOption& opt);
+
+	NIFLECT_API bool CmdExec(const char* cmd, Niflect::CString* result = NULL);
+	NIFLECT_API bool CmdExec(const char* cmd, Niflect::CString& result);
+	NIFLECT_API bool CmdExecNonblocking(const char* cmd);
 }
