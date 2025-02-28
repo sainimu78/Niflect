@@ -10,7 +10,11 @@ TEST(SaveLoad, BuildTest) {
     using namespace NiflectGen;
 	auto log = CreateGenLog();
 	auto exeDirPath = NiflectUtil::GetCurrentWorkingDirPath();
+#ifdef WIN32
 	auto rootDirPath = NiflectUtil::ResolvePath("../../../../..");
+#else
+	auto rootDirPath = NiflectUtil::ResolvePath("../../../../../..");
+#endif
 	auto test1BeingTestedSourceDirPath = NiflectUtil::ConcatPath(rootDirPath, "Project/Test/Test1/BeingTested");
 	auto niflectSourceDirPath = NiflectUtil::ConcatPath(rootDirPath, "Source/Niflect/include");
 	auto generatedDirPath = NiflectUtil::ConcatPath(exeDirPath, "Test1_Generated");

@@ -11,7 +11,7 @@ include(../Licensed_googletest.cmake)
 add_test(NAME ${ModuleName} COMMAND ${ModuleName})
 
 if(MSVC)
-	set(WorkingDirPath ${CMAKE_BINARY_DIR}/${ModuleName})
+	set(WorkingDirPath ${c_ProjectPlatformArchDirPath}/${ModuleName})
 	set_target_properties(${ModuleName} PROPERTIES
 		VS_DEBUGGER_WORKING_DIRECTORY "$<IF:$<CONFIG:Debug>,${WorkingDirPath},${WorkingDirPath}>"
 	)
