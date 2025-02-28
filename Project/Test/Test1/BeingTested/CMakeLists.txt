@@ -13,9 +13,7 @@ include(${c_RootCMakeProjectFrameworkDirPath}/ProjectEnd.cmake)
 
 set(ModuleName BeingTestedExe)
 
-file(GLOB_RECURSE SrcAll ${ModuleRootPath}/*.cpp ${ModuleRootPath}/*.h)
-create_source_group(${ModuleRootPath} ${SrcAll})
-add_executable(${ModuleName} ${SrcAll})
+add_executable(${ModuleName} Test1BeingTestedSource.cpp)
 
 get_filename_component(RootGenSourceDirPath "${c_ProjectPlatformArchDirPath}/../NiflectGenerated/_GenSource" ABSOLUTE)
 
@@ -23,6 +21,14 @@ target_include_directories(${ModuleName} PRIVATE
 	${RootGenSourceDirPath}
 	${RootGenSourceDirPath}/include
 	)
+	
+if(WIN32)
+else()
+	#不确定为何需要专门加入搜索路径
+	target_include_directories(${ModuleName} PRIVATE
+		${ModuleRootPath}
+		)
+endif()
 
 target_link_libraries(${ModuleName} PRIVATE Niflect)
 
