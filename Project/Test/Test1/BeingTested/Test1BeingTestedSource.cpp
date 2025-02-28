@@ -7,6 +7,5 @@ int main()
 	auto mgr = Niflect::GetModuleManager();
 	mgr->InitRegisteredModules();
 	printf("Modules count: %u", mgr->GetModulesCount());
-	Niflect::CleanupModuleManager();
 	return 0;
 }
