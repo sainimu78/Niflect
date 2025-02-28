@@ -13,7 +13,7 @@ include(${c_RootCMakeProjectFrameworkDirPath}/ProjectEnd.cmake)
 set(ModuleName BeingTestedExe)
 add_executable(${ModuleName} Test1BeingTestedSource.cpp)
 
-get_filename_component(RootGenSourceDirPath "${CMAKE_BINARY_DIR}/../NiflectGenerated/_GenSource" ABSOLUTE)
+get_filename_component(RootGenSourceDirPath "${c_ProjectPlatformArchDirPath}/../NiflectGenerated/_GenSource" ABSOLUTE)
 
 target_include_directories(${ModuleName} PRIVATE
 	${RootGenSourceDirPath}
