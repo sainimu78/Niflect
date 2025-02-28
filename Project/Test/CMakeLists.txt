@@ -20,8 +20,8 @@ add_executable(${ModuleName} TestExample_1.cpp)
 include(Licensed_googletest.cmake)
 add_test(NAME ${ModuleName} COMMAND ${ModuleName}) # 支持 ctest
 
-add_subdirectory(Niflect)
-add_subdirectory(NiflectGen)
+cpf_include(${c_RootProjectDirPath}/Niflect/Niflect/Shared.cmake)
+cpf_include(${c_RootProjectDirPath}/NiflectGenTool/NiflectGen/Shared.cmake)
 
 add_subdirectory(Test0)
 add_subdirectory(Test1)
