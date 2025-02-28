@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.20)
 
-get_filename_component(c_RootDirPath "${CMAKE_CURRENT_SOURCE_DIR}/../../../.." ABSOLUTE)
+set(ModuleRootPath ${CMAKE_CURRENT_SOURCE_DIR})
+get_filename_component(c_RootDirPath "${ModuleRootPath}/../../../.." ABSOLUTE)
 set(c_RootCMakeProjectFrameworkDirPath ${c_RootDirPath}/ThirdParty/CMakeProjectFramework/CMakeInclude)
 include(${c_RootCMakeProjectFrameworkDirPath}/InitDefaultRootPaths.cmake)
 
@@ -11,7 +12,10 @@ project(${c_ProjectName})
 include(${c_RootCMakeProjectFrameworkDirPath}/ProjectEnd.cmake)
 
 set(ModuleName BeingTestedExe)
-add_executable(${ModuleName} Test1BeingTestedSource.cpp)
+
+file(GLOB_RECURSE SrcAll ${ModuleRootPath}/*.cpp ${ModuleRootPath}/*.h)
+create_source_group(${ModuleRootPath} ${SrcAll})
+add_executable(${ModuleName} ${SrcAll})
 
 get_filename_component(RootGenSourceDirPath "${c_ProjectPlatformArchDirPath}/../NiflectGenerated/_GenSource" ABSOLUTE)
 
