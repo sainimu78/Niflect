@@ -62,10 +62,11 @@ TEST(SaveLoad, BuildTest) {
 		std::this_thread::sleep_for(std::chrono::seconds(1));
 	NiflectUtil::SetCurrentWorkingDirPath(beingTestedBuildDirPath);
 	NiflectUtil::CmdExec("cmake --build ./Debug");
-	NiflectUtil::SetCurrentWorkingDirPath(exeDirPath);
+	auto beingTestedBuildDirPathDebugBin = NiflectUtil::ConcatPath(beingTestedBuildDirPathDebug, "bin");
+	NiflectUtil::SetCurrentWorkingDirPath(beingTestedBuildDirPathDebugBin);
 
 	Niflect::CString testedResult;
-	auto generateedExePath = NiflectUtil::ConcatPath(beingTestedBuildDirPath, "Debug/bin/BeingTestedExe");
+	auto generateedExePath = NiflectUtil::ConcatPath(beingTestedBuildDirPathDebugBin, "BeingTestedExe");
 	while (!NiflectUtil::FileExists(generateedExePath))
 		std::this_thread::sleep_for(std::chrono::seconds(1));
 	NiflectUtil::CmdExec(generateedExePath, testedResult);
