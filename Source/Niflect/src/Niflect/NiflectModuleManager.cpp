@@ -93,6 +93,7 @@ namespace Niflect
 	void CleanupModuleManager()
 	{
 		*g_mgrPtr = NULL;
+		g_mgrPtr = NULL;
 	}
 	CNiflectModuleManager2* GetModuleManager()
 	{
