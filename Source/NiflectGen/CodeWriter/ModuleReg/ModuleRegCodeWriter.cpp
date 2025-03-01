@@ -346,7 +346,7 @@ namespace NiflectGen
             const bool toGenStaticModuleRegHeader = true;
             if (context.m_moduleRegInfo.m_userProvided.m_toGenStaticModuleReg)
             {
-                ASSERT(!context.m_moduleRegInfo.m_userProvided.m_toGenCreateModuleInfoFunction);
+                ASSERT(!context.m_moduleRegInfo.m_userProvided.m_toGenStaticallyRegisterToRegistry);
                 if (toGenStaticModuleRegHeader)
                 {
                     moduleGenHFilePath = NiflectUtil::FormatString("%s%s", m_moduleRegInfo.m_userProvided.m_moduleName.c_str(), NiflectGenDefinition::FileExt::GenH);
@@ -373,7 +373,7 @@ namespace NiflectGen
                         else
                             vecHeaderData.push_back(NiflectGenDefinition::NiflectFramework::FilePath::NiflectModuleInfoHeader);
                     }
-                    if (context.m_moduleRegInfo.m_userProvided.m_toGenCreateModuleInfoFunction)
+                    if (context.m_moduleRegInfo.m_userProvided.m_toGenStaticallyRegisterToRegistry)
                     {
                         vecHeaderData.push_back(NiflectGenDefinition::NiflectFramework::FilePath::NiflectModuleRegistryHeader);
                     }
@@ -449,7 +449,7 @@ namespace NiflectGen
                     tpl1.ReplaceLabels(map, data.m_moduleRegGenData.m_privateH, &setReplacedLabel);
                 }
             }
-            if (context.m_moduleRegInfo.m_userProvided.m_toGenCreateModuleInfoFunction)
+            if (context.m_moduleRegInfo.m_userProvided.m_toGenStaticallyRegisterToRegistry)
             {
                 CCodeLines linesStaticModuleReg;
                 CCodeTemplate tpl1;

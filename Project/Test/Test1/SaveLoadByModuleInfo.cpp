@@ -28,7 +28,7 @@ TEST(SaveLoad, BuildTest) {
 	info.m_vecModuleHeaderSearchPath2.push_back(NiflectUtil::ConcatPath(test1BeingTestedSourceDirPath, "/"));
 	info.m_toolHeaderSearchPath = NiflectUtil::ConcatPath(niflectSourceDirPath, "/");
 	info.m_genOutputDirPath = niflectGeneratedDirPath;
-	info.m_toGenCreateModuleInfoFunction = true;
+	info.m_toGenStaticallyRegisterToRegistry = true;
 	auto gen = CreateGenerator();
 	if (gen->Init(info, log.Get()))
 	{

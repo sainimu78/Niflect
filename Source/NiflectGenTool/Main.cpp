@@ -226,9 +226,9 @@ namespace NiflectGen
 			{
 				info.m_toGenStaticModuleReg = true;
 			}
-			else if (strcmp(pszV, "-gmi") == 0)
+			else if (strcmp(pszV, "-gsr") == 0)
 			{
-				info.m_toGenCreateModuleInfoFunction = true;
+				info.m_toGenStaticallyRegisterToRegistry = true;
 			}
 			else if (strcmp(pszV, "-fs") == 0)
 			{
