@@ -23,7 +23,7 @@ TEST(SaveLoad, BuildTest) {
 
 	CModuleRegInfo info;
 	info.m_moduleName = "Test1BeingTestedModule";
-	info.m_vecModuleHeader2.push_back(NiflectUtil::ConcatPath(test1BeingTestedSourceDirPath, "Test1BeingTestedHeader.h"));
+	info.m_vecModuleHeader2.push_back(NiflectUtil::ConcatPath(test1BeingTestedSourceDirPath, "Test1BeingTested.h"));
 	info.m_vecAccessorSettingHeader.push_back(NiflectUtil::ConcatPath(test1BeingTestedSourceDirPath, "Test1BeingTestedAccessorSetting.h"));
 	info.m_vecModuleHeaderSearchPath2.push_back(NiflectUtil::ConcatPath(test1BeingTestedSourceDirPath, "/"));
 	info.m_toolHeaderSearchPath = NiflectUtil::ConcatPath(niflectSourceDirPath, "/");

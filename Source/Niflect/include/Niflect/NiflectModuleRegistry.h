@@ -17,11 +17,12 @@ namespace Niflect
 			, m_table(this)
 		{
 		}
-		void InitMeta(const Niflect::CString& name, const ModuleRegisterTypesFunc& RegisterTypesFunc, const ModuleInitTypesFunc& InitTypesFunc)
+		void InitMeta(const Niflect::CString& name, uint32 moduleIdx, const ModuleRegisterTypesFunc& RegisterTypesFunc, const ModuleInitTypesFunc& InitTypesFunc)
 		{
 			m_name = name;
 			m_RegisterTypesFunc = RegisterTypesFunc;
 			m_InitTypesFunc = InitTypesFunc;
+			m_indexInManager = moduleIdx;
 		}
 		void RegisterTypes()
 		{
@@ -51,6 +52,7 @@ namespace Niflect
 		ModuleInitTypesFunc m_InitTypesFunc;
 		uint32 m_indexInManager;
 	};
+	using CSharedModule2 = Niflect::TSharedPtr<CNiflectModule2>;
 
 	class CNiflectModuleRegistry
 	{
@@ -64,7 +66,7 @@ namespace Niflect
 		NIFLECT_API static CNiflectModuleRegistry* InitializeSingleton();
 
 	private:
-		Niflect::TArrayNif<CNiflectModule2> m_vecModule;
+		Niflect::TArrayNif<CSharedModule2> m_vecModule;
 	};
 
 	NIFLECT_API CNiflectModuleRegistry* GetModuleRegistry();

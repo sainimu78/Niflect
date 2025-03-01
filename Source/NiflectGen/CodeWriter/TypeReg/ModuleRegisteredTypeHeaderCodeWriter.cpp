@@ -44,18 +44,9 @@ namespace Niflect
 	template <typename TType, typename TInfo = CNiflectType>
 	void )" MAKELABEL(LABEL_1) R"(RegisterType(CNiflectTable* table, const Niflect::CString& id, const CreateTypeAccessorFunc& inCreateTypeAccessorFunc, const CSharedNata& nata)
 	{
-		STypeLifecycleMeta lifecycleMeta;
-		lifecycleMeta.m_typeSize = sizeof(TType);
-		lifecycleMeta.m_InvokeConstructorFunc = &GenericInstanceInvokeConstructor<TType>;
-		lifecycleMeta.m_InvokeDestructorFunc = &GenericInstanceInvokeDestructor<TType>;
-
-		auto shared = Niflect::MakeShared<TInfo>();
-		CNiflectType* type = shared.Get();
-		auto idx = table->GetTypesCount();
 		ASSERT(!)" MAKELABEL(LABEL_1) R"(TRegisteredType<TType>::IsValid());
-		type->InitTypeMeta2(lifecycleMeta, inCreateTypeAccessorFunc, CNiflectType::GetTypeHash<TType>(), idx, id, &)" MAKELABEL(LABEL_1) R"(TRegisteredType<TType>::s_type, nata);
+		table->RegisterTypeInternal<TType>(id, inCreateTypeAccessorFunc, &)" MAKELABEL(LABEL_1) R"(TRegisteredType<TType>::s_type, nata);
 		ASSERT()" MAKELABEL(LABEL_1) R"(TRegisteredType<TType>::IsValid());
-		table->InsertType(shared, idx);
 	}
 })";
 	}

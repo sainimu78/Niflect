@@ -5,19 +5,19 @@ namespace Niflect
 	void CNiflectModuleRegistry::InitRegisteredModules()
 	{
 		for (auto& it0 : m_vecModule)
-			it0.RegisterTypes();
+			it0->RegisterTypes();
 		for (auto& it0 : m_vecModule)
-			it0.InitTypes();
+			it0->InitTypes();
 		for (auto& it0 : m_vecModule)
-			it0.InitTableTypesLayout();
+			it0->InitTableTypesLayout();
 	}
 	bool CNiflectModuleRegistry::RegisterModuleStatically(const Niflect::CString& name, const ModuleRegisterTypesFunc& RegisterTypesFunc, const ModuleInitTypesFunc& InitTypesFunc)
 	{
 		uint32 idx = this->GetModulesCount();
-		m_vecModule.push_back(CNiflectModule2());
-		auto& module = m_vecModule.back();
-		module.m_indexInManager = idx;
-		module.InitMeta(name, RegisterTypesFunc, InitTypesFunc);
+		auto shared = Niflect::MakeShared<CNiflectModule2>();
+		auto& module = *shared;
+		module.InitMeta(name, idx, RegisterTypesFunc, InitTypesFunc);
+		m_vecModule.push_back(shared);
 		return true;
 	}
 	uint32 CNiflectModuleRegistry::GetModulesCount() const

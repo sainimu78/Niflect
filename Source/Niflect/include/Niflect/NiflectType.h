@@ -17,6 +17,7 @@ namespace Niflect
 		InvokeDestructorFunc m_InvokeDestructorFunc;
 	};
 
+	class CNiflectTable;
 	class CNiflectType;
 	using CStaticNiflectTypeAddr = CNiflectType*;
 
@@ -24,7 +25,8 @@ namespace Niflect
 	{
 	public:
 		CNiflectType()
-			: m_tableIdx(INDEX_NONE)
+			: m_table(NULL)
+			, m_tableIdx(INDEX_NONE)
 			, m_lifecycleMeta{}
 			, m_CreateTypeAccessorFunc(NULL)
 			, m_staticTypePtrAddr(NULL)
@@ -47,9 +49,10 @@ namespace Niflect
 			//m_cb = cb;
 			//m_typeHash = typeHash;
 		}
-		void InitTypeMeta2(const STypeLifecycleMeta& lifecycleMeta, const CreateTypeAccessorFunc& inCreateTypeAccessorFunc, size_t typeHash, uint32 tableIdx, const CString& id, CStaticNiflectTypeAddr* staticTypePtrAddr, const CSharedNata& nata)
+		void InitTypeMeta2(CNiflectTable* table, uint32 tableIdx, const STypeLifecycleMeta& lifecycleMeta, size_t typeHash, const CString& id, const CreateTypeAccessorFunc& inCreateTypeAccessorFunc, CStaticNiflectTypeAddr* staticTypePtrAddr, const CSharedNata& nata)
 		{
 			m_name = id;
+			m_table = table;
 			m_tableIdx = tableIdx;
 			m_nata = nata;
 			m_lifecycleMeta = lifecycleMeta;
@@ -68,6 +71,10 @@ namespace Niflect
 		//{
 		//	return m_accessorRoot;
 		//}
+		CNiflectTable* GetTable() const
+		{
+			return m_table;
+		}
 		const uint32& GetTableIndex() const//todo: 计划改名为 GetTableIndex
 		{
 			return m_tableIdx;
@@ -227,6 +234,7 @@ namespace Niflect
 		//但需要明确一点, id 的意义在于避免重复与序列化使用, 实际是否带 namespace 通常无关紧要, 一般情况下通过定义的类名区分即可
 		CString m_name;
 		CSharedNata m_nata;
+		CNiflectTable* m_table;
 		uint32 m_tableIdx;//todo: 计划改名为 m_tableIdx;
 		CTypeLayout m_layout;
 		STypeLifecycleMeta m_lifecycleMeta;//todo: 计划改名为 m_typeFuncs
