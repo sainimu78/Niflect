@@ -32,7 +32,7 @@ endif()
 
 target_link_libraries(${ModuleName} PRIVATE Niflect)
 
-add_subdirectory(Niflect)
+cpf_include(${c_RootProjectDirPath}/Niflect/Niflect/Shared.cmake)
 
 include(${c_RootCMakeProjectFrameworkDirPath}/Cleanup.cmake)
 
