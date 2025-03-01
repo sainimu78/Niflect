@@ -22,13 +22,13 @@ target_include_directories(${ModuleName} PRIVATE
 	${RootGenSourceDirPath}/include
 	)
 	
-#if(WIN32)
-#else()
-#	#不确定为何需要专门加入搜索路径
-#	target_include_directories(${ModuleName} PRIVATE
-#		${ModuleRootPath}
-#		)
-#endif()
+if(WIN32)
+else()
+	#不确定为何需要专门加入搜索路径
+	target_include_directories(${ModuleName} PRIVATE
+		${ModuleRootPath}
+		)
+endif()
 
 target_link_libraries(${ModuleName} PRIVATE Niflect)
 
