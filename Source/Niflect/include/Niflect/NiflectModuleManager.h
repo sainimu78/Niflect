@@ -41,48 +41,4 @@ namespace Niflect
 		Niflect::TArrayNif<CNiflectModule> m_vecModule;
 		Niflect::TMap<Niflect::CString, uint32> m_mapNameToIdx;
 	};
-
-	class CNiflectModule2
-	{
-		friend class CNiflectModuleManager2;
-	public:
-		CNiflectModule2()
-			: m_indexInManager(INDEX_NONE)
-		{
-		}
-
-	private:
-		CNiflectModuleInfo m_info;
-		uint32 m_indexInManager;
-	};
-
-	class CNiflectModuleManager2
-	{
-		friend class CNiflectModuleRegger;
-	public:
-		NIFLECT_API void InitRegisteredModules();
-		NIFLECT_API uint32 GetModulesCount() const;
-
-	private:
-		NIFLECT_API bool RegisterModuleStatically(const Niflect::CString& name, const ModuleRegisterTypesFunc& RegisterTypesFunc, const ModuleInitTypesFunc& InitTypesFunc);
-		NIFLECT_API static CNiflectModuleManager2* InitializeSingleton();
-
-	private:
-		Niflect::TArrayNif<CNiflectModule2> m_vecModule;
-	};
-
-	NIFLECT_API CNiflectModuleManager2* GetModuleManager();
-	NIFLECT_API void CleanupModuleManager();
-
-	class CNiflectModuleRegger
-	{
-	public:
-		CNiflectModuleRegger(const Niflect::CString& name, const ModuleRegisterTypesFunc& RegisterTypesFunc, const ModuleInitTypesFunc& InitTypesFunc)
-		{
-			auto mgr = GetModuleManager();
-			if (mgr == NULL)
-				mgr = CNiflectModuleManager2::InitializeSingleton();
-			mgr->RegisterModuleStatically(name, RegisterTypesFunc, InitTypesFunc);
-		}
-	};
 }

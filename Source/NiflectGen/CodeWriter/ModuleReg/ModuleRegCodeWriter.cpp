@@ -344,20 +344,10 @@ namespace NiflectGen
         {
             Niflect::CString moduleGenHFilePath;
             const bool toGenStaticModuleRegHeader = true;
-            const bool toGenCApiStaticModuleRegGetModuleInfoFunction = false;//预留生成 C 接口, 现认为不实用, 可能无必要, 因为通常需要将信息注册到某个全局容器中, 不必模块定义专门的反射信息导出接口
             if (context.m_moduleRegInfo.m_userProvided.m_toGenStaticModuleReg)
             {
                 ASSERT(!context.m_moduleRegInfo.m_userProvided.m_toGenCreateModuleInfoFunction);
                 if (toGenStaticModuleRegHeader)
-                {
-                    moduleGenHFilePath = NiflectUtil::FormatString("%s%s", m_moduleRegInfo.m_userProvided.m_moduleName.c_str(), NiflectGenDefinition::FileExt::GenH);
-                    data.m_moduleRegGenData.m_genHIncludePath = NiflectUtil::ConcatPath(m_moduleRegInfo.m_genIncludeBasePath, moduleGenHFilePath);
-                }
-            }
-            if (context.m_moduleRegInfo.m_userProvided.m_toGenCreateModuleInfoFunction)
-            {
-                ASSERT(!context.m_moduleRegInfo.m_userProvided.m_toGenStaticModuleReg);
-                if (toGenCApiStaticModuleRegGetModuleInfoFunction)
                 {
                     moduleGenHFilePath = NiflectUtil::FormatString("%s%s", m_moduleRegInfo.m_userProvided.m_moduleName.c_str(), NiflectGenDefinition::FileExt::GenH);
                     data.m_moduleRegGenData.m_genHIncludePath = NiflectUtil::ConcatPath(m_moduleRegInfo.m_genIncludeBasePath, moduleGenHFilePath);
@@ -385,10 +375,7 @@ namespace NiflectGen
                     }
                     if (context.m_moduleRegInfo.m_userProvided.m_toGenCreateModuleInfoFunction)
                     {
-                        if (toGenCApiStaticModuleRegGetModuleInfoFunction)
-                            vecHeaderData.push_back(moduleGenHFilePath);
-                        else
-                            vecHeaderData.push_back(NiflectGenDefinition::NiflectFramework::FilePath::NiflectModuleManagerHeader);
+                        vecHeaderData.push_back(NiflectGenDefinition::NiflectFramework::FilePath::NiflectModuleRegistryHeader);
                     }
                     CIncludesHelper::ConvertFromHeaderFilePaths(vecHeaderData, m_moduleRegInfo.m_writingHeaderSearchPaths, linesInclude);
                     MapLabelToLines(map, LABEL_0, linesInclude);
@@ -464,49 +451,15 @@ namespace NiflectGen
             }
             if (context.m_moduleRegInfo.m_userProvided.m_toGenCreateModuleInfoFunction)
             {
-                if (toGenCApiStaticModuleRegGetModuleInfoFunction)
-                {
-                    CCodeTemplate tpl1;
-                    ReadTemplateFromRawData(tpl1, HardCodedTemplate::StaticModuleRegHeader2);
-                    CLabelToCodeMapping map;
-                    CCodeLines linesInclude;
-                    {
-                        Niflect::TArrayNif<CHeaderFilePathData> vecHeaderData;
-                        if (!context.m_moduleRegInfo.m_userProvided.m_moduleApiMacroHeader.empty())
-                            vecHeaderData.push_back(context.m_moduleRegInfo.m_userProvided.m_moduleApiMacroHeader);//可能使用 PCH, 包含在其中, 因此也可不指定
-                        vecHeaderData.push_back(NiflectGenDefinition::NiflectFramework::FilePath::NiflectModuleInfoHeader);
-                        CIncludesHelper::ConvertFromHeaderFilePaths(vecHeaderData, m_moduleRegInfo.m_writingHeaderSearchPaths, linesInclude);
-                        MapLabelToLines(map, LABEL_0, linesInclude);
-                    }
-                    MapLabelToText(map, LABEL_4, context.m_moduleRegInfo.m_userProvided.m_moduleName);
-                    if (context.m_moduleRegInfo.m_userProvided.m_moduleApiMacro.empty())
-                        GenLogError(context.m_log, "The API macro is not specified");
-                    MapLabelToText(map, LABEL_5, context.m_moduleRegInfo.m_userProvided.m_moduleApiMacro);
-                    MapLabelToText(map, LABEL_6, NiflectGenDefinition::NiflectFramework::FuncNamePrefix::GeneratedGetModuleInfo);
-                    Niflect::TSet<Niflect::CString> setReplacedLabel;
-                    tpl1.ReplaceLabels(map, data.m_moduleRegGenData.m_genH, &setReplacedLabel);
-                }
-                {
-                    CCodeLines linesStaticModuleReg;
-                    CCodeTemplate tpl1;
-                    ReadTemplateFromRawData(tpl1, HardCodedTemplate::StaticModuleRegImpl2);
-                    CLabelToCodeMapping map;
-                    MapLabelToText(map, LABEL_4, context.m_moduleRegInfo.m_userProvided.m_moduleName);
-                    Niflect::TSet<Niflect::CString> setReplacedLabel;
-                    tpl1.ReplaceLabels(map, linesStaticModuleReg, &setReplacedLabel);
-                    for (auto& it : linesStaticModuleReg)
-                        data.m_moduleRegGenData.m_privateH.push_back(it);
-                }
-                if (toGenCApiStaticModuleRegGetModuleInfoFunction)
-                {
-                    CCodeTemplate tpl1;
-                    ReadTemplateFromRawData(tpl1, HardCodedTemplate::StaticModuleRegGetModuleC2);
-                    CLabelToCodeMapping map;
-                    MapLabelToText(map, LABEL_4, context.m_moduleRegInfo.m_userProvided.m_moduleName);
-                    MapLabelToText(map, LABEL_6, NiflectGenDefinition::NiflectFramework::FuncNamePrefix::GeneratedGetModuleInfo);
-                    Niflect::TSet<Niflect::CString> setReplacedLabel;
-                    tpl1.ReplaceLabels(map, data.m_moduleRegGenData.m_privateH, &setReplacedLabel);
-                }
+                CCodeLines linesStaticModuleReg;
+                CCodeTemplate tpl1;
+                ReadTemplateFromRawData(tpl1, HardCodedTemplate::StaticModuleRegImpl2);
+                CLabelToCodeMapping map;
+                MapLabelToText(map, LABEL_4, context.m_moduleRegInfo.m_userProvided.m_moduleName);
+                Niflect::TSet<Niflect::CString> setReplacedLabel;
+                tpl1.ReplaceLabels(map, linesStaticModuleReg, &setReplacedLabel);
+                for (auto& it : linesStaticModuleReg)
+                    data.m_moduleRegGenData.m_privateH.push_back(it);
             }
         }
     }

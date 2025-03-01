@@ -3,10 +3,17 @@
 
 namespace Niflect
 {
+	class CNiflectModule2;
+
 	//为Module中所有CNiflectType的容器, 不需要被继承
 	class CNiflectTable
 	{
 	public:
+		CNiflectTable(CNiflectModule2* module = NULL)
+			: m_module(module)
+		{
+
+		}
 		void Init(const CString& name)
 		{
 			m_name = name;
@@ -101,6 +108,7 @@ namespace Niflect
 		TArrayNif<CSharedNiflectType> m_vecType;
 		TUnorderedMap<Niflect::CString, uint32> m_mapIdToIndex;
 		CString m_name;
+		CNiflectModule2* m_module;
 	};
 	using CSharedTable = TSharedPtr<CNiflectTable>;
 	
