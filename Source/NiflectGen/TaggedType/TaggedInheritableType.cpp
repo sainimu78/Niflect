@@ -119,8 +119,6 @@ namespace NiflectGen
 			if (!indexedRoot.IsValid())
 			{
 #ifdef FIELD_TYPE_CAN_BE_ALIAS_OF_BINDING_TYPE_IN_AS
-				//不支持别名如 template <typename T> using MyArray = Niflect::TArray<T>; using MyFloatArray = Niflect::TArray<float>
-				//原因可能是在位置 if (FindDirectAliasDeclTypeForTypedefOrTypeAlias( 中继续递归的方式错误, 可能需要遍历该特化别名定义的子 Cursor, 方式可参考 GetUnderlyingTypeOfTypeAliasTemplate
 #else
 				//不计划支持 Field 的类型为 BindingType 的别名, 因为这样可能滥用别名, 导致与 AccessorBinding 的对应关系不直观, 如需要使用别名, 应在 AccessorBinding 中指定, 在 Field 中使用时, 应直接使用别名
 				//如认为确实需要实现支持此用法, 可考虑在查找过程中, 引入逐级 aliasChain 查找对应的 BindingType

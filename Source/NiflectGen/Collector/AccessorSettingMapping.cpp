@@ -69,7 +69,7 @@ namespace NiflectGen
 			ctx.m_outDetailIteratingIdx++;
 			auto kind = clang_getCursorKind(it);
 			//查找首个可处理的类型的Ref
-			if (kind == CXCursor_TemplateRef || kind == CXCursor_TypeRef)
+			if (kind == CXCursor_TemplateRef || kind == CXCursor_TypeRef || kind == CXCursor_TypeAliasDecl)
 			{
 				refCursor = &it;
 				break;
@@ -95,9 +95,20 @@ namespace NiflectGen
 	static bool FindDirectAliasDeclTypeForTypedefOrTypeAlias(const CXCursor& cursor, const CAliasChain& aliasChain, CXType& foundCxType)
 	{
 		auto kind = clang_getCursorKind(cursor);
-		if (kind == CXCursor_TypedefDecl || kind == CXCursor_TypeAliasDecl)
+		if (kind == CXCursor_TypedefDecl || kind == CXCursor_TypeAliasDecl || kind == CXCursor_TypeAliasTemplateDecl)
 			return FindDirectAliasDeclType(cursor, aliasChain, foundCxType);
 		return false;
+	}
+	static void CollectSubCursorChildrenFirstLevel(const CXCursor& typeAliasTemplateCursor, Niflect::TArray<CXCursor>& vecChild) {
+		clang_visitChildren(
+			typeAliasTemplateCursor,
+			[](CXCursor c, CXCursor parent, CXClientData client_data) {
+				auto& vecChild = *static_cast<Niflect::TArray<CXCursor>*>(client_data);
+				vecChild.push_back(c);
+				return CXChildVisit_Continue;
+			},
+			&vecChild
+		);
 	}
 	bool CAccessorBindingMapping2::InitResocursorNodeIfFoundRecurs(CAccessorBindingFindingContext& ctx, CResolvedCursorNode& resocursorNode) const
 	{
@@ -134,15 +145,16 @@ namespace NiflectGen
 				}
 			}
 		}
+		CXCursor fieldCursor = g_invalidCursor;
 		if (foundAccessorBindingIdx == INDEX_NONE)
 		{
 			//特化, <Niflect::TArrayNif<bool>, 可直接通过field本身CXType的cursor查找到BindingType的cursor
-			auto cursor = clang_getTypeDeclaration(ctx.m_fieldOrArgCXType);
-			auto itFound = m_mapSpecializedCursorToIndex.find(cursor);
+			fieldCursor = clang_getTypeDeclaration(ctx.m_fieldOrArgCXType);
+			auto itFound = m_mapSpecializedCursorToIndex.find(fieldCursor);
 			if (itFound != m_mapSpecializedCursorToIndex.end())
 			{
 				foundAccessorBindingIdx = itFound->second;
-				header = GetCursorFilePath(cursor);
+				header = GetCursorFilePath(fieldCursor);
 				continuing = false;
 			}
 		}
@@ -150,19 +162,20 @@ namespace NiflectGen
 		{
 			if (const CXCursor* refCursor = FindRefCursorInDetailCursors(ctx))
 			{
-				auto cursor = clang_getCursorReferenced(*refCursor);
-				if (!this->Sssssssssssss(cursor, ctx.m_untaggedTemplateMapping, header, continuing, foundUntaggedTemplateIndex, foundAccessorBindingIdx))
+				fieldCursor = clang_getCursorReferenced(*refCursor);
+				auto itFound = m_mapCursorToIndex.find(fieldCursor);
+				if (itFound != m_mapCursorToIndex.end())
 				{
-					auto kind = clang_getCursorKind(cursor);
-					if (kind == CXCursor_TypeAliasTemplateDecl)
+					foundAccessorBindingIdx = itFound->second;
+					header = GetCursorFilePath(fieldCursor);
+					bool isTemplate = IsCursorTemplateDecl(fieldCursor);
+					if (isTemplate)
 					{
-						CXType fieldOrArgCXType;
-						if (FindDirectAliasDeclType(cursor, ctx.m_aliasChain, fieldOrArgCXType))
-						{
-							auto a = clang_getTypeDeclaration(fieldOrArgCXType);
-							this->Sssssssssssss(a, ctx.m_untaggedTemplateMapping, header, continuing, foundUntaggedTemplateIndex, foundAccessorBindingIdx);
-						}
+						auto itFound = ctx.m_untaggedTemplateMapping.m_mapCursorToIndex.find(fieldCursor);
+						ASSERT(itFound != ctx.m_untaggedTemplateMapping.m_mapCursorToIndex.end());
+						foundUntaggedTemplateIndex = itFound->second;
 					}
+					continuing = isTemplate;
 				}
 			}
 		}
@@ -173,32 +186,16 @@ namespace NiflectGen
 		}
 		else
 		{
-			auto cursor = clang_getTypeDeclaration(ctx.m_fieldOrArgCXType);
+			ASSERT(!clang_Cursor_isNull(fieldCursor));
 			CXType fieldOrArgCXType;
-			if (FindDirectAliasDeclTypeForTypedefOrTypeAlias(cursor, ctx.m_aliasChain, fieldOrArgCXType))
+			if (FindDirectAliasDeclTypeForTypedefOrTypeAlias(fieldCursor, ctx.m_aliasChain, fieldOrArgCXType))
 			{
-				CAccessorBindingFindingContext ctxSub(fieldOrArgCXType, ctx.m_vecDetailCursor, ctx.m_untaggedTemplateMapping, ctx.m_aliasChain, ctx.m_outDetailIteratingIdx);
+				Niflect::TArray<CXCursor> vecDetailCursorSub;
+				CollectSubCursorChildrenFirstLevel(fieldCursor, vecDetailCursorSub);//据观察, 别名定义仅具一层子节点, 另未实验更多层时如何处理, 因此仅处理一层子节点
+				uint32 outDetailIteratingIdxSub = 0;
+				CAccessorBindingFindingContext ctxSub(fieldOrArgCXType, vecDetailCursorSub, ctx.m_untaggedTemplateMapping, ctx.m_aliasChain, outDetailIteratingIdxSub);
 				return this->InitResocursorNodeIfFoundRecurs(ctxSub, resocursorNode);
 			}
-		}
-		return false;
-	}
-	bool CAccessorBindingMapping2::Sssssssssssss(const CXCursor& cursor, const CUntaggedTemplatesMapping& untaggedTemplateMapping, Niflect::CString& header, bool& continuing, uint32& foundUntaggedTemplateIndex, uint32& foundAccessorBindingIdx) const
-	{
-		auto itFound = m_mapCursorToIndex.find(cursor);
-		if (itFound != m_mapCursorToIndex.end())
-		{
-			foundAccessorBindingIdx = itFound->second;
-			header = GetCursorFilePath(cursor);
-			bool isTemplate = IsCursorTemplateDecl(cursor);
-			if (isTemplate)
-			{
-				auto itFound = untaggedTemplateMapping.m_mapCursorToIndex.find(cursor);
-				ASSERT(itFound != untaggedTemplateMapping.m_mapCursorToIndex.end());
-				foundUntaggedTemplateIndex = itFound->second;
-			}
-			continuing = isTemplate;
-			return true;
 		}
 		return false;
 	}

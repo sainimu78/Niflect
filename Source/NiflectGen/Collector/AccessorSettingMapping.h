@@ -188,7 +188,6 @@ namespace NiflectGen
 		bool IterateForTemplate(const SResonodesInitContext& context, const CXType& fieldOrArgCXType, const Niflect::TArrayNif<CXCursor>& vecDetailCursor, const CTaggedTypesMapping& taggedMapping, const CUntaggedTemplatesMapping& untaggedTemplateMapping, const CAliasChain& aliasChain, CResolvedCursorNode& resultIndexedParent, uint32& detailIteratingIdx) const;
 #ifdef FIELD_TYPE_CAN_BE_ALIAS_OF_BINDING_TYPE_IN_AS
 		bool InitResocursorNodeIfFoundRecurs(CAccessorBindingFindingContext& ctx, CResolvedCursorNode& resocursorNode) const;
-		bool Sssssssssssss(const CXCursor& cursor, const CUntaggedTemplatesMapping& untaggedTemplateMapping, Niflect::CString& header, bool& continuing, uint32& foundUntaggedTemplateIndex, uint32& foundAccessorBindingIdx) const;
 #else
 		bool InitResocursorNodeIfFound(CAccessorBindingFindingContext& ctx, CResolvedCursorNode& resocursorNode) const;
 #endif

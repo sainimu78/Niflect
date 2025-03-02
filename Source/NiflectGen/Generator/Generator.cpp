@@ -115,7 +115,7 @@ namespace NiflectGen
         {
             auto cursor = clang_getTranslationUnitCursor(translation_unit);
 #pragma warning( disable : 4996 )
-            FILE* fp = fopen("E:/a.txt", "w");
+            FILE* fp = fopen("I:/E/a.txt", "w");
 #pragma warning( default : 4996 )
             int level = 0;
             CVisitCallbacks callbacks;
