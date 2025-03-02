@@ -6,6 +6,22 @@
 #include "Niflect/Util/SystemUtil.h"
 #include <thread>
 
+bool WaitForFileCreation(const Niflect::CString& filePath)
+{
+	printf("Waiting for file creation %s\n", filePath.c_str());
+	const uint32 maxTimes = 10;
+	uint32 cnt = 0;
+	while (!NiflectUtil::FileExists(filePath))
+	{
+		std::this_thread::sleep_for(std::chrono::seconds(1));
+		cnt++;
+		printf("Checking for %u/%u times\n", cnt, maxTimes);
+		if (cnt == maxTimes)
+			return false;
+	}
+	return true;
+}
+
 TEST(SaveLoad, BuildTest) {
     using namespace NiflectGen;
 	auto log = CreateGenLog();
@@ -37,24 +53,21 @@ TEST(SaveLoad, BuildTest) {
 		gen->Save2(genData);
 		gen->Cleanup();
 	}
-	while (!NiflectUtil::FileExists(NiflectUtil::ConcatPath(niflectGeneratedDirPath, "FinishedFlag.txt")))
-		std::this_thread::sleep_for(std::chrono::seconds(1));
+	EXPECT_TRUE(WaitForFileCreation(NiflectUtil::ConcatPath(niflectGeneratedDirPath, "FinishedFlag.txt")));
 
 	NiflectUtil::DeleteDirectory(beingTestedBuildDirPath);
 #ifdef WIN32
 	NiflectUtil::MakeDirectories(NiflectUtil::ConcatPath(beingTestedBuildDirPath, "/"));
 	NiflectUtil::SetCurrentWorkingDirPath(beingTestedBuildDirPath);
 	NiflectUtil::CmdExec(NiflectUtil::FormatString("cmake %s", test1BeingTestedSourceDirPath.c_str()));
-	while (!NiflectUtil::FileExists(NiflectUtil::ConcatPath(beingTestedBuildDirPath, "BeingTestedExe.sln")))
-		std::this_thread::sleep_for(std::chrono::seconds(1));
+	EXPECT_TRUE(WaitForFileCreation(NiflectUtil::ConcatPath(beingTestedBuildDirPath, "BeingTestedExe.sln")));
 	NiflectUtil::CmdExec("cmake --build .");
 	NiflectUtil::SetCurrentWorkingDirPath(exeDirPath);
 
 	Niflect::CString testedResult;
 	auto generateedExePath = NiflectUtil::ConcatPath(beingTestedBuildDirPath, "Debug/bin/BeingTestedExe");
 	auto winPath = generateedExePath + ".exe";
-	while (!NiflectUtil::FileExists(winPath))
-		std::this_thread::sleep_for(std::chrono::seconds(1));
+	EXPECT_TRUE(WaitForFileCreation(winPath));
 	std::replace(winPath.begin(), winPath.end(), '/', '\\');
 	NiflectUtil::CmdExec(winPath, testedResult);
 #else
@@ -62,20 +75,17 @@ TEST(SaveLoad, BuildTest) {
 	NiflectUtil::MakeDirectories(NiflectUtil::ConcatPath(beingTestedBuildDirPathDebug, "/"));
 	NiflectUtil::SetCurrentWorkingDirPath(beingTestedBuildDirPathDebug);
 	NiflectUtil::CmdExec(NiflectUtil::FormatString("cmake %s -G \"Unix Makefiles\" -DCMAKE_BUILD_TYPE=Debug", test1BeingTestedSourceDirPath.c_str()));
-	while (!NiflectUtil::FileExists(NiflectUtil::ConcatPath(beingTestedBuildDirPathDebug, "Makefile")))
-		std::this_thread::sleep_for(std::chrono::seconds(1));
+	EXPECT_TRUE(WaitForFileCreation(NiflectUtil::ConcatPath(beingTestedBuildDirPathDebug, "Makefile")));
 	NiflectUtil::SetCurrentWorkingDirPath(beingTestedBuildDirPath);
 	NiflectUtil::CmdExec("cmake --build ./Debug");
 	NiflectUtil::SetCurrentWorkingDirPath(exeDirPath);
 
 	Niflect::CString testedResult;
 	auto generateedExePath = NiflectUtil::ConcatPath(beingTestedBuildDirPath, "Debug/bin/BeingTestedExe");
-	while (!NiflectUtil::FileExists(generateedExePath))
-		std::this_thread::sleep_for(std::chrono::seconds(1));
+	EXPECT_TRUE(WaitForFileCreation(generateedExePath));
 	NiflectUtil::CmdExec(generateedExePath, testedResult);
 
-	while (!NiflectUtil::FileExists(generateedExePath))
-		std::this_thread::sleep_for(std::chrono::seconds(1));
+	EXPECT_TRUE(WaitForFileCreation(generateedExePath));
 	NiflectUtil::CmdExec(generateedExePath, testedResult);
 #endif
     EXPECT_STREQ(testedResult.c_str(), "Modules count: 1");
