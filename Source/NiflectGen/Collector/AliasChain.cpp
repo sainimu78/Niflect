@@ -5,17 +5,61 @@ namespace NiflectGen
 {
 	CAliasInfo::CAliasInfo()
 		: m_decl(g_invalidCursor)
+		, m_underlyingType({})
 		, m_templateArgsCount(0)
 	{
 
 	}
-
+#ifdef FIELD_TYPE_CAN_BE_ALIAS_OF_BINDING_TYPE_IN_AS
+	CAliasInfo& CAliasChain::AddLinkDeclInternal(const CXCursor& decl)
+	{
+		auto ret = m_mapDeclToIndex.insert({ decl, static_cast<uint32>(m_vecItem.size()) });
+		ASSERT(ret.second);
+		m_vecItem.push_back(CAliasInfo());
+		return m_vecItem.back();
+	}
+	void CAliasChain::AddLinkDecl2(const CXCursor& decl)
+	{
+		this->AddLinkDeclInternal(decl);
+	}
+	static CXType GetUnderlyingTypeOfTypeAliasTemplate(CXCursor typeAliasTemplateCursor) {
+		CXType resultType{};
+		clang_visitChildren(
+			typeAliasTemplateCursor,
+			[](CXCursor c, CXCursor parent, CXClientData client_data) {
+				if (clang_getCursorKind(c) == CXCursor_TypeAliasDecl) {
+					CXType* typePtr = static_cast<CXType*>(client_data);
+					*typePtr = clang_getCursorType(c);
+					return CXChildVisit_Break; // ÕÒµ½ºóÍ£Ö¹±éÀú
+				}
+				return CXChildVisit_Continue;
+			},
+			&resultType
+		);
+		return resultType;
+	}
+	void CAliasChain::AddLinkAliasDecl(const CXCursor& decl)
+	{
+		auto& item = this->AddLinkDeclInternal(decl);
+		item.m_underlyingType = clang_getTypedefDeclUnderlyingType(decl);
+		ASSERT(item.m_underlyingType.kind != CXType_Invalid);
+	}
+	void CAliasChain::AddLinkTemplateAliasDecl(const CXCursor& decl)
+	{
+		auto& item = this->AddLinkDeclInternal(decl);
+		auto a = GetUnderlyingTypeOfTypeAliasTemplate(decl);
+		auto b = clang_getTypeDeclaration(a);
+		item.m_underlyingType = clang_getTypedefDeclUnderlyingType(b);
+		ASSERT(item.m_underlyingType.kind != CXType_Invalid);
+	}
+#else
 	void CAliasChain::AddLinkDecl(const CXCursor& decl)
 	{
-		auto ret = m_mapDeclToIndex.insert({ decl, static_cast<uint32>(m_vecItem.size())});
+		auto ret = m_mapDeclToIndex.insert({ decl, static_cast<uint32>(m_vecItem.size()) });
 		ASSERT(ret.second);
 		m_vecItem.push_back(CAliasInfo());
 	}
+#endif
 	void CAliasChain::LinkToReferenced(const CXCursor& decl, const CXCursor& alias, uint32 templateArgsCount)
 	{
 		auto itFound = m_mapDeclToIndex.find(decl);

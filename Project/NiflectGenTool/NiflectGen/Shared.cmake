@@ -20,7 +20,7 @@ list(APPEND SrcAll ${ModuleHeaders})
 
 add_library(${ModuleName} SHARED ${SrcAll})
 
-target_precompile_headers(${ModuleName} PRIVATE ${ModuleSourcePath}/NiflectGenDevelopmentMacro.h)
+target_precompile_headers(${ModuleName} PUBLIC ${ModuleSourcePath}/NiflectGenDevelopmentMacro.h)
 
 target_include_directories(${ModuleName}
 	PRIVATE ${IncludePathsPrivate}

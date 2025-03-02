@@ -953,16 +953,34 @@ namespace NiflectGen
 	#else
 				if (kind == CXCursor_TypeAliasTemplateDecl)
 				{
+#ifdef FIELD_TYPE_CAN_BE_ALIAS_OF_BINDING_TYPE_IN_AS
+					aliasChain->AddLinkTemplateAliasDecl(cursor);
+#else
 					aliasChain->AddLinkDecl(cursor);
+#endif
 					addedTaggedChild = m_templateCollector.Collect(cursor, taggedParent, context.m_log);
 				}
+#ifdef FIELD_TYPE_CAN_BE_ALIAS_OF_BINDING_TYPE_IN_AS
+				else if (kind == CXCursor_TypedefDecl)
+				{
+					aliasChain->AddLinkAliasDecl(cursor);
+				}
+#endif
 				else if (kind == CXCursor_TypeAliasDecl)
 				{
+#ifdef FIELD_TYPE_CAN_BE_ALIAS_OF_BINDING_TYPE_IN_AS
+					aliasChain->AddLinkAliasDecl(cursor);
+#else
 					aliasChain->AddLinkDecl(cursor);
+#endif
 				}
 				else if (kind == CXCursor_ClassTemplate)
 				{
+#ifdef FIELD_TYPE_CAN_BE_ALIAS_OF_BINDING_TYPE_IN_AS
+					aliasChain->AddLinkDecl2(cursor);
+#else
 					aliasChain->AddLinkDecl(cursor);
+#endif
 					addedTaggedChild = m_templateCollector.Collect(cursor, taggedParent, context.m_log);
 				}
 	#endif

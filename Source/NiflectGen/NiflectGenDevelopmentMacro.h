@@ -48,3 +48,6 @@
 
 //废弃 ACCESSMETHOD 宏标签, 可减少一步指定对应 Getter / Setter
 #define DEPRECATED_ACCESSMETHOD_MACRO_TAG
+
+//Field 的类型可为 AS 中对应设置的 BindingType 别名
+//#define FIELD_TYPE_CAN_BE_ALIAS_OF_BINDING_TYPE_IN_AS

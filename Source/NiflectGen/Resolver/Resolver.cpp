@@ -390,7 +390,7 @@ namespace NiflectGen
 		data.m_taggedMapping.Resolve();
 		data.m_untaggedTemplateMapping.Init(*m_collectionData.m_aliasChain);
 
-		SResolvedMappings mappings{ *data.m_accessorBindingMapping, data.m_taggedMapping, data.m_untaggedTemplateMapping };
+		SResolvedMappings mappings{ *data.m_accessorBindingMapping, data.m_taggedMapping, data.m_untaggedTemplateMapping, *m_collectionData.m_aliasChain };
 		CResolvingDependenciesContext resolvingDepCtx(mappings, context.m_log);
 		SResolvingDependenciesData resolvingDepData{ data.m_signatureMapping };
 		Niflect::TArrayNif<STaggedTypeIndexAndBelongingFilePath> vecFilePathAndTaggedTypeIdx;

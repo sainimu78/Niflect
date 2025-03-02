@@ -165,6 +165,27 @@ int main(int argc, const char** argv)
 				//};
 				//argc = sizeof(argvTest) / sizeof(const char*);
 				//argv = argvTest;
+				
+				//const char* argvTest[] = {
+				//	"Placeholder",
+				//	"-n", "SampleAPI",
+				//	"-h", "I:/F/Fts/Proj/Test/Wishing/Source/Sample/SampleProjectTemplate/SampleAPI/include/SampleAPI.h",
+				//	"-h", "I:/F/Fts/Proj/Test/Wishing/Source/Sample/SampleProjectTemplate/SampleAPI/include/SampleAPICommon.h",
+				//	"-h", "I:/F/Fts/Proj/Test/Wishing/Source/Sample/SampleProjectTemplate/SampleAPI/include/SampleObject.h",
+				//	"-am", "SAMPLEAPI_API",
+				//	"-amh", "I:/F/Fts/Proj/Test/Wishing/Source/Sample/SampleProjectTemplate/SampleAPI/include/SampleAPICommon.h",
+				//	"-a", "I:/F/Fts/Proj/Test/Wishing/ThirdParty/Niflect/Niflect/include/Niflect/CommonlyUsed/DefaultAccessorSetting.h",
+				//	"-t", "I:/F/Fts/Proj/Test/Wishing/ThirdParty/Niflect/Niflect/include",
+				//	"-I", "I:/F/Fts/Proj/Test/Wishing/Source/Sample/SampleProjectTemplate/SampleAPI/include",
+				//	"-I", "I:/F/Fts/Proj/Test/Wishing/Source/Sample/SampleProjectTemplate/SampleAPI/src",
+				//	"-I", "I:/F/Fts/Proj/Test/Wishing/Source/Sample/SampleProjectTemplate/SampleAPI/include",
+				//	"-I", "I:/F/Fts/Proj/Test/Wishing/ThirdParty/Niflect/Niflect/include",
+				//	"-g", "I:/F/Fts/Proj/Test/Wishing/Build/Sample/SampleProjectTemplate/Windows/DefaultBuild/Generated/SampleAPI",
+				//	"-gbt",
+				//	"-gsm",
+				//};
+				//argc = sizeof(argvTest) / sizeof(const char*);
+				//argv = argvTest;
 
 				bool waitingForDebuggerAttaching = false;
 				using namespace CommandLine;
