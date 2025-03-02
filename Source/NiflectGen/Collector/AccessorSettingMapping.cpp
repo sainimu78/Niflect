@@ -106,15 +106,7 @@ namespace NiflectGen
 		auto& continuing = ctx.m_continuing;
 
 		Niflect::CString header;
-		auto cursor = clang_getTypeDeclaration(ctx.m_fieldOrArgCXType);
 		{
-			CXType fieldOrArgCXType;
-			if (FindDirectAliasDeclTypeForTypedefOrTypeAlias(cursor, ctx.m_aliasChain, fieldOrArgCXType))
-			{
-				CAccessorBindingFindingContext ctxSub(fieldOrArgCXType, ctx.m_vecDetailCursor, ctx.m_untaggedTemplateMapping, ctx.m_aliasChain, ctx.m_outDetailIteratingIdx);
-				return this->InitResocursorNodeIfFoundRecurs(ctxSub, resocursorNode);
-			}
-
 			auto pointerCursor = GetPointerCursorFromPointerType(ctx.m_fieldOrArgCXType);
 			if (pointerCursor.IsValid())
 			{
@@ -145,6 +137,7 @@ namespace NiflectGen
 		if (foundAccessorBindingIdx == INDEX_NONE)
 		{
 			//特化, <Niflect::TArrayNif<bool>, 可直接通过field本身CXType的cursor查找到BindingType的cursor
+			auto cursor = clang_getTypeDeclaration(ctx.m_fieldOrArgCXType);
 			auto itFound = m_mapSpecializedCursorToIndex.find(cursor);
 			if (itFound != m_mapSpecializedCursorToIndex.end())
 			{
@@ -177,6 +170,16 @@ namespace NiflectGen
 		{
 			resocursorNode.InitForAccessorBinding(foundAccessorBindingIdx, foundUntaggedTemplateIndex, header);
 			return true;
+		}
+		else
+		{
+			auto cursor = clang_getTypeDeclaration(ctx.m_fieldOrArgCXType);
+			CXType fieldOrArgCXType;
+			if (FindDirectAliasDeclTypeForTypedefOrTypeAlias(cursor, ctx.m_aliasChain, fieldOrArgCXType))
+			{
+				CAccessorBindingFindingContext ctxSub(fieldOrArgCXType, ctx.m_vecDetailCursor, ctx.m_untaggedTemplateMapping, ctx.m_aliasChain, ctx.m_outDetailIteratingIdx);
+				return this->InitResocursorNodeIfFoundRecurs(ctxSub, resocursorNode);
+			}
 		}
 		return false;
 	}
