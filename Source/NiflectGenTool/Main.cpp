@@ -13,6 +13,7 @@
 #include <iostream>//std::cin.get()
 #include "CommandLineArgParser.h"
 #include "CMakeProjectFramework/ProjectVersion.h"
+#include "CommandLineArgParser.h"
 
 //代码中的用语
 //1. StaticRegStage, 在静态初始化阶段的注册过程
@@ -64,187 +65,28 @@
 //				1. 其中 MyVector1 为 template <typename T> using MyVector1 = std::vecotr<T, MyAllocator1<T> >;
 //					1. 其中 MyAllocator1 为 template <typename T> class MyAllocator1 { ... };
 
-
-namespace NiflectGen
+namespace CommandLine
 {
-	//static bool FindOptionName(const Niflect::CString& str, const Niflect::CString& name, size_t& pos)
-	//{
-	//	pos = str.find(name);
-	//	bool found = pos != std::string::npos;
-	//	if (found)
-	//		pos += name.length();
-	//	return found;
-	//}
-	//static void GetAndAddOptionValue(const Niflect::CString& str, const size_t& pos, Niflect::TArrayNif<Niflect::CString>& vec)
-	//{
-	//	vec.push_back(str.substr(pos, str.length() - pos));
-	//}
-	//static void GetOptionValue(const Niflect::CString& str, const size_t& pos, Niflect::CString& out)
-	//{
-	//	out = str.substr(pos, str.length() - pos);
-	//}
-
-	//static void ParseOptions(int argc, const char** argv, CModuleRegInfo& info)
-	//{
-	//	ASSERT(argc > 1);
-	//	for (int idx = 1; idx < argc; ++idx)
-	//	{
-	//		Niflect::CString strV = argv[idx];
-	//		if (strV.length() >= 2)
-	//		{
-	//			size_t pos;
-	//			if (FindOptionName(strV, "-n", pos))
-	//			{
-	//				GetOptionValue(strV, pos, info.m_moduleName);
-	//			}
-	//			else if (FindOptionName(strV, "-h", pos))
-	//			{
-	//				GetAndAddOptionValue(strV, pos, info.m_vecModuleHeader);
-	//			}
-	//			else if (FindOptionName(strV, "-am", pos))
-	//			{
-	//				GetOptionValue(strV, pos, info.m_moduleApiMacro);
-	//			}
-	//			else if (FindOptionName(strV, "-mh", pos))
-	//			{
-	//				GetOptionValue(strV, pos, info.m_moduleApiMacroHeader);
-	//			}
-	//			else if (FindOptionName(strV, "-s", pos))
-	//			{
-	//				GetAndAddOptionValue(strV, pos, info.m_vecAccessorSettingHeader);
-	//			}
-	//			else if (FindOptionName(strV, "-I", pos))
-	//			{
-	//				GetAndAddOptionValue(strV, pos, info.m_vecModuleHeaderSearchPath);
-	//			}
-	//			else if (FindOptionName(strV, "-p", pos))
-	//			{
-	//				GetOptionValue(strV, pos, info.m_outputRootPath_genIncludeSearchPath);
-	//			}
-	//			else if (FindOptionName(strV, "-fs", pos))
-	//			{
-	//				info.m_genFileMode = EGeneratingHeaderAndSourceFileMode::ESourceAndHeader;
-	//			}
-	//			else
-	//			{
-	//				ASSERT(false);
-	//			}
-	//		}
-	//	}
-	//}
-
-	static Niflect::CString GetNextArgValue(const char** argv, int& idx)
+	static Niflect::CString ParseNextArgValue(CCommandLineArgParser& parser)
 	{
-		idx += 1;
-		Niflect::CString str;
-		auto& psz = argv[idx];
-		if (psz[0] == '\"')
-		{
-			str = &psz[1];
-			ASSERT(str.length() >= 2);
-			if (str.back() == '\"')
-				str.erase(str.begin() + str.length() - 1);
-			else
-				ASSERT(false);
-		}
-		else
-		{
-			str = psz;
-		}
-		return str;
+		std::string value;
+		parser.TryParseNextValue(value);
+		return Niflect::CString(value.c_str());
 	}
-	static Niflect::CString GetNextArgPath(const char** argv, int& idx)
+	static Niflect::CString ParseNextArgPath(CCommandLineArgParser& parser)
 	{
-		auto path = GetNextArgValue(argv, idx);
-		return NiflectUtil::ResolvePath(path);
+		std::string path;
+		if (parser.TryParseNextValue(path))
+			path = NiflectUtil::ResolvePath(path.c_str()).c_str();
+		return Niflect::CString(path.c_str());
 	}
-	static Niflect::CString GetNextArgIncludeSearchPath(const char** argv, int& idx)
+	static Niflect::CString ParseNextArgIncludeSearchPath(CCommandLineArgParser& parser)
 	{
-		auto path = GetNextArgPath(argv, idx);
-		return NiflectUtil::ConvertToSearchPath(path);
+		auto path = ParseNextArgPath(parser);
+		if (!path.empty())
+			path = NiflectUtil::ConvertToSearchPath(path.c_str()).c_str();
+		return Niflect::CString(path.c_str());
 	}
-
-	static void ParseOptions(int argc, const char** argv, CModuleRegInfo& info, bool& waitingForDebuggerAttaching)
-	{
-		ASSERT(argc > 1);
-		for (int idx = 1; idx < argc; ++idx)
-		{
-			auto& pszV = argv[idx];
-			if (strcmp(pszV, "-v") == 0)
-			{
-				printf("Version: %d.%d.%d\n", g_versionMajor, g_versionMinor, g_versionPatch);
-			}
-			else if (strcmp(pszV, "-n") == 0)
-			{
-				info.m_moduleName = GetNextArgValue(argv, idx);
-			}
-			else if (strcmp(pszV, "-h") == 0)
-			{
-				info.m_vecModuleHeader2.push_back(GetNextArgPath(argv, idx));
-			}
-			else if (strcmp(pszV, "-ph") == 0)
-			{
-				info.m_vecModulePrecompileHeader.push_back(GetNextArgPath(argv, idx));
-			}
-			else if (strcmp(pszV, "-am") == 0)
-			{
-				info.m_moduleApiMacro = GetNextArgValue(argv, idx);
-			}
-			else if (strcmp(pszV, "-amh") == 0)
-			{
-				info.m_moduleApiMacroHeader = GetNextArgPath(argv, idx);
-			}
-			else if (strcmp(pszV, "-a") == 0)
-			{
-				info.m_vecAccessorSettingHeader.push_back(GetNextArgPath(argv, idx));
-			}
-			else if (strcmp(pszV, "-I") == 0)
-			{
-				info.m_vecModuleHeaderSearchPath2.push_back(GetNextArgIncludeSearchPath(argv, idx));
-			}
-			else if (strcmp(pszV, "-c") == 0)
-			{
-				info.m_vecResolverCustomizationHeader.push_back(GetNextArgPath(argv, idx));
-			}
-			else if (strcmp(pszV, "-t") == 0)
-			{
-				info.m_toolHeaderSearchPath = GetNextArgIncludeSearchPath(argv, idx);
-			}
-			else if (strcmp(pszV, "-g") == 0)
-			{
-				info.m_genOutputDirPath = GetNextArgPath(argv, idx);
-			}
-			else if (strcmp(pszV, "-gs") == 0)
-			{
-				info.m_genSourceOutputDirPath = GetNextArgPath(argv, idx);
-			}
-			else if (strcmp(pszV, "-gbt") == 0)
-			{
-				info.m_toGenGeneratedBodyThisType = true;
-			}
-			else if (strcmp(pszV, "-gsm") == 0)
-			{
-				info.m_toGenStaticModuleReg = true;
-			}
-			else if (strcmp(pszV, "-gsr") == 0)
-			{
-				info.m_toGenStaticallyRegisterToRegistry = true;
-			}
-			else if (strcmp(pszV, "-fs") == 0)
-			{
-				info.m_genFileMode = EGeneratingHeaderAndSourceFileMode::ESourceAndHeader;
-			}
-			else if (strcmp(pszV, "-debuggerattaching") == 0)
-			{
-				waitingForDebuggerAttaching = true;
-			}
-			else
-			{
-				printf("Unknown option: %s\n", pszV);
-			}
-		}
-	}
-
 }
 
 int main(int argc, const char** argv)
@@ -325,10 +167,95 @@ int main(int argc, const char** argv)
 				//argv = argvTest;
 
 				bool waitingForDebuggerAttaching = false;
-				ParseOptions(argc, argv, info, waitingForDebuggerAttaching);
-				if (waitingForDebuggerAttaching)
+				using namespace CommandLine;
+				CCommandLineArgParser parser(argc, argv);
+				parser.RegisterDefaultHelps(
+					R"(Example usage on Windows:
+@NiflectGenTool ^
+-n TestModule1 ^
+-h F:/Source/TestModule1/include/TestModule1/TestClass1.h ^
+-am TESTMODULE1_API ^
+-amh F:/Source/TestModule1/include/TestModule1Common.h ^
+-a F:/Source/Niflect/include/Niflect/CommonlyUsed/DefaultAccessorSetting.h ^
+-I F:/Source/TestModule1/include ^
+-t F:/Source/Niflect/include ^
+-g F:/Generated/NiflectGenerated 
+)", g_versionMajor, g_versionMinor, g_versionPatch);
+
+				parser.Register("-n", CArgDefinition()
+					.SetRequirementType(EArgRequirementType::Required)
+					.SetDescription("Module name").SetExample("TestModule1")
+					.SetOnFoundArgFunc([&] { info.m_moduleName = ParseNextArgValue(parser); }));
+				parser.Register("-h", CArgDefinition()
+					.SetDescription("File path of the header to generate reflection code").SetExample("F:/Source/TestModule1/include/TestModule1/TestClass1.h")
+					.SetRequirementType(EArgRequirementType::MultipleOptional)
+					.SetOnFoundArgFunc([&] { info.m_vecModuleHeader2.push_back(ParseNextArgPath(parser)); }));
+				parser.Register("-ph", CArgDefinition()
+					.SetDescription("File path of the precompile header using by the module").SetExample("F:/Source/TestModule1/include/TestModule1PrecompileHeader.h")
+					.SetRequirementType(EArgRequirementType::MultipleOptional)
+					.SetOnFoundArgFunc([&] { info.m_vecModulePrecompileHeader.push_back(ParseNextArgPath(parser)); }));
+				parser.Register("-am", CArgDefinition()
+					.SetDescription("Module API macro").SetExample("TESTMODULE1_API")
+					.SetRequirementType(EArgRequirementType::Optional)
+					.SetOnFoundArgFunc([&] { info.m_moduleApiMacro = ParseNextArgValue(parser); }));
+				parser.Register("-amh", CArgDefinition()
+					.SetDescription("File path of the header defined the module API macro, there is no need to specified if the file path is included in the precompile header(s)")
+					.SetRequirementType(EArgRequirementType::Optional)
+					.SetOnFoundArgFunc([&] { info.m_moduleApiMacroHeader = ParseNextArgPath(parser); }));
+				parser.Register("-a", CArgDefinition()
+					.SetDescription("File path of the accessor setting header using by the module")
+					.SetRequirementType(EArgRequirementType::MultipleOptional)
+					.SetOnFoundArgFunc([&] { info.m_vecAccessorSettingHeader.push_back(ParseNextArgPath(parser)); }));
+				parser.Register("-I", CArgDefinition()
+					.SetDescription("Include path containing the specified headers").SetExample("F:/Source/TestModule1/include")
+					.SetRequirementType(EArgRequirementType::SpecifiedAtLeastOne)
+					.SetOnFoundArgFunc([&] { info.m_vecModuleHeaderSearchPath2.push_back(ParseNextArgIncludeSearchPath(parser)); }));
+				parser.Register("-c", CArgDefinition()
+					.SetDescription("Resolver customization headers bypassing the correspoinding original ones for the headers parsing(by libclang) time optimization")
+					.SetRequirementType(EArgRequirementType::MultipleOptional)
+					.SetOnFoundArgFunc([&] { info.m_vecResolverCustomizationHeader.push_back(ParseNextArgPath(parser)); }));
+				parser.Register("-t", CArgDefinition()
+					.SetDescription("Runtime include path of Niflect").SetExample("F:/Source/Niflect/include")
+					.SetRequirementType(EArgRequirementType::Required)
+					.SetOnFoundArgFunc([&] { info.m_toolHeaderSearchPath = ParseNextArgIncludeSearchPath(parser); }));
+				parser.Register("-g", CArgDefinition()
+					.SetDescription("Root output directory path of the generated files").SetExample("F:/Generated/NiflectGenerated ")
+					.SetRequirementType(EArgRequirementType::Required)
+					.SetOnFoundArgFunc([&] { info.m_genOutputDirPath = ParseNextArgPath(parser); }));
+				//else if (strcmp(pszV, "-gs") == 0)
+				//{
+				//	info.m_genSourceOutputDirPath = GetNextArgPath(argv, idx);
+				//}
+				parser.Register("-gbt", CArgDefinition()
+					.SetDescription("Generate an alias of CThis for the reflected class in GENERATED_BODY expansion")
+					.SetRequirementType(EArgRequirementType::Optional)
+					.SetNoValue()
+					.SetOnFoundArgFunc([&] { info.m_toGenGeneratedBodyThisType = true; }));
+				parser.Register("-gsm", CArgDefinition()
+					.SetDescription("Generate the statically registering types function with C API")
+					.SetRequirementType(EArgRequirementType::Optional)
+					.SetNoValue()
+					.SetOnFoundArgFunc([&] { info.m_toGenStaticModuleReg = true; }));
+				parser.Register("-gsr", CArgDefinition()
+					.SetDescription("Generate a static object for statically registering types to the global singleton module registry which can be get by invoking GetModuleRegistry")
+					.SetRequirementType(EArgRequirementType::Optional)
+					.SetNoValue()
+					.SetOnFoundArgFunc([&] { info.m_toGenStaticallyRegisterToRegistry = true; }));
+				parser.Register("-fs", CArgDefinition()
+					.SetDescription("Generating header(.h .hxx) and source(.cpp) files rather than only header(.h .hxx) files")
+					.SetRequirementType(EArgRequirementType::Optional)
+					.SetNoValue()
+					.SetOnFoundArgFunc([&] { info.m_genFileMode = EGeneratingHeaderAndSourceFileMode::ESourceAndHeader; }));
+				parser.Register("-debuggerattaching", CArgDefinition()
+					.SetDescription("Waiting for debugger attaching")
+					.SetRequirementType(EArgRequirementType::Optional)
+					.SetNoValue()
+					.SetOnFoundArgFunc([&] { waitingForDebuggerAttaching = true; }));
+				if (parser.Parse())
 				{
-					printf(R"(Debugging Tip:
+					if (waitingForDebuggerAttaching)
+					{
+						printf(R"(Debugging Tip:
 #1. Set the output directory path for all projects to the bin directory, eg. "Wishing\ThirdParty\NiflectGenTool\NiflectGenTool\build\Windows\x64\Release\bin".
 #2. Set breakpoints after the line containing std::cin.get().
 #3. Attach the debugger to the NiflectGenTool.exe process.
@@ -336,20 +263,21 @@ int main(int argc, const char** argv)
 #5. You can now debug NiflectGenTool.
 #6. When you finished debugging, you can restore the projects' settings by Save All in VS and then running Generate.bat.
 )");
-					std::cin.get();
-				}
+						std::cin.get();
+					}
 
-				auto log = CreateGenLog();
-				if (gen->Init(info, log.Get()))
-				{
-					CCodeGenData genData;
-					gen->Generate(genData);
-					gen->Save2(genData);
-					gen->Cleanup();
-				}
-				else
-				{
-					ASSERT(false);
+					auto log = CreateGenLog();
+					if (gen->Init(info, log.Get()))
+					{
+						CCodeGenData genData;
+						gen->Generate(genData);
+						gen->Save2(genData);
+						gen->Cleanup();
+					}
+					else
+					{
+						ASSERT(false);
+					}
 				}
 			}
 		}
