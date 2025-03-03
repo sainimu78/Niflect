@@ -52,7 +52,7 @@ namespace Niflect
 			//type->InitTypeMeta2(sizeof(TType), CNiflectType::GetTypeHash<TType>(), idx, typeFuncs, id, &TRegisteredType<TType>::s_type, NULL);
 			//ASSERT(TRegisteredType<TType>::IsValid());
 		}
-		template <typename TType, typename TInfo = CNiflectType>
+		template <typename TType, typename TInfo>
 		void RegisterTypeInternal(const Niflect::CString& id, const CreateTypeAccessorFunc& inCreateTypeAccessorFunc, CStaticNiflectTypeAddr* staticTypePtrAddr, const CSharedNata& nata)
 		{
 			STypeLifecycleMeta lifecycleMeta;
@@ -66,11 +66,11 @@ namespace Niflect
 			type->InitTypeMeta2(this, idx, lifecycleMeta, CNiflectType::GetTypeHash<TType>(), id, inCreateTypeAccessorFunc, staticTypePtrAddr, nata);
 			this->InsertType(shared, idx);
 		}
-		template <typename TType, typename TInfo = CNiflectType>
+		template <typename TType, typename TInfo>
 		void RegisterType3(const Niflect::CString& id, const CreateTypeAccessorFunc& inCreateTypeAccessorFunc, const CSharedNata& nata)
 		{
 			ASSERT(!TRegisteredType<TType>::IsValid());
-			this->RegisterTypeInternal<TType>(id, inCreateTypeAccessorFunc, &TRegisteredType<TType>::s_type, nata);
+			this->RegisterTypeInternal<TType, TInfo>(id, inCreateTypeAccessorFunc, &TRegisteredType<TType>::s_type, nata);
 			ASSERT(TRegisteredType<TType>::IsValid());
 		}
 		CNiflectModule2* GetModule() const

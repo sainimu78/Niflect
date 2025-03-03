@@ -41,11 +41,11 @@ namespace Niflect
 	template <typename T>
 	CSharedAccessor )" MAKELABEL(LABEL_1) R"(CreateTypeAccessor();
 
-	template <typename TType, typename TInfo = CNiflectType>
+	template <typename TType, typename TInfo>
 	void )" MAKELABEL(LABEL_1) R"(RegisterType(CNiflectTable* table, const Niflect::CString& id, const CreateTypeAccessorFunc& inCreateTypeAccessorFunc, const CSharedNata& nata)
 	{
 		ASSERT(!)" MAKELABEL(LABEL_1) R"(TRegisteredType<TType>::IsValid());
-		table->RegisterTypeInternal<TType>(id, inCreateTypeAccessorFunc, &)" MAKELABEL(LABEL_1) R"(TRegisteredType<TType>::s_type, nata);
+		table->RegisterTypeInternal<TType, TInfo>(id, inCreateTypeAccessorFunc, &)" MAKELABEL(LABEL_1) R"(TRegisteredType<TType>::s_type, nata);
 		ASSERT()" MAKELABEL(LABEL_1) R"(TRegisteredType<TType>::IsValid());
 	}
 })";
