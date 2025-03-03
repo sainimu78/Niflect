@@ -291,7 +291,7 @@ int main(int argc, const char** argv)
 #3. Attach the debugger to the NiflectGenTool.exe process.
 #4. Press any key on this console.
 #5. You can now debug NiflectGenTool.
-#6. When you finished debugging, you can restore the projects' settings by Save All in VS and then running Generate.bat.
+#6. When you finished debugging, you can restore the projects' settings by Save All in VS and then running Update.bat.
 )");
 						std::cin.get();
 					}
