@@ -184,6 +184,7 @@ namespace NiflectGen
 			resocursorNode.InitForAccessorBinding(foundAccessorBindingIdx, foundUntaggedTemplateIndex, header);
 			return true;
 		}
+#ifdef FIELD_TYPE_CAN_BE_ALIAS_OF_BINDING_TYPE_IN_AS
 		else
 		{
 			ASSERT(!clang_Cursor_isNull(fieldCursor));
@@ -197,6 +198,8 @@ namespace NiflectGen
 				return this->InitResocursorNodeIfFoundRecurs(ctxSub, resocursorNode);
 			}
 		}
+#else
+#endif
 		return false;
 	}
 #else

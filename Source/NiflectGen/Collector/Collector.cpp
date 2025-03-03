@@ -951,38 +951,61 @@ namespace NiflectGen
 					addedTaggedChild = m_untaggedTypeCollector.Collect(cursor, taggedParent, context.m_log);
 				}
 	#else
+		#ifdef FIELD_TYPE_CAN_BE_ALIAS_OF_BINDING_TYPE_IN_AS
+				if (m_moduleRegInfo.m_userProvided.m_allowedFieldTypeAsForBindingTypeInAS)
+				{
+					if (kind == CXCursor_TypeAliasTemplateDecl)
+					{
+						aliasChain->AddLinkTemplateAliasDecl(cursor);
+						addedTaggedChild = m_templateCollector.Collect(cursor, taggedParent, context.m_log);
+					}
+					else if (kind == CXCursor_TypedefDecl)
+					{
+						aliasChain->AddLinkAliasDecl(cursor);
+					}
+					else if (kind == CXCursor_TypeAliasDecl)
+					{
+						aliasChain->AddLinkAliasDecl(cursor);
+					}
+					else if (kind == CXCursor_ClassTemplate)
+					{
+						aliasChain->AddLinkDecl2(cursor);
+						addedTaggedChild = m_templateCollector.Collect(cursor, taggedParent, context.m_log);
+					}
+				}
+				else
+				{
+					if (kind == CXCursor_TypeAliasTemplateDecl)
+					{
+						aliasChain->AddLinkDecl2(cursor);
+						addedTaggedChild = m_templateCollector.Collect(cursor, taggedParent, context.m_log);
+					}
+					else if (kind == CXCursor_TypeAliasDecl)
+					{
+						aliasChain->AddLinkDecl2(cursor);
+					}
+					else if (kind == CXCursor_ClassTemplate)
+					{
+						aliasChain->AddLinkDecl2(cursor);
+						addedTaggedChild = m_templateCollector.Collect(cursor, taggedParent, context.m_log);
+					}
+				}
+		#else
 				if (kind == CXCursor_TypeAliasTemplateDecl)
 				{
-#ifdef FIELD_TYPE_CAN_BE_ALIAS_OF_BINDING_TYPE_IN_AS
-					aliasChain->AddLinkTemplateAliasDecl(cursor);
-#else
 					aliasChain->AddLinkDecl(cursor);
-#endif
 					addedTaggedChild = m_templateCollector.Collect(cursor, taggedParent, context.m_log);
 				}
-#ifdef FIELD_TYPE_CAN_BE_ALIAS_OF_BINDING_TYPE_IN_AS
-				else if (kind == CXCursor_TypedefDecl)
-				{
-					aliasChain->AddLinkAliasDecl(cursor);
-				}
-#endif
 				else if (kind == CXCursor_TypeAliasDecl)
 				{
-#ifdef FIELD_TYPE_CAN_BE_ALIAS_OF_BINDING_TYPE_IN_AS
-					aliasChain->AddLinkAliasDecl(cursor);
-#else
 					aliasChain->AddLinkDecl(cursor);
-#endif
 				}
 				else if (kind == CXCursor_ClassTemplate)
 				{
-#ifdef FIELD_TYPE_CAN_BE_ALIAS_OF_BINDING_TYPE_IN_AS
-					aliasChain->AddLinkDecl2(cursor);
-#else
 					aliasChain->AddLinkDecl(cursor);
-#endif
 					addedTaggedChild = m_templateCollector.Collect(cursor, taggedParent, context.m_log);
 				}
+		#endif
 	#endif
 			}
 			if (!addedTaggedChild)

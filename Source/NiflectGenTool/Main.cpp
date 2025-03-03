@@ -183,6 +183,7 @@ int main(int argc, const char** argv)
 				//	"-g", "I:/F/Fts/Proj/Test/Wishing/Build/Sample/SampleProjectTemplate/Windows/DefaultBuild/Generated/SampleAPI",
 				//	"-gbt",
 				//	"-gsm",
+				//	"-aft",
 				//};
 				//argc = sizeof(argvTest) / sizeof(const char*);
 				//argv = argvTest;
@@ -263,10 +264,18 @@ int main(int argc, const char** argv)
 					.SetNoValue()
 					.SetOnFoundArgFunc([&] { info.m_toGenStaticallyRegisterToRegistry = true; }));
 				parser.Register("-fs", CArgDefinition()
-					.SetDescription("Generating header(.h .hxx) and source(.cpp) files rather than only header(.h .hxx) files")
+					.SetDescription("Generating header(.h) and source(.cpp) files rather than only header(.h) files")
 					.SetRequirementType(EArgRequirementType::Optional)
 					.SetNoValue()
 					.SetOnFoundArgFunc([&] { info.m_genFileMode = EGeneratingHeaderAndSourceFileMode::ESourceAndHeader; }));
+#ifdef FIELD_TYPE_CAN_BE_ALIAS_OF_BINDING_TYPE_IN_AS
+				parser.Register("-aft", CArgDefinition()
+					.SetDescription("Allowed field type as alias for corresponding TSetting's BindingType in Accessor Setting.")
+					.SetRequirementType(EArgRequirementType::Optional)
+					.SetNoValue()
+					.SetOnFoundArgFunc([&] { info.m_allowedFieldTypeAsForBindingTypeInAS = true; }));
+#else
+#endif
 				parser.Register("-debuggerattaching", CArgDefinition()
 					.SetDescription("Waiting for debugger attaching")
 					.SetRequirementType(EArgRequirementType::Optional)

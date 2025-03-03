@@ -20,6 +20,10 @@ namespace NiflectGen
 			: m_toGenGeneratedBodyThisType(false)
 			, m_toGenStaticModuleReg(false)
 			, m_toGenStaticallyRegisterToRegistry(false)
+#ifdef FIELD_TYPE_CAN_BE_ALIAS_OF_BINDING_TYPE_IN_AS
+			, m_allowedFieldTypeAsForBindingTypeInAS(false)
+#else
+#endif
 			, m_genFileMode(EGeneratingHeaderAndSourceFileMode::EHeaderOnly)
 		{
 		}
@@ -37,6 +41,10 @@ namespace NiflectGen
 		bool m_toGenGeneratedBodyThisType;
 		bool m_toGenStaticModuleReg;
 		bool m_toGenStaticallyRegisterToRegistry;
+#ifdef FIELD_TYPE_CAN_BE_ALIAS_OF_BINDING_TYPE_IN_AS
+		bool m_allowedFieldTypeAsForBindingTypeInAS;
+#else
+#endif
 		EGeneratingHeaderAndSourceFileMode m_genFileMode;
 	};
 
