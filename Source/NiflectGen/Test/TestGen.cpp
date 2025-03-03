@@ -351,6 +351,37 @@ namespace TestGen
 				});
 		}
 	}
+	static void TestSuccess_AllowedAliasFieldType()
+	{
+		auto memTest = Niflect::GetDefaultMemoryStats();
+		{
+			auto gen = CreateGenerator();
+			CModuleRegInfo info;
+			info.m_vecAccessorSettingHeader.push_back(CONCAT_HARDCODED_STRINGS_2(ROOT_TEST_PATH, "/TestAccessorSettingAllowedAliasFieldType.h"));
+			info.m_vecModuleHeader2.push_back(CONCAT_HARDCODED_STRINGS_2(ROOT_TEST_PATH, "/TestAllowedAliasFieldType.h"));
+			info.m_allowedFieldTypeAsForBindingTypeInAS = true;
+			Test::InitArgs(info);
+			gen->Init(info, NULL);
+			CCodeGenData genData;
+			gen->Generate(genData, [&gen](void* cursorAddr)
+				{
+					auto& cursor = *static_cast<CXCursor*>(cursorAddr);
+					CTaggedNode2 taggedRoot;
+					CGenLog log;
+					log.Config(CGenLogOption().SetAssertionOnAddingItem(false).SetCachedItems(true));
+					CCollectingContext context(&log);
+					CCollectionData collectionData;
+					CDataCollector collector(gen->GetModuleRegInfo());
+					collector.Collect(cursor, &taggedRoot, context, collectionData);
+					ASSERT(log.m_vecText.size() == 0);
+					CResolvingContext resolvingContext(&log);
+					CResolver resolver(collectionData, gen->GetModuleRegInfo());
+					CResolvedData resolvedData;
+					resolver.Resolve4(&taggedRoot, resolvingContext, resolvedData);
+					ASSERT(log.m_vecText.size() == 0);
+				});
+		}
+	}
 	static void TestSuccess_TypeRegCodeGen0()
 	{
 		auto memTest = Niflect::GetDefaultMemoryStats();
@@ -397,6 +428,7 @@ namespace TestGen
 		TestSuccess_AccessorFinding();
 		TestSuccess_AccessorResocursorName();
 		TestSuccess_RequiredHeader();
+		TestSuccess_AllowedAliasFieldType();
 		//TestSuccess_TypeRegCodeGen0();
 	}
 }

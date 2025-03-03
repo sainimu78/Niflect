@@ -1,7 +1,9 @@
 #pragma once
-#include <cassert>
-#include <cstddef>//std::size_t, offsetof
-#include <cstdio>//fflush
+//#include <cassert>//assert
+//#include <stdexcept>//std::exception
+#include <cstddef>//NULL
+//#include <iostream>//std::cerr
+#include <cstdio>//fprintf
 
 //公共define, typedef, const
 
@@ -16,13 +18,26 @@ typedef long long int64;
 typedef unsigned int uint32;
 typedef unsigned long long uint64;
 
-#define ASSERT(b)\
-do {\
-    bool cond = (b);\
-    if (!cond)\
-        fflush(stdout);\
-    assert(cond);\
-} while(0)
+#if defined(_MSC_VER)
+#define DEBUG_BREAK() __debugbreak()
+#elif defined(__GNUC__) || defined(__clang__)
+#define DEBUG_BREAK() __builtin_trap()
+#else
+#define DEBUG_BREAK() (void)0  // 其他平台无操作
+#endif
+
+#ifndef NDEBUG
+    #define ASSERT(b)\
+        do { \
+            bool cond = b;\
+            if (!cond)\
+            {\
+                std::fprintf(stderr, "Assertion failed: %s, %d\n", __FILE__, __LINE__);\
+                DEBUG_BREAK();\
+            }\
+        } while(0)
+#else
+#endif
 
 #ifdef NIFLECT_API
 #else
