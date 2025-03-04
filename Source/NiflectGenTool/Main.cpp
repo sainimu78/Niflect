@@ -276,6 +276,11 @@ int main(int argc, const char** argv)
 					.SetOnFoundArgFunc([&] { info.m_allowedFieldTypeAsForBindingTypeInAS = true; }));
 #else
 #endif
+				parser.Register("-et", CArgDefinition()
+					.SetDescription("Exported StaticGetType functions by using a generated API macro named in form of '_${ModuleName}_API' and the exports enabling macro is in form of _${ModuleName}_EXPORTS.")
+					.SetRequirementType(EArgRequirementType::Optional)
+					.SetNoValue()
+					.SetOnFoundArgFunc([&] { info.m_exportedStaticGetTypeFunctions = true; }));
 				parser.Register("-debuggerattaching", CArgDefinition()
 					.SetDescription("Waiting for debugger attaching")
 					.SetRequirementType(EArgRequirementType::Optional)
