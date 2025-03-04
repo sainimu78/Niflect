@@ -219,11 +219,11 @@ int main(int argc, const char** argv)
 				parser.Register("-am", CArgDefinition()
 					.SetDescription("Module API macro").SetExample("TESTMODULE1_API")
 					.SetRequirementType(EArgRequirementType::Optional)
-					.SetOnFoundArgFunc([&] { info.m_moduleApiMacro = ParseNextArgValue(parser); }));
+					.SetOnFoundArgFunc([&] { info.m_specifiedModuleApiMacro = ParseNextArgValue(parser); }));
 				parser.Register("-amh", CArgDefinition()
 					.SetDescription("File path of the header defined the module API macro, there is no need to specified if the file path is included in the precompile header(s)")
 					.SetRequirementType(EArgRequirementType::Optional)
-					.SetOnFoundArgFunc([&] { info.m_moduleApiMacroHeader = ParseNextArgPath(parser); }));
+					.SetOnFoundArgFunc([&] { info.m_specifiedModuleApiMacroHeaderFilePath = ParseNextArgPath(parser); }));
 				parser.Register("-a", CArgDefinition()
 					.SetDescription("File path of the accessor setting header using by the module")
 					.SetRequirementType(EArgRequirementType::MultipleOptional)

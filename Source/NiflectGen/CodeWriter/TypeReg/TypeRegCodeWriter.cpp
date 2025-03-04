@@ -324,7 +324,7 @@ namespace NiflectGen
 				ReadTemplateFromRawData(tpl0, HardCodedTemplate::StaticGetTypeSpecDecl);
 				CLabelToCodeMapping map;
 				MapLabelToText(map, LABEL_2, staticGetTypeFuncName);
-				auto apiMacroSpace = context.m_moduleRegInfo.m_userProvided.m_moduleApiMacro;
+				auto apiMacroSpace = context.m_moduleRegInfo.m_moduleApiMacro;
 				if (!apiMacroSpace.empty())
 				{
 					apiMacroSpace += ' ';

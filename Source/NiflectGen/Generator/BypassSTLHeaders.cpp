@@ -276,7 +276,7 @@ using enable_if_t = typename enable_if<_Test, _Ty>::type;
 		const char* m_headerFileName;
 		const bool m_withBypassDefinition;
 	};
-	void GenerateBypassSTLHeaders(const Niflect::CString& headersDirPath)
+	void WriteBypassSTLHeaders(const Niflect::CString& headersDirPath)
 	{
 		//字母序排列仅为方便补充 BypassSTL, 补充步骤
 		//1. 实现写相应的系统头文件的 Write_xxx, 如 Write_map

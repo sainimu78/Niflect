@@ -90,8 +90,8 @@ namespace NiflectGen
             //end
             for (auto& it : userProvided.m_vecResolverCustomizationHeader)
                 writer.AddInclude(it);
-            if (!userProvided.m_moduleApiMacroHeader.empty())
-                writer.AddInclude(userProvided.m_moduleApiMacroHeader);
+            if (!userProvided.m_specifiedModuleApiMacroHeaderFilePath.empty())//仅用户指定的头文件须加入, 生成的头文件假定不会被直接使用因此无须加入
+                writer.AddInclude(userProvided.m_specifiedModuleApiMacroHeaderFilePath);
             for (auto& it1 : userProvided.m_vecAccessorSettingHeader)
                 writer.AddInclude(it1);
             for (auto& it1 : userProvided.m_vecModuleHeader2)
@@ -310,6 +310,8 @@ namespace NiflectGen
             this->SaveFileToGenSource(genData.m_moduleRegGenData.m_genH, genData.m_moduleRegGenData.m_genHIncludePath, saving);
         this->SaveFileToGenSource(genData.m_moduleRegGenData.m_privateH, genData.m_moduleRegGenData.m_privateHIncludePath, saving);
         this->SaveFileToGenSource(genData.m_moduleRegisteredTypeHeaderGenData.m_linesHeader, m_moduleRegInfo.m_moduleRegisteredTypeHeaderFilePath, saving);
+        if (genData.m_moduleApiMacroHeaderGenData.m_linesHeader.size() > 0)
+            this->SaveFileToGenSource(genData.m_moduleApiMacroHeaderGenData.m_linesHeader, genData.m_moduleApiMacroHeaderGenData.m_filePath, saving);
 
         size_t offset = 0;
         const bool writeEncodingMark = true;

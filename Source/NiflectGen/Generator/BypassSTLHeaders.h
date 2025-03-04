@@ -3,5 +3,5 @@
 
 namespace NiflectGen
 {
-	void GenerateBypassSTLHeaders(const Niflect::CString& headersDirPath);
+	void WriteBypassSTLHeaders(const Niflect::CString& headersDirPath);
 }

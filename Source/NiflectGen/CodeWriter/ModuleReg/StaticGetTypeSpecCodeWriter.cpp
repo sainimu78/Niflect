@@ -85,12 +85,12 @@ namespace NiflectGen
                 auto internalRelativeTypeRegFilePathNoExt = NiflectUtil::ConcatPath(context.m_moduleRegInfo.m_typeRegBasePath, ConvertToInternalFilePath(relativeTypeRegFilePathNoExt));
                 staticGetTypeSpecData.m_implSourceFilePath = internalRelativeTypeRegFilePathNoExt + NiflectGenDefinition::FileNamePostfix::Gen + context.m_moduleRegInfo.GetSourceFileExtForGenFileMode();
 
-                const bool requiredExportedStaticGetType = !context.m_moduleRegInfo.m_userProvided.m_moduleApiMacro.empty();
+                const bool requiredExportedStaticGetType = !context.m_moduleRegInfo.m_moduleApiMacro.empty();
                 {
                     CCodeLines linesGenHInclude;
                     CHeaderFilePathDataArray vecHeaderData;
-                    if (requiredExportedStaticGetType && (!context.m_moduleRegInfo.m_userProvided.m_moduleApiMacroHeader.empty()))
-                        vecHeaderData.push_back({ context.m_moduleRegInfo.m_userProvided.m_moduleApiMacroHeader, true });
+                    if (requiredExportedStaticGetType && (!context.m_moduleRegInfo.m_moduleApiMacroHeaderFilePath.empty()))
+                        vecHeaderData.push_back({ context.m_moduleRegInfo.m_moduleApiMacroHeaderFilePath, true });
                     vecHeaderData.push_back({ NiflectGenDefinition::NiflectFramework::FilePath::NiflectTypeHeader, true });
                     CIncludesHelper::ConvertFromHeaderFilePaths(vecHeaderData, context.m_moduleRegInfo.m_writingHeaderSearchPaths, linesGenHInclude);
 

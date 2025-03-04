@@ -13,6 +13,7 @@
 #include "NiflectGen/CodeWriter/HardCoded/ModuleRegTemplate.h"
 #include "NiflectGen/CodeWriter/TypeReg/ModuleRegisteredTypeHeaderCodeWriter.h"
 #include "NiflectGen/CodeWriter/CppTemplate.h"
+#include "NiflectGen/CodeWriter/ModuleApiMacroHeaderWriter.h"
 
 #include "Niflect/Util/SystemUtil.h"//临时写文件测试用
 
@@ -333,6 +334,12 @@ namespace NiflectGen
         SModuleRegisteredTypeHeaderWritingContext moduleRegisteredTypeHeaderCtx{ m_moduleRegInfo, context.m_log };
         WriteModuleRegisteredTypeHeaderCodeWriter(moduleRegisteredTypeHeaderCtx, data.m_moduleRegisteredTypeHeaderGenData);
 
+        if (m_moduleRegInfo.m_userProvided.m_exportedStaticGetTypeFunctions)
+        {
+            WriteModuleApiMacroHeader(m_moduleRegInfo.m_userProvided.m_moduleName, m_moduleRegInfo.m_moduleApiMacro, data.m_moduleApiMacroHeaderGenData.m_linesHeader);
+            data.m_moduleApiMacroHeaderGenData.m_filePath = GetApiMacroHeaderFileName(m_moduleRegInfo.m_userProvided.m_moduleName);
+        }
+
         this->WriteVerificationCode();
     }
     void CTemplateBasedCppWriter::WriteModuleReg(const SModuleRegWritingContext2& context, SModuleRegWritingData2& data) const
@@ -411,16 +418,16 @@ namespace NiflectGen
                     CCodeLines linesInclude;
                     {
                         Niflect::TArrayNif<CHeaderFilePathData> vecHeaderData;
-                        if (!context.m_moduleRegInfo.m_userProvided.m_moduleApiMacroHeader.empty())
-                            vecHeaderData.push_back(context.m_moduleRegInfo.m_userProvided.m_moduleApiMacroHeader);//可能使用 PCH, 包含在其中, 因此也可不指定
+                        if (!context.m_moduleRegInfo.m_moduleApiMacroHeaderFilePath.empty())
+                            vecHeaderData.push_back(context.m_moduleRegInfo.m_moduleApiMacroHeaderFilePath);//可能使用 PCH, 包含在其中, 因此也可不指定
                         vecHeaderData.push_back(NiflectGenDefinition::NiflectFramework::FilePath::NiflectModuleInfoHeader);
                         CIncludesHelper::ConvertFromHeaderFilePaths(vecHeaderData, m_moduleRegInfo.m_writingHeaderSearchPaths, linesInclude);
                         MapLabelToLines(map, LABEL_0, linesInclude);
                     }
                     MapLabelToText(map, LABEL_4, context.m_moduleRegInfo.m_userProvided.m_moduleName);
-                    if (context.m_moduleRegInfo.m_userProvided.m_moduleApiMacro.empty())
+                    if (context.m_moduleRegInfo.m_moduleApiMacro.empty())
                         GenLogError(context.m_log, "The API macro is not specified");
-                    MapLabelToText(map, LABEL_5, context.m_moduleRegInfo.m_userProvided.m_moduleApiMacro);
+                    MapLabelToText(map, LABEL_5, context.m_moduleRegInfo.m_moduleApiMacro);
                     MapLabelToText(map, LABEL_6, NiflectGenDefinition::NiflectFramework::FuncNamePrefix::GeneratedGetModuleInfo);
                     Niflect::TSet<Niflect::CString> setReplacedLabel;
                     tpl1.ReplaceLabels(map, data.m_moduleRegGenData.m_genH, &setReplacedLabel);
@@ -431,9 +438,9 @@ namespace NiflectGen
                     ReadTemplateFromRawData(tpl1, HardCodedTemplate::StaticModuleRegImpl);
                     CLabelToCodeMapping map;
                     MapLabelToText(map, LABEL_4, context.m_moduleRegInfo.m_userProvided.m_moduleName);
-                    if (context.m_moduleRegInfo.m_userProvided.m_moduleApiMacro.empty())
+                    if (context.m_moduleRegInfo.m_moduleApiMacro.empty())
                         GenLogError(context.m_log, "The API macro is not specified");
-                    MapLabelToText(map, LABEL_5, context.m_moduleRegInfo.m_userProvided.m_moduleApiMacro);
+                    MapLabelToText(map, LABEL_5, context.m_moduleRegInfo.m_moduleApiMacro);
                     Niflect::TSet<Niflect::CString> setReplacedLabel;
                     tpl1.ReplaceLabels(map, linesStaticModuleReg, &setReplacedLabel);
                     for (auto& it : linesStaticModuleReg)

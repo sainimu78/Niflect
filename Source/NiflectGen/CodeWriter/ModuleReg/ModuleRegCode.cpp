@@ -4,6 +4,7 @@
 #include "NiflectGen/Generator/BypassSTLHeaders.h"
 #include "NiflectGen/CodeWriter/GenTimeNiflectMacro.h"
 #include "NiflectGen/CodeWriter/CppWriter.h"
+#include "NiflectGen/CodeWriter/ModuleApiMacroHeaderWriter.h"
 
 namespace NiflectGen
 {
@@ -11,16 +12,24 @@ namespace NiflectGen
 	{
 		if (info.m_moduleName.empty())
 			return false;
+		if (!info.m_specifiedModuleApiMacroHeaderFilePath.empty())
+		{
+			if (info.m_specifiedModuleApiMacro.empty())
+			{
+				ASSERT(false);//todo: 提示指定前者必须同时指定后者
+				return false;
+			}
+		}
 
 		m_userProvided = info;
 
 		//m_genSourceRootParentDir 现为空, 预留附加一层输出目录
 
-		m_moduleGenDirPath = NiflectUtil::ConcatPath(info.m_genOutputDirPath, m_genSourceRootParentDir);
-		if (!info.m_genSourceOutputDirPath.empty())
+		m_moduleGenDirPath = NiflectUtil::ConcatPath(m_userProvided.m_genOutputDirPath, m_genSourceRootParentDir);
+		if (!m_userProvided.m_genSourceOutputDirPath.empty())
 		{
 			ASSERT(false);//经检查, 此选项可能废弃
-			auto genSourceOutputDirPath = NiflectUtil::ConcatPath(info.m_genSourceOutputDirPath, m_genSourceRootParentDir);
+			auto genSourceOutputDirPath = NiflectUtil::ConcatPath(m_userProvided.m_genSourceOutputDirPath, m_genSourceRootParentDir);
 			NiflectUtil::DeleteDirectory(genSourceOutputDirPath);
 		}
 
@@ -31,7 +40,7 @@ namespace NiflectGen
 		m_genSrcBasePath = NiflectGenDefinition::DirName::GenSrc;
 
 		m_moduleRegisteredTypeHeaderFilePath = NiflectUtil::ConcatPath(m_typeRegBasePath, NiflectGenDefinition::NiflectFramework::FileName::ModuleRegisteredTypeHeader);
-		m_moduleScopeSymbolPrefix = "_" + info.m_moduleName + "_";
+		m_moduleScopeSymbolPrefix = "_" + m_userProvided.m_moduleName + "_";
 
 		for (auto& it : m_userProvided.m_vecModuleHeaderSearchPath2)
 			m_writingHeaderSearchPaths.m_vecForRegularConversion.push_back(it);
@@ -39,13 +48,24 @@ namespace NiflectGen
 		m_writingHeaderSearchPaths.m_vecForRegularConversion.push_back(m_userProvided.m_toolHeaderSearchPath);
 		
 		m_genTimeBasePath = NiflectUtil::ConcatPath(m_moduleGenDirPath, NiflectGenDefinition::DirName::GenTime);
-		GenerateBypassSTLHeaders(m_genTimeBasePath);
+		WriteBypassSTLHeaders(m_genTimeBasePath);
 		{
 			CGenLog log;
 			Niflect::TArrayNif<Niflect::CString> vecToolHeaderSearchPath;
 			vecToolHeaderSearchPath.push_back(m_userProvided.m_toolHeaderSearchPath);
 			SGenTimeNiflectMacroHeaderWritingContext ctx{ vecToolHeaderSearchPath, m_genTimeBasePath, &log };
 			WriteGenTimeNiflectMacroHeader(ctx);
+
+			if (m_userProvided.m_exportedStaticGetTypeFunctions)
+			{
+				ASSERT(m_userProvided.m_specifiedModuleApiMacro.empty());//todo: 提示只能选择一种
+				GetModuleApiMacroHeaderInfo(NiflectUtil::ConcatPath(m_userProvided.m_genOutputDirPath, m_moduleGenSourceRoot), m_userProvided.m_moduleName, m_moduleApiMacro, m_moduleApiMacroHeaderFilePath);
+			}
+			else
+			{
+				m_moduleApiMacro = m_userProvided.m_specifiedModuleApiMacro;
+				m_moduleApiMacroHeaderFilePath = m_userProvided.m_specifiedModuleApiMacroHeaderFilePath;//如未提供则可能由 PrecompileHeader 或其它头文件中提供, 因此允许为空
+			}
 		}
 
 		m_writingHeaderSearchPaths.m_vecForGenTimeConversion.push_back(NiflectUtil::ConvertToSearchPath(m_genTimeBasePath));

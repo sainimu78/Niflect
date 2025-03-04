@@ -24,6 +24,7 @@ namespace NiflectGen
 			, m_allowedFieldTypeAsForBindingTypeInAS(false)
 #else
 #endif
+			, m_exportedStaticGetTypeFunctions(false)
 			, m_genFileMode(EGeneratingHeaderAndSourceFileMode::EHeaderOnly)
 		{
 		}
@@ -35,8 +36,8 @@ namespace NiflectGen
 		Niflect::TArrayNif<Niflect::CString> m_vecAccessorSettingHeader;
 		Niflect::TArrayNif<Niflect::CString> m_vecModuleHeaderSearchPath2;//header search paths for libclang parsing
 		Niflect::TArrayNif<Niflect::CString> m_vecResolverCustomizationHeader;
-		Niflect::CString m_moduleApiMacro;
-		Niflect::CString m_moduleApiMacroHeader;
+		Niflect::CString m_specifiedModuleApiMacro;
+		Niflect::CString m_specifiedModuleApiMacroHeaderFilePath;
 		Niflect::CString m_toolHeaderSearchPath;
 		bool m_toGenGeneratedBodyThisType;
 		bool m_toGenStaticModuleReg;
@@ -45,6 +46,7 @@ namespace NiflectGen
 		bool m_allowedFieldTypeAsForBindingTypeInAS;
 #else
 #endif
+		bool m_exportedStaticGetTypeFunctions;
 		EGeneratingHeaderAndSourceFileMode m_genFileMode;
 	};
 
@@ -64,7 +66,9 @@ namespace NiflectGen
 		Niflect::CString m_moduleGenDirPath;
 		Niflect::CString m_moduleRegisteredTypeHeaderFilePath;
 		Niflect::CString m_moduleScopeSymbolPrefix;
-		Niflect::TArrayNif<Niflect::CString> m_vecParsingHeaderSearchPath;
+		Niflect::CString m_moduleApiMacro;
+		Niflect::CString m_moduleApiMacroHeaderFilePath;
+		Niflect::TArray<Niflect::CString> m_vecParsingHeaderSearchPath;
 		CWritingHeaderSearchPaths m_writingHeaderSearchPaths;
 		CModuleRegInfo m_userProvided;
 	};

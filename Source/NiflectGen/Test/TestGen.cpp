@@ -390,7 +390,7 @@ namespace TestGen
 			CModuleRegInfo info;
 			info.m_vecModuleHeader2.push_back(CONCAT_HARDCODED_STRINGS_2(ROOT_TEST_PATH, "/TestModuleHeaderCodeGen0.h"));
 			info.m_vecAccessorSettingHeader.push_back(CONCAT_HARDCODED_STRINGS_2(ROOT_TEST_PATH, "/TestAccessorSettingCodeGen0.h"));
-			info.m_moduleApiMacro = "TEST_MY_API";
+			info.m_exportedStaticGetTypeFunctions = true;
 			Test::InitArgs(info);
 			CGenLog log;
 			gen->Init(info, &log);

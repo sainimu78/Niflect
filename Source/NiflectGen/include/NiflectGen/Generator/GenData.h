@@ -65,6 +65,12 @@ namespace NiflectGen
 		CCodeLines m_linesHeader;
 	};
 
+	struct SModuleApiMacroHeaderGenData
+	{
+		CCodeLines m_linesHeader;
+		Niflect::CString m_filePath;
+	};
+
 	class CCodeGenData
 	{
 	public:
@@ -74,5 +80,6 @@ namespace NiflectGen
 		CTypeRegCreateTypeAccessorSpecData m_typeRegCreateTypeAccessorSpecGenData;
 		CTypeRegStaticGetTypeSpecData m_typeRegStaticGetTypeSpecGenData;
 		SModuleRegisteredTypeHeaderGenData m_moduleRegisteredTypeHeaderGenData;
+		SModuleApiMacroHeaderGenData m_moduleApiMacroHeaderGenData;
 	};
 }
