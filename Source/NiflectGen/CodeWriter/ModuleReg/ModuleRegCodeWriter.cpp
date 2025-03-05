@@ -337,7 +337,7 @@ namespace NiflectGen
         if (m_moduleRegInfo.m_userProvided.m_exportedStaticGetTypeFunctions)
         {
             WriteModuleApiMacroHeader(m_moduleRegInfo.m_userProvided.m_moduleName, m_moduleRegInfo.m_moduleApiMacro, data.m_moduleApiMacroHeaderGenData.m_linesHeader);
-            data.m_moduleApiMacroHeaderGenData.m_filePath = GetApiMacroHeaderFileName(m_moduleRegInfo.m_userProvided.m_moduleName);
+            data.m_moduleApiMacroHeaderGenData.m_filePath = NiflectUtil::ConcatPath(NiflectGenDefinition::DirName::GenInclude, GetApiMacroHeaderFileName(m_moduleRegInfo.m_userProvided.m_moduleName));
         }
 
         this->WriteVerificationCode();

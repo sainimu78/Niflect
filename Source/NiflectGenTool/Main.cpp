@@ -169,20 +169,21 @@ int main(int argc, const char** argv)
 				//const char* argvTest[] = {
 				//	"Placeholder",
 				//	"-n", "SampleAPI",
-				//	"-h", "I:/F/Fts/Proj/Test/Wishing/Source/Sample/SampleProjectTemplate/SampleAPI/include/SampleAPI.h",
-				//	"-h", "I:/F/Fts/Proj/Test/Wishing/Source/Sample/SampleProjectTemplate/SampleAPI/include/SampleAPICommon.h",
-				//	"-h", "I:/F/Fts/Proj/Test/Wishing/Source/Sample/SampleProjectTemplate/SampleAPI/include/SampleObject.h",
-				//	"-am", "SAMPLEAPI_API",
-				//	"-amh", "I:/F/Fts/Proj/Test/Wishing/Source/Sample/SampleProjectTemplate/SampleAPI/include/SampleAPICommon.h",
-				//	"-a", "I:/F/Fts/Proj/Test/Wishing/ThirdParty/Niflect/Niflect/include/Niflect/CommonlyUsed/DefaultAccessorSetting.h",
-				//	"-t", "I:/F/Fts/Proj/Test/Wishing/ThirdParty/Niflect/Niflect/include",
-				//	"-I", "I:/F/Fts/Proj/Test/Wishing/Source/Sample/SampleProjectTemplate/SampleAPI/include",
-				//	"-I", "I:/F/Fts/Proj/Test/Wishing/Source/Sample/SampleProjectTemplate/SampleAPI/src",
-				//	"-I", "I:/F/Fts/Proj/Test/Wishing/Source/Sample/SampleProjectTemplate/SampleAPI/include",
-				//	"-I", "I:/F/Fts/Proj/Test/Wishing/ThirdParty/Niflect/Niflect/include",
-				//	"-g", "I:/F/Fts/Proj/Test/Wishing/Build/Sample/SampleProjectTemplate/Windows/DefaultBuild/Generated/SampleAPI",
+				//	"-h", "../../../../../../../Wishing/Source/Sample/SampleProjectTemplate/SampleAPI/include/SampleAPI.h",
+				//	"-h", "../../../../../../../Wishing/Source/Sample/SampleProjectTemplate/SampleAPI/include/SampleAPICommon.h",
+				//	"-h", "../../../../../../../Wishing/Source/Sample/SampleProjectTemplate/SampleAPI/include/SampleObject.h",
+				//	//"-am", "SAMPLEAPI_API",
+				//	//"-amh", "../../../../../../../Wishing/Source/Sample/SampleProjectTemplate/SampleAPI/include/SampleAPICommon.h",
+				//	"-gam",
+				//	"-a", "../../../../../../../Wishing/ThirdParty/Niflect/Niflect/include/Niflect/CommonlyUsed/DefaultAccessorSetting.h",
+				//	"-t", "../../../../../../../Wishing/ThirdParty/Niflect/Niflect/include",
+				//	"-I", "../../../../../../../Wishing/Source/Sample/SampleProjectTemplate/SampleAPI/include",
+				//	"-I", "../../../../../../../Wishing/Source/Sample/SampleProjectTemplate/SampleAPI/src",
+				//	"-I", "../../../../../../../Wishing/Source/Sample/SampleProjectTemplate/SampleAPI/include",
+				//	"-I", "../../../../../../../Wishing/ThirdParty/Niflect/Niflect/include",
+				//	"-g", "../../../../../../../Wishing/Build/Sample/SampleProjectTemplate/Windows/DefaultBuild/Generated/SampleAPI",
 				//	"-gbt",
-				//	"-gsm",
+				//	//"-gsm",
 				//	"-aft",
 				//};
 				//argc = sizeof(argvTest) / sizeof(const char*);
@@ -270,14 +271,14 @@ int main(int argc, const char** argv)
 					.SetOnFoundArgFunc([&] { info.m_genFileMode = EGeneratingHeaderAndSourceFileMode::ESourceAndHeader; }));
 #ifdef FIELD_TYPE_CAN_BE_ALIAS_OF_BINDING_TYPE_IN_AS
 				parser.Register("-aft", CArgDefinition()
-					.SetDescription("Allowed field type as alias for corresponding TSetting's BindingType in Accessor Setting.")
+					.SetDescription("Allowed field type as alias for corresponding TSetting's BindingType in Accessor Setting")
 					.SetRequirementType(EArgRequirementType::Optional)
 					.SetNoValue()
 					.SetOnFoundArgFunc([&] { info.m_allowedFieldTypeAsForBindingTypeInAS = true; }));
 #else
 #endif
-				parser.Register("-et", CArgDefinition()
-					.SetDescription("Exported StaticGetType functions by using a generated API macro named in form of '_${ModuleName}_API' and the exports enabling macro is in form of _${ModuleName}_EXPORTS.")
+				parser.Register("-gam", CArgDefinition()
+					.SetDescription("Generating API macro header exports StaticGetType functions of reflected types. Exporting requires defining the control macro (e.g., -D_TESTMODULE1_EXPORTS) in compiler preprocessor options")
 					.SetRequirementType(EArgRequirementType::Optional)
 					.SetNoValue()
 					.SetOnFoundArgFunc([&] { info.m_exportedStaticGetTypeFunctions = true; }));

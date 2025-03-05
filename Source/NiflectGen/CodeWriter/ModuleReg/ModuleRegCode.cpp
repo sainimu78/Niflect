@@ -59,7 +59,7 @@ namespace NiflectGen
 			if (m_userProvided.m_exportedStaticGetTypeFunctions)
 			{
 				ASSERT(m_userProvided.m_specifiedModuleApiMacro.empty());//todo: 提示只能选择一种
-				GetModuleApiMacroHeaderInfo(NiflectUtil::ConcatPath(m_userProvided.m_genOutputDirPath, m_moduleGenSourceRoot), m_userProvided.m_moduleName, m_moduleApiMacro, m_moduleApiMacroHeaderFilePath);
+				GetModuleApiMacroHeaderInfo(m_userProvided.m_moduleName, m_moduleApiMacro, m_moduleApiMacroHeaderFilePath);
 			}
 			else
 			{

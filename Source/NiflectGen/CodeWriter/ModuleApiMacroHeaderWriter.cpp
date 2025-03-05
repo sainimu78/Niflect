@@ -46,13 +46,13 @@ R"(#pragma once
 	}
 	Niflect::CString GetApiMacroHeaderFileName(const Niflect::CString& moduleName)
 	{
-		return NiflectUtil::ConcatPath(NiflectGenDefinition::DirName::ModuleReg, "_" + moduleName + "ApiHeader.h");
+		return "_" + moduleName + "ApiHeader.h";
 	}
-	void GetModuleApiMacroHeaderInfo(const Niflect::CString& moduleGenSourceRootDirPath, const Niflect::CString& moduleName, Niflect::CString& moduleApiMacro, Niflect::CString& moduleApiMacroHeaderFilePath)
+	void GetModuleApiMacroHeaderInfo(const Niflect::CString& moduleName, Niflect::CString& moduleApiMacro, Niflect::CString& moduleApiMacroHeaderFilePath)
 	{
 		Niflect::CString placeholder;
 		GetApiMacroNames(moduleName, placeholder, moduleApiMacro);
-		moduleApiMacroHeaderFilePath = NiflectUtil::ConcatPath(moduleGenSourceRootDirPath, GetApiMacroHeaderFileName(moduleName));
+		moduleApiMacroHeaderFilePath = GetApiMacroHeaderFileName(moduleName);
 	}
 	void WriteModuleApiMacroHeader(const Niflect::CString& moduleName, const Niflect::CString& moduleApiMacro, CCodeLines& linesHeader)
 	{
