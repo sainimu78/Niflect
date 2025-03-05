@@ -37,6 +37,7 @@ typedef unsigned long long uint64;
             }\
         } while(0)
 #else
+    #define ASSERT(b) (void)0
 #endif
 
 #ifdef NIFLECT_API
