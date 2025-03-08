@@ -6,10 +6,10 @@
 
 TEST(SaveLoad, GenToolTest) {
     auto memTest = Niflect::GetDefaultMemoryStats();
-    EXPECT_TRUE(memTest->m_allocCount == 0);
+    EXPECT_EQ(memTest->m_allocCount, 0);
     {
         Niflect::CNiflectTable table;
-        EXPECT_TRUE(memTest->m_allocCount > 0);
+        EXPECT_GT(memTest->m_allocCount, 0);
         Niflect::GeneratedInitialReg(&table);
         Niflect::GeneratedInitTypes();
         table.InitTypesLayout();
@@ -23,7 +23,7 @@ TEST(SaveLoad, GenToolTest) {
         type->LoadInstanceFromRwNode(&dst, &rw);
         EXPECT_TRUE(src == dst);
     }
-    EXPECT_TRUE(memTest->m_bytesRuntime == 0);
+    EXPECT_EQ(memTest->m_bytesRuntime, 0);
 }
 
 int main(int argc, char** argv) {
