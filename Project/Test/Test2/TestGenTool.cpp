@@ -17,6 +17,7 @@ TEST(SaveLoad, GenToolTest) {
         using namespace RwTree;
         CRwNode rw;
         CTest2Class src;
+        src.InitForTest();
         auto type = Niflect::StaticGetType<CTest2Class>();
         type->SaveInstanceToRwNode(&src, &rw);
         CTest2Class dst;
