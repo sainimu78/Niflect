@@ -12,12 +12,31 @@ namespace NiflectGen
 	{
 		if (info.m_moduleName.empty())
 			return false;
+		CGenLog log;
 		if (!info.m_specifiedModuleApiMacroHeaderFilePath.empty())
 		{
 			if (info.m_specifiedModuleApiMacro.empty())
 			{
-				ASSERT(false);//todo: 提示指定前者必须同时指定后者
+				GenLogError(&log, "The API macro name (.e.g., -am TESTMODULE1_API) must be specified when the API macro header is specified");
 				return false;
+			}
+		}
+
+		for (auto& it0 : info.m_vecModuleHeader2)
+		{
+			auto incPath = CIncludesHelper::ConvertToIncludePath(it0, info.m_vecModuleHeaderSearchPath2);
+			if (incPath.empty())
+			{
+				if (!NiflectUtil::IsRelativePath(it0))
+				{
+					auto paths = NiflectUtil::CombineFromPaths(info.m_vecModuleHeaderSearchPath2, '\n');
+					GenLogError(&log, NiflectUtil::FormatString(
+R"(The module header search paths specified:
+%s
+must be valid for header file:
+%s)", paths.c_str(), it0.c_str()).c_str());
+					return false;
+				}
 			}
 		}
 
@@ -50,7 +69,6 @@ namespace NiflectGen
 		m_genTimeBasePath = NiflectUtil::ConcatPath(m_moduleGenDirPath, NiflectGenDefinition::DirName::GenTime);
 		WriteBypassSTLHeaders(m_genTimeBasePath);
 		{
-			CGenLog log;
 			Niflect::TArrayNif<Niflect::CString> vecToolHeaderSearchPath;
 			vecToolHeaderSearchPath.push_back(m_userProvided.m_toolHeaderSearchPath);
 			SGenTimeNiflectMacroHeaderWritingContext ctx{ vecToolHeaderSearchPath, m_genTimeBasePath, &log };

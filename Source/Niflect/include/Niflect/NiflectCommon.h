@@ -1,9 +1,12 @@
 #pragma once
-//#include <cassert>//assert
-//#include <stdexcept>//std::exception
 #include <cstddef>//NULL
-//#include <iostream>//std::cerr
-#include <cstdio>//fprintf
+#define ASSERTION_ABORT
+#ifdef ASSERTION_ABORT
+#include <cassert>//assert
+#include <cstdio>//fflush
+#else
+#include <cstdio>//printf, fflush
+#endif
 
 //¹«¹²define, typedef, const
 
@@ -18,6 +21,21 @@ typedef long long int64;
 typedef unsigned int uint32;
 typedef unsigned long long uint64;
 
+#ifdef ASSERTION_ABORT
+#ifndef NDEBUG
+    #define ASSERT(b)\
+        do { \
+            bool cond = b;\
+            if (!cond)\
+            {\
+                fflush(stdout);\
+                assert(false);\
+            }\
+        } while(0)
+#else
+    #define ASSERT(b) (void)0
+#endif
+#else
 #if defined(_MSC_VER)
 #define DEBUG_BREAK() __debugbreak()
 #elif defined(__GNUC__) || defined(__clang__)
@@ -32,13 +50,14 @@ typedef unsigned long long uint64;
             bool cond = b;\
             if (!cond)\
             {\
-                std::fprintf(stdout, "Assertion failed: %s, %d\n", __FILE__, __LINE__);\
+                printf("Assertion failed: %s, %d\n", __FILE__, __LINE__);\
                 fflush(stdout);\
                 DEBUG_BREAK();\
             }\
         } while(0)
 #else
     #define ASSERT(b) (void)0
+#endif
 #endif
 
 #ifdef NIFLECT_API

@@ -213,8 +213,8 @@ namespace NiflectUtil
 		std::transform(lowerB.begin(), lowerB.end(), lowerB.begin(), ::tolower);
 		return lowerA < lowerB;
 	}
-	static Niflect::TArrayNif<Niflect::CString> Split(const Niflect::CString& str, char delimiter) {
-		Niflect::TArrayNif<Niflect::CString> tokens;  // 用于存储分割后的子字符串
+	static Niflect::TArray<Niflect::CString> Split(const Niflect::CString& str, char delimiter) {
+		Niflect::TArray<Niflect::CString> tokens;  // 用于存储分割后的子字符串
 		Niflect::CString token;                // 临时存储每个子字符串
 		for (char ch : str) {             // 遍历输入字符串中的每个字符
 			if (ch == delimiter) {        // 如果当前字符是分隔符
@@ -232,8 +232,8 @@ namespace NiflectUtil
 		}
 		return tokens;                    // 返回分割后的子字符串向量
 	}
-	static Niflect::TArrayNif<Niflect::CString> Split(const Niflect::CString& str, const Niflect::CString& delimiter) {
-		Niflect::TArrayNif<Niflect::CString> tokens;  // 用于存储分割后的子字符串
+	static Niflect::TArray<Niflect::CString> Split(const Niflect::CString& str, const Niflect::CString& delimiter) {
+		Niflect::TArray<Niflect::CString> tokens;  // 用于存储分割后的子字符串
 		size_t start = 0;                 // 开始位置
 		size_t end = 0;                   // 结束位置
 
@@ -246,9 +246,25 @@ namespace NiflectUtil
 
 		return tokens;                       // 返回分割后的子字符串向量
 	}
-	static Niflect::TArrayNif<Niflect::CString> SplitPath(const Niflect::CString& path)
+	static Niflect::TArray<Niflect::CString> SplitPath(const Niflect::CString& path)
 	{
 		return NiflectUtil::Split(path, '/');
+	}
+	static Niflect::CString CombineFromPaths(const Niflect::TArray<Niflect::CString>& vecPath, const Niflect::CString& delim)
+	{
+		Niflect::CString str;
+		for (uint32 idx = 0; idx < vecPath.size(); ++idx)
+		{
+			str += vecPath[idx];
+			if (idx != vecPath.size() - 1)
+				str += delim;
+		}
+		return str;
+	}
+	static Niflect::CString CombineFromPaths(const Niflect::TArray<Niflect::CString>& vecPath, char delim)
+	{
+		Niflect::CString str(1, delim);
+		return CombineFromPaths(vecPath, str);
 	}
 	static Niflect::CString Trim(const Niflect::CString& str)
 	{

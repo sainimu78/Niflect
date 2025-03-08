@@ -7,20 +7,23 @@
 TEST(SaveLoad, GenToolTest) {
     auto memTest = Niflect::GetDefaultMemoryStats();
     EXPECT_EQ(memTest->m_allocCount, 0);
+    {
+        Niflect::CNiflectTable table;
+        EXPECT_GT(memTest->m_allocCount, 0);
+        Niflect::GeneratedInitialReg(&table);
+        Niflect::GeneratedInitTypes();
+        table.InitTypesLayout();
 
-    Niflect::CNiflectTable table;
-    Niflect::GeneratedInitialReg(&table);
-    Niflect::GeneratedInitTypes();
-    table.InitTypesLayout();
-    
-    using namespace RwTree;
-    CRwNode rw;
-    CTest2Class src;
-    auto type = Niflect::StaticGetType<CTest2Class>();
-    type->SaveInstanceToRwNode(&src, &rw);
-    CTest2Class dst;
-    type->LoadInstanceFromRwNode(&dst, &rw);
-    EXPECT_TRUE(src == dst);
+        using namespace RwTree;
+        CRwNode rw;
+        CTest2Class src;
+        auto type = Niflect::StaticGetType<CTest2Class>();
+        type->SaveInstanceToRwNode(&src, &rw);
+        CTest2Class dst;
+        type->LoadInstanceFromRwNode(&dst, &rw);
+        EXPECT_TRUE(src == dst);
+    }
+    EXPECT_EQ(memTest->m_bytesRuntime, 0);
 }
 
 int main(int argc, char** argv) {

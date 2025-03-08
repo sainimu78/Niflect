@@ -19,6 +19,7 @@ namespace NiflectGen
                 if (it0.m_taggedTypeHeaderFilePathAddr != NULL)
                 {
                     relativeTypeRegFilePathNoExt = CIncludesHelper::ConvertToIncludePath(*it0.m_taggedTypeHeaderFilePathAddr, context.m_moduleRegInfo.m_writingHeaderSearchPaths.m_vecForRegularConversion);
+                    ASSERT(!relativeTypeRegFilePathNoExt.empty());
                     relativeTypeRegFilePathNoExt = NiflectUtil::RemoveFileExt(relativeTypeRegFilePathNoExt);
                 }
                 else
