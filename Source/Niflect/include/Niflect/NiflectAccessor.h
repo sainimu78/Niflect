@@ -15,14 +15,16 @@ namespace Niflect
 
 	class CTypeLayout
 	{
+		using InstanceType = CAddrOffset::DummyType;
 	public:
-		bool AccessorsSaveToRwNode(const AddrType base, CRwNode* rw) const;
-		bool AccessorsLoadFromRwNode(AddrType base, const CRwNode* rw) const;
+		bool AccessorsSaveToRwNode(const InstanceType* base, CRwNode* rw) const;
+		bool AccessorsLoadFromRwNode(InstanceType* base, const CRwNode* rw) const;
 		Niflect::TArrayNif<CSharedAccessor> m_vecAccessor;
 	};
 
 	class CField
 	{
+		using InstanceType = CAddrOffset::DummyType;
 		friend class CNiflectType;
 	public:
 		void Init(const Niflect::CString& name, const CSharedNata& nata)
@@ -42,11 +44,11 @@ namespace Niflect
 		{
 			return m_layout.m_vecAccessor;
 		}
-		bool LayoutSaveToRwNode(const AddrType base, CRwNode* rw) const
+		bool LayoutSaveToRwNode(const InstanceType* base, CRwNode* rw) const
 		{
 			return m_layout.AccessorsSaveToRwNode(base, rw);
 		}
-		bool LayoutLoadFromRwNode(AddrType base, const CRwNode* rw) const
+		bool LayoutLoadFromRwNode(InstanceType* base, const CRwNode* rw) const
 		{
 			return m_layout.AccessorsLoadFromRwNode(base, rw);
 		}
@@ -59,6 +61,9 @@ namespace Niflect
 
 	class CAccessor
 	{
+	protected:
+		using InstanceType = CAddrOffset::DummyType;
+		using OffsetType = CAddrOffset::OffsetType;
 	public:
 		CAccessor()
 			: m_type(NULL)
@@ -66,17 +71,17 @@ namespace Niflect
 		}
 
 	public:
-		bool SaveToRwNode(const AddrType base, CRwNode* rw) const
+		bool SaveToRwNode(const InstanceType* base, CRwNode* rw) const
 		{
 			return this->SaveInstanceImpl(this->GetAddrFromBase(base), rw);
 		}
-		bool LoadFromRwNode(AddrType base, const CRwNode* rw) const
+		bool LoadFromRwNode(InstanceType* base, const CRwNode* rw) const
 		{
 			return this->LoadInstanceImpl(this->GetAddrFromBase(base), rw);
 		}
 
 	public:
-		void InitMemberMeta(const CString& name, const AddrOffsetType& offset)
+		void InitMemberMeta(const CString& name, const OffsetType& offset)
 		{
 			ASSERT(false);
 			//m_name = name;
@@ -91,7 +96,7 @@ namespace Niflect
 			//ASSERT(m_name.empty());
 			ASSERT(m_addrOffset.GetOffset() == CAddrOffset::None);
 		}
-		void InitForField(const CString& name, const AddrOffsetType& offset)
+		void InitForField(const CString& name, const OffsetType& offset)
 		{
 			ASSERT(false);
 			//ASSERT(m_name.empty());
@@ -127,7 +132,7 @@ namespace Niflect
 			m_type = type;
 			ASSERT(m_addrOffset.GetOffset() == CAddrOffset::None);
 		}
-		void InitOffset(const AddrOffsetType& offset)
+		void InitOffset(const OffsetType& offset)
 		{
 			ASSERT(m_addrOffset.GetOffset() == CAddrOffset::None);
 			m_addrOffset.SetOffset(offset);
@@ -191,15 +196,15 @@ namespace Niflect
 		}
 
 	protected:
-		virtual bool SaveInstanceImpl(const AddrType base, CRwNode* rw) const = 0;
-		virtual bool LoadInstanceImpl(AddrType base, const CRwNode* rw) const = 0;
+		virtual bool SaveInstanceImpl(const InstanceType* base, CRwNode* rw) const = 0;
+		virtual bool LoadInstanceImpl(InstanceType* base, const CRwNode* rw) const = 0;
 
 	private:
-		inline const AddrType GetAddrFromBase(const AddrType& base) const
+		inline const InstanceType* GetAddrFromBase(const InstanceType*& base) const
 		{
 			return static_cast<const char*>(base) + m_addrOffset.GetOffset();
 		}
-		inline AddrType GetAddrFromBase(AddrType& base) const
+		inline InstanceType* GetAddrFromBase(InstanceType*& base) const
 		{
 			return static_cast<char*>(base) + m_addrOffset.GetOffset();
 		}
@@ -213,7 +218,7 @@ namespace Niflect
 		CNiflectType* m_type;
 	};
 
-	inline bool CTypeLayout::AccessorsSaveToRwNode(const AddrType base, CRwNode* rw) const
+	inline bool CTypeLayout::AccessorsSaveToRwNode(const InstanceType* base, CRwNode* rw) const
 	{
 		for (auto& it : m_vecAccessor)
 		{
@@ -222,7 +227,7 @@ namespace Niflect
 		}
 		return true;
 	}
-	inline bool CTypeLayout::AccessorsLoadFromRwNode(AddrType base, const CRwNode* rw) const
+	inline bool CTypeLayout::AccessorsLoadFromRwNode(InstanceType* base, const CRwNode* rw) const
 	{
 		for (auto& it : m_vecAccessor)
 		{

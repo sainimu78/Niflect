@@ -8,7 +8,7 @@ namespace Niflect
 	{
 		typedef CAccessor inherited;
 	public:
-		virtual bool SaveInstanceImpl(const AddrType base, CRwNode* rw) const override
+		virtual bool SaveInstanceImpl(const InstanceType* base, CRwNode* rw) const override
 		{
 			//typename std::underlying_type<TEnum>::type >, 可获取枚举对应的整数类型
 
@@ -28,7 +28,7 @@ namespace Niflect
 			rwValue->SetString(name);
 			return true;
 		}
-		virtual bool LoadInstanceImpl(AddrType base, const CRwNode* rw) const override
+		virtual bool LoadInstanceImpl(InstanceType* base, const CRwNode* rw) const override
 		{
 			auto et = this->GetEnum();
 			auto rwValue = rw->GetValue();
@@ -58,12 +58,12 @@ namespace Niflect
 	{
 		typedef CAccessor inherited;
 	public:
-		virtual bool SaveInstanceImpl(const AddrType base, CRwNode* rw) const override
+		virtual bool SaveInstanceImpl(const InstanceType* base, CRwNode* rw) const override
 		{
 			//typename std::underlying_type<TEnum>::type >, 可获取枚举对应的整数类型
 			return true;
 		}
-		virtual bool LoadInstanceImpl(AddrType base, const CRwNode* rw) const override
+		virtual bool LoadInstanceImpl(InstanceType* base, const CRwNode* rw) const override
 		{
 			return true;
 		}

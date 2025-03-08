@@ -30,16 +30,17 @@ namespace Niflect
 {
 	class CNiflectType;
 
-	typedef void (*InvokeMethodFunc2)(AddrType obj, AddrType* inputInstanceArray, AddrType* ouputInstanceArray, const TArrayNif<CNiflectType*>& vecInputType, const TArrayNif<CNiflectType*>& vecOutputType);
-
 	class CNiflectMethod2
 	{
+		using InstanceType = CAddrOffset::DummyType;
+		using OffsetType = CAddrOffset::OffsetType;
+		typedef void (*InvokeMethodFunc2)(InstanceType* obj, InstanceType** inputInstanceArray, InstanceType** ouputInstanceArray, const TArrayNif<CNiflectType*>& vecInputType, const TArrayNif<CNiflectType*>& vecOutputType);
 	public:
 		CNiflectMethod2()
 			: m_InvokeFunc(NULL)
 		{
 		}
-		void Invoke(AddrType obj, AddrType* inputInstanceArray, AddrType* ouputInstanceArray) const
+		void Invoke(InstanceType* obj, InstanceType** inputInstanceArray, InstanceType** ouputInstanceArray) const
 		{
 			m_InvokeFunc(obj, inputInstanceArray, ouputInstanceArray, m_vecInputType, m_vecOutputType);
 		}

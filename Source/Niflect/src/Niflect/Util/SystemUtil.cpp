@@ -279,8 +279,25 @@ namespace NiflectUtil
 }
 namespace NiflectUtil
 {
-    static bool IsRelativePath(const Niflect::CString& path) {
-        return !(path.empty() || path[0] == '/' || (path.length() > 1 && path[1] == ':'));
+    bool IsRelativePath(const Niflect::CString& path) {
+        if (path.empty()) {
+            return false;
+        }
+
+#ifdef _WIN32
+        if (path.length() >= 2 && path[1] == ':' && std::isalpha(static_cast<unsigned char>(path[0]))) {
+            return false;
+        }
+        if (path[0] == '/' || path[0] == '\\') {
+            return false;
+        }
+#else
+        if (path[0] == '/') {
+            return false;
+        }
+#endif
+
+        return true;
     }
     Niflect::CString ResolvePath(const Niflect::CString& relativePath) {
         if (!IsRelativePath(relativePath))

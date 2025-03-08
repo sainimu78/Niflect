@@ -308,8 +308,11 @@ namespace NiflectGen
         }
         if (genData.m_moduleRegGenData.m_genH.size() > 0)
             this->SaveFileToGenSource(genData.m_moduleRegGenData.m_genH, genData.m_moduleRegGenData.m_genHIncludePath, saving);
-        this->SaveFileToGenSource(genData.m_moduleRegGenData.m_privateH, genData.m_moduleRegGenData.m_privateHIncludePath, saving);
-        this->SaveFileToGenSource(genData.m_moduleRegisteredTypeHeaderGenData.m_linesHeader, m_moduleRegInfo.m_moduleRegisteredTypeHeaderFilePath, saving);
+        if (genData.m_moduleRegGenData.m_privateH.size() > 0)
+        {
+            this->SaveFileToGenSource(genData.m_moduleRegGenData.m_privateH, genData.m_moduleRegGenData.m_privateHIncludePath, saving);
+            this->SaveFileToGenSource(genData.m_moduleRegisteredTypeHeaderGenData.m_linesHeader, m_moduleRegInfo.m_moduleRegisteredTypeHeaderFilePath, saving);
+        }
         if (genData.m_moduleApiMacroHeaderGenData.m_linesHeader.size() > 0)
             this->SaveFileToGenSource(genData.m_moduleApiMacroHeaderGenData.m_linesHeader, genData.m_moduleApiMacroHeaderGenData.m_filePath, saving);
 

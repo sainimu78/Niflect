@@ -21,7 +21,7 @@ namespace Niflect
 	class TArrayAccessor : public CArrayAccessor
 	{
 	public:
-		virtual bool SaveInstanceImpl(const AddrType base, CRwNode* rw) const override
+		virtual bool SaveInstanceImpl(const InstanceType* base, CRwNode* rw) const override
 		{
 			auto& instance = *static_cast<const TArrayType*>(base);
 			ASSERT(!rw->IsArray());
@@ -36,7 +36,7 @@ namespace Niflect
 			}
 			return true;
 		}
-		virtual bool LoadInstanceImpl(AddrType base, const CRwNode* rw) const override
+		virtual bool LoadInstanceImpl(InstanceType* base, const CRwNode* rw) const override
 		{
 			auto& instance = *static_cast<TArrayType*>(base);
 			ASSERT(rw->IsArray());
@@ -72,7 +72,7 @@ namespace Niflect
 	class TBitsArrayAccessor : public CBitsArrayAccessor
 	{
 	public:
-		virtual bool SaveInstanceImpl(const AddrType base, CRwNode* rw) const override
+		virtual bool SaveInstanceImpl(const InstanceType* base, CRwNode* rw) const override
 		{
 			auto& instance = *static_cast<const TBitsArrayType*>(base);
 			ASSERT(!rw->IsArray());
@@ -81,7 +81,7 @@ namespace Niflect
 				rwArray->AddItemBool(instance[idx]);
 			return true;
 		}
-		virtual bool LoadInstanceImpl(AddrType base, const CRwNode* rw) const override
+		virtual bool LoadInstanceImpl(InstanceType* base, const CRwNode* rw) const override
 		{
 			auto& instance = *static_cast<TBitsArrayType*>(base);
 			ASSERT(rw->IsArray());
@@ -115,7 +115,7 @@ namespace Niflect
 	{
 		using TElem = typename TMapType::allocator_type::value_type;
 	public:
-		virtual bool SaveInstanceImpl(const AddrType base, CRwNode* rw) const override
+		virtual bool SaveInstanceImpl(const InstanceType* base, CRwNode* rw) const override
 		{
 			auto& instance = *static_cast<const TMapType*>(base);
 			ASSERT(!rw->IsArray());
@@ -130,7 +130,7 @@ namespace Niflect
 			}
 			return true;
 		}
-		virtual bool LoadInstanceImpl(AddrType base, const CRwNode* rw) const override
+		virtual bool LoadInstanceImpl(InstanceType* base, const CRwNode* rw) const override
 		{
 			auto& instance = *static_cast<TMapType*>(base);
 			ASSERT(rw->IsArray());

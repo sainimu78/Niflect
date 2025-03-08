@@ -1,55 +1,54 @@
 #pragma once
 
 namespace Niflect
-{
-	#define AddrType void*
-	using AddrOffsetType = ptrdiff_t;
-	
+{	
 	class CAddrOffset
 	{
 	public:
-		enum __InternalConst : AddrOffsetType { None };
+		using DummyType = void;
+		using OffsetType = ptrdiff_t;
+		enum __InternalConst : OffsetType { None };
 
 	public:
 		CAddrOffset()
 			: m_addrDiff(None)
 		{
 		}
-		CAddrOffset(const AddrOffsetType& offset)
+		CAddrOffset(const OffsetType& offset)
 			: m_addrDiff(offset)
 		{
 		}
-		void SetOffset(const AddrOffsetType& offset)
+		void SetOffset(const OffsetType& offset)
 		{
 			m_addrDiff = offset;
 		}
-		const AddrOffsetType& GetOffset() const
+		const OffsetType& GetOffset() const
 		{
 			return m_addrDiff;
 		}
 
 	public:
-		inline const AddrType GetAddr(const AddrType& base) const
+		inline const DummyType* GetAddr(const DummyType*& base) const
 		{
 			return static_cast<const char*>(base) + m_addrDiff;
 		}
-		inline AddrType GetAddr(AddrType& base) const
+		inline DummyType* GetAddr(DummyType*& base) const
 		{
 			return static_cast<char*>(base) + m_addrDiff;
 		}
 
 	private:
-		AddrOffsetType m_addrDiff;
+		OffsetType m_addrDiff;
 	};
 
 	template <typename U, typename T>
-	inline static AddrOffsetType GetMemberVariableOffset(U T::*member)
+	inline static CAddrOffset::OffsetType GetMemberVariableOffset(U T::*member)
 	{
 		return (char*)&((T*)nullptr->*member) - (char*)nullptr;
 	}
 
 	template <typename U, typename T>
-	inline static AddrOffsetType GetFieldOffset(U T::* member)
+	inline static CAddrOffset::OffsetType GetFieldOffset(U T::* member)
 	{
 		return (char*)&((T*)nullptr->*member) - (char*)nullptr;
 	}

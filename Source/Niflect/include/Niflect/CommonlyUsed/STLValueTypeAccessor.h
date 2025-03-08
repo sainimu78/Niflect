@@ -6,7 +6,7 @@ namespace Niflect
 	class CSTLStringAccessor : public CAccessor
 	{
 	public:
-		virtual bool SaveInstanceImpl(const AddrType base, CRwNode* rw) const override
+		virtual bool SaveInstanceImpl(const InstanceType* base, CRwNode* rw) const override
 		{
 			auto& instance = *static_cast<const std::string*>(base);
 			ASSERT(!rw->IsValue());
@@ -15,7 +15,7 @@ namespace Niflect
 			SetRwValueAs(rwValue, str);
 			return true;
 		}
-		virtual bool LoadInstanceImpl(AddrType base, const CRwNode* rw) const override
+		virtual bool LoadInstanceImpl(InstanceType* base, const CRwNode* rw) const override
 		{
 			auto& instance = *static_cast<std::string*>(base);
 			ASSERT(rw->IsValue());

@@ -23,6 +23,8 @@ namespace Niflect
 
 	class CNiflectType
 	{
+		using InstanceType = CAddrOffset::DummyType;
+		using OffsetType = CAddrOffset::OffsetType;
 	public:
 		CNiflectType()
 			: m_table(NULL)
@@ -97,7 +99,7 @@ namespace Niflect
 		}
 
 	public:
-		bool SaveInstanceToRwNode(const AddrType base, CRwNode* rw) const
+		bool SaveInstanceToRwNode(const InstanceType* base, CRwNode* rw) const
 		{
 			for (auto& it : m_layout.m_vecAccessor)
 			{
@@ -106,7 +108,7 @@ namespace Niflect
 			}
 			return true;
 		}
-		bool LoadInstanceFromRwNode(AddrType base, const CRwNode* rw) const
+		bool LoadInstanceFromRwNode(InstanceType* base, const CRwNode* rw) const
 		{
 			for (auto& it : m_layout.m_vecAccessor)
 			{
@@ -153,7 +155,7 @@ namespace Niflect
 			ASSERT(m_layout.m_vecAccessor.size() == 0);
 			this->CreateTypeLayout(m_layout);
 		}
-		void InitAddFieldToAccessor(CAccessor* owner, const Niflect::CString& name, const AddrOffsetType& offset, const CSharedNata& nata) const
+		void InitAddFieldToAccessor(CAccessor* owner, const Niflect::CString& name, const OffsetType& offset, const CSharedNata& nata) const
 		{
 			CField field;
 			field.Init(name, nata);
@@ -197,7 +199,7 @@ namespace Niflect
 	public:
 		//todo: 此函数可废弃, 改为静态函数获取m_typeHash
 		template <typename T>
-		inline T& GetInstanceRef(AddrType base) const
+		inline T& GetInstanceRef(InstanceType* base) const
 		{
 			auto Check = [this]()
 			{

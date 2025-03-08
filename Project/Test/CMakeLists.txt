@@ -22,10 +22,12 @@ add_test(NAME ${ModuleName} COMMAND ${ModuleName}) # 支持 ctest
 
 cpf_include(${c_RootProjectDirPath}/Niflect/Niflect/Shared.cmake)
 cpf_include(${c_RootProjectDirPath}/NiflectGenTool/NiflectGen/Shared.cmake)
+cpf_include(${c_RootProjectDirPath}/NiflectGenTool/NiflectGenTool/Exe.cmake)
 
 add_subdirectory(Test0)
 add_subdirectory(Test1)
-set(DefaultModuleName Test1)
+add_subdirectory(Test2)
+set(DefaultModuleName Test2)
 
 include(${c_RootCMakeProjectFrameworkDirPath}/Cleanup.cmake)
 

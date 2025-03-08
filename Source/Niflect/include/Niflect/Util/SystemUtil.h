@@ -10,6 +10,7 @@ namespace NiflectUtil
 	NIFLECT_API bool FileExists(const Niflect::CString& path);
 	NIFLECT_API Niflect::CString GetCurrentWorkingDirPath();
 	NIFLECT_API bool SetCurrentWorkingDirPath(const Niflect::CString& path);
+	NIFLECT_API bool IsRelativePath(const Niflect::CString& path);
 	NIFLECT_API Niflect::CString ResolvePath(const Niflect::CString& relativePath);
 
 	struct SCollectingContext

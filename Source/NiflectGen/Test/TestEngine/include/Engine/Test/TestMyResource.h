@@ -13,11 +13,11 @@ namespace TestMyScope
 	class CMyResourceAccessor : public Niflect::CAccessor
 	{
 		//protected:
-		//	virtual bool SaveInstanceImpl(const AddrType base, CRwNode* rw) const override
+		//	virtual bool SaveInstanceImpl(const InstanceType* base, CRwNode* rw) const override
 		//	{
 		//		return false;
 		//	}
-		//	virtual bool LoadInstanceImpl(AddrType base, const CRwNode* rw) const override
+		//	virtual bool LoadInstanceImpl(InstanceType* base, const CRwNode* rw) const override
 		//	{
 		//		return false;
 		//	}
@@ -39,11 +39,11 @@ namespace TestMyScope
 	class TSharedMyResourceAccessor : public Niflect::CAccessor
 	{
 		//protected:
-		//	virtual bool SaveInstanceImpl(const AddrType base, CRwNode* rw) const override
+		//	virtual bool SaveInstanceImpl(const InstanceType* base, CRwNode* rw) const override
 		//	{
 		//		return false;
 		//	}
-		//	virtual bool LoadInstanceImpl(AddrType base, const CRwNode* rw) const override
+		//	virtual bool LoadInstanceImpl(InstanceType* base, const CRwNode* rw) const override
 		//	{
 		//		return false;
 		//	}
@@ -52,11 +52,11 @@ namespace TestMyScope
 	class CMyResourcePtrPtrAccessor : public Niflect::CAccessor
 	{
 		//protected:
-		//	virtual bool SaveInstanceImpl(const AddrType base, CRwNode* rw) const override
+		//	virtual bool SaveInstanceImpl(const InstanceType* base, CRwNode* rw) const override
 		//	{
 		//		return false;
 		//	}
-		//	virtual bool LoadInstanceImpl(AddrType base, const CRwNode* rw) const override
+		//	virtual bool LoadInstanceImpl(InstanceType* base, const CRwNode* rw) const override
 		//	{
 		//		return false;
 		//	}

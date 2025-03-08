@@ -7,7 +7,7 @@ namespace Niflect
 	class TBuiltinTypeAccessor : public CAccessor
 	{
 	public:
-		virtual bool SaveInstanceImpl(const AddrType base, CRwNode* rw) const override
+		virtual bool SaveInstanceImpl(const InstanceType* base, CRwNode* rw) const override
 		{
 			auto& instance = *static_cast<const TValue*>(base);
 			ASSERT(!rw->IsValue());
@@ -15,7 +15,7 @@ namespace Niflect
 			SetRwValueAs<TValue>(rwValue, instance);
 			return true;
 		}
-		virtual bool LoadInstanceImpl(AddrType base, const CRwNode* rw) const override
+		virtual bool LoadInstanceImpl(InstanceType* base, const CRwNode* rw) const override
 		{
 			auto& instance = *static_cast<TValue*>(base);
 			ASSERT(rw->IsValue());

@@ -6,7 +6,7 @@ namespace Niflect
 	class CCompoundAccessor : public CAccessor
 	{
 	public:
-		virtual bool SaveInstanceImpl(const AddrType base, CRwNode* rw) const override
+		virtual bool SaveInstanceImpl(const InstanceType* base, CRwNode* rw) const override
 		{
 			for (auto& it : this->GetFields())
 			{
@@ -17,7 +17,7 @@ namespace Niflect
 			}
 			return true;
 		}
-		virtual bool LoadInstanceImpl(AddrType base, const CRwNode* rw) const override
+		virtual bool LoadInstanceImpl(InstanceType* base, const CRwNode* rw) const override
 		{
 			for (auto& it : this->GetFields())
 			{

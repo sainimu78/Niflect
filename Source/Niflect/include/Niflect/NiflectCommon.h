@@ -32,7 +32,8 @@ typedef unsigned long long uint64;
             bool cond = b;\
             if (!cond)\
             {\
-                std::fprintf(stderr, "Assertion failed: %s, %d\n", __FILE__, __LINE__);\
+                std::fprintf(stdout, "Assertion failed: %s, %d\n", __FILE__, __LINE__);\
+                fflush(stdout);\
                 DEBUG_BREAK();\
             }\
         } while(0)
