@@ -1,7 +1,7 @@
 #include "Niflect/NiflectAccessorSetting.h"
-#include "Niflect/CommonlyUsed/ContainerTypeAccessor.h"
-#include "Niflect/CommonlyUsed/ValueTypeAccessor.h"
-#include "Niflect/CommonlyUsed/STLValueTypeAccessor.h"
+#include "Niflect/Default/ContainerTypeAccessor.h"
+#include "Niflect/Default/ValueTypeAccessor.h"
+#include "Niflect/Default/STLValueTypeAccessor.h"
 #include "Engine/Test/TestMyTransform.h"
 #include "NiflectGen/Test/TestModuleHeaderRequiredHeader.h"
 

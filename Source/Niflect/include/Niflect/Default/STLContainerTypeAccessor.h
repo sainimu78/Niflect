@@ -1,5 +1,5 @@
 #pragma once
-#include "Niflect/CommonlyUsed/ContainerTypeAccessor.h"
+#include "Niflect/Default/ContainerTypeAccessor.h"
 
 namespace Niflect
 {

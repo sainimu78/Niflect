@@ -1,6 +1,6 @@
 #include "Niflect/NiflectAccessorSetting.h"
-#include "Niflect/CommonlyUsed/CompoundAccessor.h"
-#include "Niflect/CommonlyUsed/ContainerTypeAccessor.h"
+#include "Niflect/Default/CompoundAccessor.h"
+#include "Niflect/Default/ContainerTypeAccessor.h"
 #include "Engine/Test/TestMyTransform.h"
 
 namespace MyScope2
