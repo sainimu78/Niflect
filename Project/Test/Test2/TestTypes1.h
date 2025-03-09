@@ -24,7 +24,7 @@ public:
 	}
 private:
 	NIF_F()
-		float m_float_0;
+	float m_float_0;
 	NIF_F()
-		bool m_bool_1;
+	bool m_bool_1;
 };

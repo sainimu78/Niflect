@@ -35,6 +35,33 @@ namespace std
 	using nullptr_t   = decltype(nullptr);
 })";
 	}
+	static void Write_iosfwd(Niflect::CString& code)
+	{
+		code =
+R"(#pragma once
+#include <istream>
+#include <ostream>
+#include <string>
+
+namespace std
+{
+	using istream       = basic_istream<char, char_traits<char>>;
+	using ostream       = basic_ostream<char, char_traits<char>>;
+})";
+	}
+	static void Write_istream(Niflect::CString& code)
+	{
+		code =
+R"(#pragma once
+
+namespace std
+{
+	extern "C++" template <class _Elem, class _Traits>
+	class basic_istream
+	{
+	};
+})";
+	}
 	static void Write_map(Niflect::CString& code)
 	{
 		code =
@@ -63,6 +90,19 @@ namespace std
 {
 	template <class _Ty>
 	class shared_ptr
+	{
+	};
+})";
+	}
+	static void Write_ostream(Niflect::CString& code)
+	{
+		code =
+R"(#pragma once
+
+namespace std
+{
+	extern "C++" template <class _Elem, class _Traits>
+	class basic_ostream
 	{
 	};
 })";
@@ -279,6 +319,8 @@ using enable_if_t = typename enable_if<_Test, _Ty>::type;
 	void WriteBypassSTLHeaders(const Niflect::CString& headersDirPath)
 	{
 		//字母序排列仅为方便补充 BypassSTL, 补充步骤
+		//仅需空文件, 仅须增加 element 定义即可, 如 {"cassert", false}
+		//需实现旁路定义, 则
 		//1. 实现写相应的系统头文件的 Write_xxx, 如 Write_map
 		//2. 相应地标记 m_withBypassDefinition 为 true, 如 {"map", true},//Write_map
 		//3. 将补充的写函数加到 vecWriteFunc 中, 如 vecWriteFunc.push_back(&Write_map);
@@ -287,6 +329,7 @@ using enable_if_t = typename enable_if<_Test, _Ty>::type;
 			{"algorithm", false},
 			{"array", false},
 			{"cassert", false},
+			{"cmath", false},
 			{"cstddef", true},//Write_cstddef
 			{"cstdio", false},
 			{"cstring", false},
@@ -297,23 +340,26 @@ using enable_if_t = typename enable_if<_Test, _Ty>::type;
 			{"hash", false},
 			{"hash_map", false},
 			{"hash_set", false},
+			{"iomanip", false},
 			{"ios", false},
-			{"iosfwd", false},
+			{"iosfwd", true},//Write_iosfwd
 			{"iostream", false},
-			{"istream", false},
+			{"istream", true},//Write_istream
 			{"iterator", false},
+			{"limits", false},
 			{"list", false},
 			{"locale", false},
 			{"map", true},//Write_map
 			{"memory", true},//Write_memory
 			{"new", false},
 			{"numeric", false},
-			{"ostream", false},
+			{"ostream", true},//Write_ostream
 			{"queue", false},
 			{"regex", false},
 			{"set", true},//Write_set
 			{"sstream", true},//Write_sstream
 			{"stack", false},
+			{"stdio", false},
 			{"streambuf", false},
 			{"stddef.h", true},//Write_stddef_h
 			{"string", true},//Write_string
@@ -331,6 +377,9 @@ using enable_if_t = typename enable_if<_Test, _Ty>::type;
 			{"xiosbase", false},
 			{"xlocale", false},
 			{"xlocbuf", false},
+			{"xlocmon", false},
+			{"xlocnum", false},
+			{"xloctime", false},
 			{"xmemory", true},//Write_xmemory
 			{"xstring", false},
 			{"xtr1common", true},//Write_xtr1common
@@ -341,8 +390,11 @@ using enable_if_t = typename enable_if<_Test, _Ty>::type;
 
 		Niflect::TArrayNif<WriteHeaderFileFunc> vecWriteFunc;
 		vecWriteFunc.push_back(&Write_cstddef);
+		vecWriteFunc.push_back(&Write_iosfwd);
+		vecWriteFunc.push_back(&Write_istream);
 		vecWriteFunc.push_back(&Write_map);
 		vecWriteFunc.push_back(&Write_memory);
+		vecWriteFunc.push_back(&Write_ostream);
 		vecWriteFunc.push_back(&Write_set);
 		vecWriteFunc.push_back(&Write_sstream);
 		vecWriteFunc.push_back(&Write_stddef_h);
