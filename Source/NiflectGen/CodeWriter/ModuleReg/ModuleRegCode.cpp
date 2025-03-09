@@ -17,12 +17,22 @@ namespace NiflectGen
 			GenLogError(&log, "The module name (.e.g., -n TestModule1) must be specified");
 			ok = false;
 		}
-		for (auto& it : info.m_vecAccessorSettingHeader)
 		{
-			if (NiflectUtil::FileExists(it))
+			Niflect::TArray<Niflect::CString> vecInvalid;
+			for (auto& it : info.m_vecAccessorSettingHeader)
 			{
-				GenLogError(&log, "The accessor setting header (.e.g., -a F:/Source/TestModule1AccessorSetting.h) must be valid");
-				ok = false;
+				if (!NiflectUtil::FileExists(it))
+				{
+					vecInvalid.push_back(it);
+					ok = false;
+				}
+			}
+			if (vecInvalid.size())
+			{
+				auto paths = NiflectUtil::CombineFromPaths(info.m_vecModuleHeaderSearchPath2, '\n');
+				GenLogError(&log, NiflectUtil::FormatString(
+R"(The accessor setting header%s valid:
+%s)", vecInvalid.size()>0?"s are":" is", paths.c_str()));
 			}
 		}
 		if (!info.m_specifiedModuleApiMacroHeaderFilePath.empty())
@@ -33,7 +43,6 @@ namespace NiflectGen
 				ok = false;
 			}
 		}
-
 		{
 			Niflect::TArray<Niflect::CString> vecFailtToConvert;
 			for (auto& it0 : info.m_vecModuleHeader2)
