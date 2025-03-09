@@ -13,12 +13,14 @@ namespace NiflectGen
 
 	namespace HardCodedTemplate
 	{
+#define GENERATED_FUNC_NAME_GeneratedRegisterTypes "GeneratedRegisterTypes"
+
 		static const char* ModuleRegImpl =
 "" MAKELABEL(LABEL_0) R"(
 
 namespace Niflect
 {
-	static void GeneratedInitialReg(Niflect::CNiflectTable* table)
+	static void )" GENERATED_FUNC_NAME_GeneratedRegisterTypes R"((Niflect::CNiflectTable* table)
 	{
 		)" MAKELABEL(LABEL_1) R"(
 	}
@@ -31,12 +33,12 @@ namespace Niflect
 R"(#pragma once
 )" MAKELABEL(LABEL_0) R"(
 
-extern "C" )" MAKELABEL(LABEL_5) " Niflect::CNiflectModuleInfo* " MAKELABEL(LABEL_6) "" MAKELABEL(LABEL_4) "();";
+extern "C" )" MAKELABEL(LABEL_5) R"( Niflect::CNiflectModuleInfo* )" MAKELABEL(LABEL_6) "" MAKELABEL(LABEL_4) "();";
 		static const char* StaticModuleRegHeader2 =
 R"(#pragma once
 )" MAKELABEL(LABEL_0) R"(
 
-extern "C" )" MAKELABEL(LABEL_5) " Niflect::CNiflectModuleInfo* " MAKELABEL(LABEL_6) "" MAKELABEL(LABEL_4) "();";
+extern "C" )" MAKELABEL(LABEL_5) R"( Niflect::CNiflectModuleInfo* )" MAKELABEL(LABEL_6) "" MAKELABEL(LABEL_4) "();";
 		static const char* StaticModuleRegImpl =
 R"(namespace Niflect
 {
@@ -51,13 +53,13 @@ R"(namespace Niflect
 		static CSharedModuleInfo s_info;
 	};
 	CSharedModuleInfo CRegger_)" MAKELABEL(LABEL_4) R"(::s_info;
-	static CRegger_)" MAKELABEL(LABEL_4) R"( g_staticRegger_)" MAKELABEL(LABEL_4) R"((")" MAKELABEL(LABEL_4) R"(", &GeneratedInitialReg, &GeneratedInitTypes);
+	static CRegger_)" MAKELABEL(LABEL_4) R"( g_staticRegger_)" MAKELABEL(LABEL_4) R"((")" MAKELABEL(LABEL_4) R"(", &)" GENERATED_FUNC_NAME_GeneratedRegisterTypes R"(, & GeneratedInitTypes);
 })";
 #define FUNCNAMEHARDCODEDSTRING_GetModuleInfoPrivate "NiflectGeneratedGetModuleInfoPrivate"
 		static const char* StaticModuleRegImpl2 =
 R"(namespace Niflect
 {
-	static CNiflectModuleRegger g_staticRegger_)" MAKELABEL(LABEL_4) R"((")" MAKELABEL(LABEL_4) R"(", &GeneratedInitialReg, &GeneratedInitTypes);
+	static CNiflectModuleRegger g_staticRegger_)" MAKELABEL(LABEL_4) R"((")" MAKELABEL(LABEL_4) R"(", &)" GENERATED_FUNC_NAME_GeneratedRegisterTypes R"(, &GeneratedInitTypes);
 })";
 		static const char* StaticModuleRegGetModuleC =
 "Niflect::CNiflectModuleInfo* " MAKELABEL(LABEL_6) "" MAKELABEL(LABEL_4) R"(()
