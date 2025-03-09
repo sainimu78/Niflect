@@ -13,7 +13,7 @@
 #include <iostream>//std::cin.get()
 #include "CommandLineArgParser.h"
 #include "CMakeProjectFramework/ProjectVersion.h"
-#include "CommandLineArgParser.h"
+#include "NiflectGen/Log/Log.h"
 
 //代码中的用语
 //1. StaticRegStage, 在静态初始化阶段的注册过程
@@ -86,6 +86,72 @@ namespace CommandLine
 		if (!path.empty())
 			path = NiflectUtil::ConvertToSearchPath(path.c_str()).c_str();
 		return Niflect::CString(path.c_str());
+	}
+}
+
+namespace NiflectGen
+{
+	static bool CheckArgs(CGenLog* log, CModuleRegInfo& info)
+	{
+		bool ok = true;
+		if (info.m_moduleName.empty())
+		{
+			GenLogError(log, "The module name (by -n) must be specified");
+			ok = false;
+		}
+		{
+			Niflect::TArray<Niflect::CString> vecInvalid;
+			for (auto& it : info.m_vecAccessorSettingHeader)
+			{
+				if (!NiflectUtil::FileExists(it))
+				{
+					vecInvalid.push_back(it);
+					ok = false;
+				}
+			}
+			if (vecInvalid.size())
+			{
+				auto paths = NiflectUtil::CombineFromPaths(vecInvalid, '\n');
+				bool plural = vecInvalid.size() > 1;
+				GenLogError(log, NiflectUtil::FormatString(
+R"(The accessor setting header%s (by -a) %s invalid:
+%s)", plural?"s":"", plural?"are":"is", paths.c_str()));
+			}
+		}
+		if (!info.m_specifiedModuleApiMacroHeaderFilePath.empty())
+		{
+			if (info.m_specifiedModuleApiMacro.empty())
+			{
+				GenLogError(log, "The API macro name (by -am) must be specified when the API macro header is specified");
+				ok = false;
+			}
+		}
+		{
+			Niflect::TArray<Niflect::CString> vecFailtToConvert;
+			for (auto& it0 : info.m_vecModuleHeader2)
+			{
+				auto incPath = CIncludesHelper::ConvertToIncludePath(it0, info.m_vecModuleHeaderSearchPath2);
+				if (incPath.empty())
+				{
+					if (!NiflectUtil::IsRelativePath(it0))
+					{
+						vecFailtToConvert.push_back(it0);
+						ok = false;
+					}
+				}
+			}
+			if (vecFailtToConvert.size() > 0)
+			{
+				auto incPaths = NiflectUtil::CombineFromPaths(info.m_vecModuleHeaderSearchPath2, '\n');
+				auto headerPaths = NiflectUtil::CombineFromPaths(vecFailtToConvert, '\n');
+				GenLogError(log, NiflectUtil::FormatString(
+R"(The module header search paths specified:
+%s
+must be valid for header file:
+%s)", incPaths.c_str(), headerPaths.c_str()).c_str());
+			}
+		}
+		return ok;
 	}
 }
 
@@ -199,7 +265,7 @@ int main(int argc, const char** argv)
 -h F:/Source/TestModule1/include/TestModule1/TestClass1.h ^
 -am TESTMODULE1_API ^
 -amh F:/Source/TestModule1/include/TestModule1Common.h ^
--a F:/Source/Niflect/include/Niflect/CommonlyUsed/DefaultAccessorSetting.h ^
+-a F:/Source/Niflect/include/Niflect/Default/DefaultAccessorSetting.h ^
 -I F:/Source/TestModule1/include ^
 -t F:/Source/Niflect/include ^
 -g F:/Generated/NiflectGenerated 
@@ -303,8 +369,9 @@ int main(int argc, const char** argv)
 					}
 
 					auto log = CreateGenLog();
-					if (gen->Init(info, log.Get()))
+					if (CheckArgs(log.Get(), info))
 					{
+						gen->Init(info, log.Get());
 						CCodeGenData genData;
 						gen->Generate(genData);
 						gen->Save2(genData);

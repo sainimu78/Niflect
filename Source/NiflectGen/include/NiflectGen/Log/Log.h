@@ -114,7 +114,7 @@ namespace NiflectGen
 	void GenLogWarning(CGenLog* log, const CLogLocationInfo& indicator, const Niflect::CString& text);
 	void GenLogWarning(CGenLog* log, const Niflect::CString& text);
 	void GenLogError(CGenLog* log, const CLogLocationInfo& indicator, const Niflect::CString& text);
-	void GenLogError(CGenLog* log, const Niflect::CString& text);
+	NIFLECTGEN_API void GenLogError(CGenLog* log, const Niflect::CString& text);
 
 	void MyLogError(const Niflect::CString& text);
 	void MyLogErrorChecked(bool condition, const Niflect::CString& text);

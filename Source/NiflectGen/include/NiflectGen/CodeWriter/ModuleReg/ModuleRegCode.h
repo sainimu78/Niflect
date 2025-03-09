@@ -3,6 +3,8 @@
 
 namespace NiflectGen
 {
+	class CGenLog;
+
 	enum class EGeneratingHeaderAndSourceFileMode
 	{
 		EHeaderOnly,
@@ -53,7 +55,7 @@ namespace NiflectGen
 	class CModuleRegInfoValidated
 	{
 	public:
-		bool Init(const CModuleRegInfo& info);
+		bool Init(const CModuleRegInfo& info, CGenLog* log);
 		Niflect::CString GetSourceFileExtForGenFileMode() const;
 
 		Niflect::CString m_moduleGenSourceRoot;

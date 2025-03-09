@@ -8,69 +8,8 @@
 
 namespace NiflectGen
 {
-	bool CModuleRegInfoValidated::Init(const CModuleRegInfo& info)
+	bool CModuleRegInfoValidated::Init(const CModuleRegInfo& info, CGenLog* log)
 	{
-		CGenLog log;
-		bool ok = true;
-		if (info.m_moduleName.empty())
-		{
-			GenLogError(&log, "The module name (.e.g., -n TestModule1) must be specified");
-			ok = false;
-		}
-		{
-			Niflect::TArray<Niflect::CString> vecInvalid;
-			for (auto& it : info.m_vecAccessorSettingHeader)
-			{
-				if (!NiflectUtil::FileExists(it))
-				{
-					vecInvalid.push_back(it);
-					ok = false;
-				}
-			}
-			if (vecInvalid.size())
-			{
-				auto paths = NiflectUtil::CombineFromPaths(vecInvalid, '\n');
-				GenLogError(&log, NiflectUtil::FormatString(
-R"(The accessor setting header%s invalid:
-%s)", vecInvalid.size()>1?"s are":" is", paths.c_str()));
-			}
-		}
-		if (!info.m_specifiedModuleApiMacroHeaderFilePath.empty())
-		{
-			if (info.m_specifiedModuleApiMacro.empty())
-			{
-				GenLogError(&log, "The API macro name (.e.g., -am TESTMODULE1_API) must be specified when the API macro header is specified");
-				ok = false;
-			}
-		}
-		{
-			Niflect::TArray<Niflect::CString> vecFailtToConvert;
-			for (auto& it0 : info.m_vecModuleHeader2)
-			{
-				auto incPath = CIncludesHelper::ConvertToIncludePath(it0, info.m_vecModuleHeaderSearchPath2);
-				if (incPath.empty())
-				{
-					if (!NiflectUtil::IsRelativePath(it0))
-					{
-						vecFailtToConvert.push_back(it0);
-						ok = false;
-					}
-				}
-			}
-			if (vecFailtToConvert.size() > 0)
-			{
-				auto incPaths = NiflectUtil::CombineFromPaths(info.m_vecModuleHeaderSearchPath2, '\n');
-				auto headerPaths = NiflectUtil::CombineFromPaths(vecFailtToConvert, '\n');
-				GenLogError(&log, NiflectUtil::FormatString(
-R"(The module header search paths specified:
-%s
-must be valid for header file:
-%s)", incPaths.c_str(), headerPaths.c_str()).c_str());
-			}
-		}
-		if (!ok)
-			return false;
-
 		m_userProvided = info;
 
 		//m_genSourceRootParentDir 现为空, 预留附加一层输出目录
@@ -102,7 +41,7 @@ must be valid for header file:
 		{
 			Niflect::TArrayNif<Niflect::CString> vecToolHeaderSearchPath;
 			vecToolHeaderSearchPath.push_back(m_userProvided.m_toolHeaderSearchPath);
-			SGenTimeNiflectMacroHeaderWritingContext ctx{ vecToolHeaderSearchPath, m_genTimeBasePath, &log };
+			SGenTimeNiflectMacroHeaderWritingContext ctx{ vecToolHeaderSearchPath, m_genTimeBasePath, log };
 			WriteGenTimeNiflectMacroHeader(ctx);
 
 			if (m_userProvided.m_exportedStaticGetTypeFunctions)

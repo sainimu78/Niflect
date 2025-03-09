@@ -64,7 +64,7 @@ namespace NiflectGen
     bool CGenerator::Init(const CModuleRegInfo& userProvied, CGenLog* log)
     {
         m_log = log;
-        return m_moduleRegInfo.Init(userProvied);
+        return m_moduleRegInfo.Init(userProvied, m_log);
     }
     void CGenerator::Generate(CCodeGenData& genData, TestInterfaceFunc TestFunc)
     {
