@@ -3,6 +3,7 @@
 #include "Niflect/Memory/Default/DefaultMemory.h"
 
 extern void TestTypes0();
+extern void TestTypes1();
 
 typedef void (*UnitTestFunc)();
 static void InvokeTest(UnitTestFunc Func)
@@ -23,6 +24,10 @@ static void InvokeTest(UnitTestFunc Func)
 
 TEST(TestGenTool, Test0) {
     InvokeTest(&TestTypes0);
+}
+
+TEST(TestGenTool, Test1) {
+    InvokeTest(&TestTypes1);
 }
 
 int main(int argc, char** argv) {
