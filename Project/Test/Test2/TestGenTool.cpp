@@ -11,8 +11,8 @@ static void InvokeTest(UnitTestFunc Func)
     EXPECT_EQ(memTest->m_allocCount, 0);
     {
         Niflect::CNiflectTable table;
-        EXPECT_GT(memTest->m_allocCount, 0);
         Niflect::GeneratedRegisterTypes(&table);
+        EXPECT_GT(memTest->m_allocCount, 0);
         Niflect::GeneratedInitTypes();
         table.InitTypesLayout();
 
