@@ -10,35 +10,57 @@ namespace NiflectGen
 {
 	bool CModuleRegInfoValidated::Init(const CModuleRegInfo& info)
 	{
-		if (info.m_moduleName.empty())
-			return false;
 		CGenLog log;
+		bool ok = true;
+		if (info.m_moduleName.empty())
+		{
+			GenLogError(&log, "The module name (.e.g., -n TestModule1) must be specified");
+			ok = false;
+		}
+		for (auto& it : info.m_vecAccessorSettingHeader)
+		{
+			if (NiflectUtil::FileExists(it))
+			{
+				GenLogError(&log, "The accessor setting header (.e.g., -a F:/Source/TestModule1AccessorSetting.h) must be valid");
+				ok = false;
+			}
+		}
 		if (!info.m_specifiedModuleApiMacroHeaderFilePath.empty())
 		{
 			if (info.m_specifiedModuleApiMacro.empty())
 			{
 				GenLogError(&log, "The API macro name (.e.g., -am TESTMODULE1_API) must be specified when the API macro header is specified");
-				return false;
+				ok = false;
 			}
 		}
 
-		for (auto& it0 : info.m_vecModuleHeader2)
 		{
-			auto incPath = CIncludesHelper::ConvertToIncludePath(it0, info.m_vecModuleHeaderSearchPath2);
-			if (incPath.empty())
+			Niflect::TArray<Niflect::CString> vecFailtToConvert;
+			for (auto& it0 : info.m_vecModuleHeader2)
 			{
-				if (!NiflectUtil::IsRelativePath(it0))
+				auto incPath = CIncludesHelper::ConvertToIncludePath(it0, info.m_vecModuleHeaderSearchPath2);
+				if (incPath.empty())
 				{
-					auto paths = NiflectUtil::CombineFromPaths(info.m_vecModuleHeaderSearchPath2, '\n');
-					GenLogError(&log, NiflectUtil::FormatString(
+					if (!NiflectUtil::IsRelativePath(it0))
+					{
+						vecFailtToConvert.push_back(it0);
+						ok = false;
+					}
+				}
+			}
+			if (vecFailtToConvert.size() > 0)
+			{
+				auto incPaths = NiflectUtil::CombineFromPaths(info.m_vecModuleHeaderSearchPath2, '\n');
+				auto headerPaths = NiflectUtil::CombineFromPaths(vecFailtToConvert, '\n');
+				GenLogError(&log, NiflectUtil::FormatString(
 R"(The module header search paths specified:
 %s
 must be valid for header file:
-%s)", paths.c_str(), it0.c_str()).c_str());
-					return false;
-				}
+%s)", incPaths.c_str(), headerPaths.c_str()).c_str());
 			}
 		}
+		if (!ok)
+			return false;
 
 		m_userProvided = info;
 
