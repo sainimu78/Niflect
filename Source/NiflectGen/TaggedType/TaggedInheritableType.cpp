@@ -13,6 +13,10 @@ namespace NiflectGen
 		, m_generatedBodyLineNumber(INDEX_NONE)
 	{
 	}
+	bool CTaggedInheritableType::RequiredGenHIncluded() const
+	{
+		return m_generatedBodyLineNumber != INDEX_NONE;
+	}
 	void CTaggedInheritableType::InitBaseTypeSpecifierCursor(const CXCursor& cursor)
 	{
 		ASSERT(clang_Cursor_isNull(m_baseTypeSpecifierCursor));

@@ -1,11 +1,11 @@
 #pragma once
-#include "TestGenTool_gen.h"
+#include "Niflect/NiflectMacro.h"
 
 NIF_T()
-class CTest2Class
+class CPublicFields
 {
 public:
-	CTest2Class()
+	CPublicFields()
 		: m_float_0(0.0f)
 		, m_bool_1(false)
 	{
@@ -15,7 +15,7 @@ public:
 		m_float_0 = 1.23f;
 		m_bool_1 = true;
 	}
-	bool operator==(const CTest2Class& rhs) const
+	bool operator==(const CPublicFields& rhs) const
 	{
 		return m_float_0 == rhs.m_float_0
 			&& m_bool_1 == rhs.m_bool_1

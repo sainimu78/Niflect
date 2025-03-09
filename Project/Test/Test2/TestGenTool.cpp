@@ -1,8 +1,8 @@
 #include "gtest/gtest.h"
 #include "Test2_private.h"
-#include "TestGenTool.h"
-#include "Niflect/Serialization/JsonFormat.h"
 #include "Niflect/Memory/Default/DefaultMemory.h"
+
+extern void TestTypes0();
 
 TEST(SaveLoad, GenToolTest) {
     auto memTest = Niflect::GetDefaultMemoryStats();
@@ -14,15 +14,7 @@ TEST(SaveLoad, GenToolTest) {
         Niflect::GeneratedInitTypes();
         table.InitTypesLayout();
 
-        using namespace RwTree;
-        CRwNode rw;
-        CTest2Class src;
-        src.InitForTest();
-        auto type = Niflect::StaticGetType<CTest2Class>();
-        type->SaveInstanceToRwNode(&src, &rw);
-        CTest2Class dst;
-        type->LoadInstanceFromRwNode(&dst, &rw);
-        EXPECT_TRUE(src == dst);
+        TestTypes0();
     }
     EXPECT_EQ(memTest->m_bytesRuntime, 0);
 }
