@@ -31,8 +31,8 @@ namespace NiflectGen
 			{
 				auto paths = NiflectUtil::CombineFromPaths(vecInvalid, '\n');
 				GenLogError(&log, NiflectUtil::FormatString(
-R"(The accessor setting header%s valid:
-%s)", vecInvalid.size()>0?"s are":" is", paths.c_str()));
+R"(The accessor setting header%s invalid:
+%s)", vecInvalid.size()>1?"s are":" is", paths.c_str()));
 			}
 		}
 		if (!info.m_specifiedModuleApiMacroHeaderFilePath.empty())
