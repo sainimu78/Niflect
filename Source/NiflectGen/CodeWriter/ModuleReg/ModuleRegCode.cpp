@@ -29,7 +29,7 @@ namespace NiflectGen
 			}
 			if (vecInvalid.size())
 			{
-				auto paths = NiflectUtil::CombineFromPaths(info.m_vecModuleHeaderSearchPath2, '\n');
+				auto paths = NiflectUtil::CombineFromPaths(vecInvalid, '\n');
 				GenLogError(&log, NiflectUtil::FormatString(
 R"(The accessor setting header%s valid:
 %s)", vecInvalid.size()>0?"s are":" is", paths.c_str()));
