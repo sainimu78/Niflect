@@ -69,7 +69,7 @@ Execute NiflectGenTool to generate reflection code, here is a batch script examp
 @..\ThirdParty\NiflectGenTool\bin\NiflectGenTool.exe ^
 -n MyApp ^
 -h ../MyClass.h ^
--a ../ThirdParty/Niflect/include/Niflect/CommonlyUsed/DefaultAccessorSetting.h ^
+-a ../ThirdParty/Niflect/include/Niflect/Default/DefaultAccessorSetting.h ^
 -I ../ThirdParty/Niflect/include ^
 -I ../ ^
 -p NiflectGenerated 

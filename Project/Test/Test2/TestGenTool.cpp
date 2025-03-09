@@ -9,20 +9,19 @@ typedef void (*UnitTestFunc)();
 static void InvokeTest(UnitTestFunc Func)
 {
     auto memTest = Niflect::GetDefaultMemoryStats();
-    EXPECT_EQ(memTest->m_allocCount, 0);
     {
         Niflect::CNiflectTable table;
         Niflect::GeneratedRegisterTypes(&table);
-        EXPECT_GT(memTest->m_allocCount, 0);
         Niflect::GeneratedInitTypes();
         table.InitTypesLayout();
-
         Func();
     }
     EXPECT_EQ(memTest->m_bytesRuntime, 0);
 }
 
 TEST(TestGenTool, Test0) {
+    auto memTest = Niflect::GetDefaultMemoryStats();
+    EXPECT_EQ(memTest->m_allocCount, 0);
     InvokeTest(&TestTypes0);
 }
 

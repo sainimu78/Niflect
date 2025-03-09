@@ -1,11 +1,11 @@
 #pragma once
 #include "Niflect/NiflectAccessorSetting.h"
-#include "Niflect/CommonlyUsed/CompoundAccessor.h"
-#include "Niflect/CommonlyUsed/EnumAccessor.h"
-#include "Niflect/CommonlyUsed/ValueTypeAccessor.h"
-#include "Niflect/CommonlyUsed/ContainerTypeAccessor.h"
-#include "Niflect/CommonlyUsed/STLValueTypeAccessor.h"
-#include "Niflect/CommonlyUsed/STLContainerTypeAccessor.h"
+#include "Niflect/Default/CompoundAccessor.h"
+#include "Niflect/Default/EnumAccessor.h"
+#include "Niflect/Default/ValueTypeAccessor.h"
+#include "Niflect/Default/ContainerTypeAccessor.h"
+#include "Niflect/Default/STLValueTypeAccessor.h"
+#include "Niflect/Default/STLContainerTypeAccessor.h"
 
 namespace DefaultAccessorSetting
 {
