@@ -58,12 +58,14 @@ namespace Niflect
 		InvokeDestructorFunc m_InvokeDestructorFunc;//为通用性增加该函数指针以支持基类未定义virtual析构也能够安全释放, 如有规范要求基类必须定义virtual析构, 则可不定义该函数指针以减少占用内存
 	};
 
-	template <typename TClass, typename TMemory>
+	template <typename TElement, typename TMemory>
 	class TGenericSharedPtr
 	{
+	public:
+		typedef TElement CElement;
 		typedef TMemory CMemory;
-		typedef TClass CClass;
 
+	private:
 		template <typename TDerived, typename TSameMemory>
 		friend class TGenericSharedPtr;
 		template <typename TBase, typename TMemory2, typename TConstructFunc, typename ...TArgs>
@@ -88,7 +90,7 @@ namespace Niflect
 			this->IncRef();
 		}
 		//支持子类赋值到父类指针
-		template <typename TDerived, std::enable_if_t<std::is_convertible<TDerived*, CClass*>::value, int> = 0>
+		template <typename TDerived, std::enable_if_t<std::is_convertible<TDerived*, CElement*>::value, int> = 0>
 		TGenericSharedPtr(const TGenericSharedPtr<TDerived, CMemory>& rhs)
 			: m_pointer(rhs.m_pointer)
 			, m_data(rhs.m_data)
@@ -117,7 +119,7 @@ namespace Niflect
 		}
 
 	private:
-		TGenericSharedPtr(CClass* pointer, SGenericSharedPtrData* data)
+		TGenericSharedPtr(CElement* pointer, SGenericSharedPtrData* data)
 			: m_pointer(pointer)
 			, m_data(data)
 		{
@@ -125,7 +127,7 @@ namespace Niflect
 		}
 
 	public:
-		inline CClass* Get() const
+		inline CElement* Get() const
 		{
 			return m_pointer;
 		}
@@ -137,15 +139,15 @@ namespace Niflect
 				this->AssignFrom(rhs.m_pointer, rhs.m_data);
 			return *this;
 		}
-		CClass& operator*()
+		CElement& operator*()
 		{
 			return *m_pointer;
 		}
-		const CClass& operator*() const
+		const CElement& operator*() const
 		{
 			return *m_pointer;
 		}
-		inline CClass* operator->() const
+		inline CElement* operator->() const
 		{
 			return m_pointer;
 		}
@@ -157,19 +159,19 @@ namespace Niflect
 		{
 			return !this->operator==(rhs);
 		}
-		bool operator==(const CClass* pointer) const
+		bool operator==(const CElement* pointer) const
 		{
 			return m_pointer == pointer;
 		}
-		bool operator!=(const CClass* pointer) const
+		bool operator!=(const CElement* pointer) const
 		{
 			return !this->operator==(pointer);
 		}
-		friend bool operator==(const CClass* pointer, const TGenericSharedPtr& rhs)
+		friend bool operator==(const CElement* pointer, const TGenericSharedPtr& rhs)
 		{
 			return rhs.operator==(pointer);
 		}
-		friend bool operator!=(const CClass* pointer, const TGenericSharedPtr& rhs)
+		friend bool operator!=(const CElement* pointer, const TGenericSharedPtr& rhs)
 		{
 			return !(rhs.operator==(pointer));
 		}
@@ -181,7 +183,7 @@ namespace Niflect
 		}
 
 	private:
-		void InitWithData(CClass* pointer, const InvokeDestructorFunc& DestructFunc)
+		void InitWithData(CElement* pointer, const InvokeDestructorFunc& DestructFunc)
 		{
 			ASSERT(m_data == NULL);
 			m_pointer = pointer;
@@ -189,7 +191,7 @@ namespace Niflect
 			StaticInitData(m_data, DestructFunc, false);
 			this->IncRef();
 		}
-		void InitWithSharedData(CClass* pointer, const InvokeDestructorFunc& DestructFunc, SGenericSharedPtrData* data)
+		void InitWithSharedData(CElement* pointer, const InvokeDestructorFunc& DestructFunc, SGenericSharedPtrData* data)
 		{
 			ASSERT(m_data == NULL);
 			m_pointer = pointer;
@@ -292,7 +294,7 @@ namespace Niflect
 #endif
 			}
 		}
-		void AssignFrom(CClass* pointer, SGenericSharedPtrData* data)
+		void AssignFrom(CElement* pointer, SGenericSharedPtrData* data)
 		{
 			this->DecRef();
 			m_pointer = pointer;
@@ -304,12 +306,12 @@ namespace Niflect
 		template <typename TDerived>
 		inline static bool StaticCheck(TDerived& rhsRawPtr)
 		{
-			const TClass* thisRawPtr = rhsRawPtr;//静态检查是否为安全指针转换, 如父类转子类指针为不安全, 应先正确cast后再赋TSharedPtr
+			const TElement* thisRawPtr = rhsRawPtr;//静态检查是否为安全指针转换, 如父类转子类指针为不安全, 应先正确cast后再赋TSharedPtr
 			return true;
 		}
 
 	private:
-		CClass* m_pointer;
+		CElement* m_pointer;
 		SGenericSharedPtrData* m_data;
 	};
 	template <typename TBase, typename TMemory, typename TConstructFunc, typename ...TArgs>
