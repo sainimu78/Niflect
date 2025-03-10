@@ -3,5 +3,5 @@
 
 void TestTypes0()
 {
-    TestSerializationTypeBased<CPublicFields>();
+    TestSerializationOf<CPublicFields>();
 }

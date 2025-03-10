@@ -1,3 +1,4 @@
+#include "TestApp.h"
 #include "gtest/gtest.h"
 #include "Niflect/Memory/Default/DefaultMemory.h"
 #include "TestLib/TestLib.h"
@@ -11,7 +12,7 @@ static void InitTestApp(Niflect::CNiflectTable& table)
 }
 
 template <typename TTestType>
-static void TestSerializationTypeBased()
+static void TestSerializationOf()
 {
     using namespace RwTree;
     CRwNode rw;
@@ -32,8 +33,8 @@ TEST(TestAppAndLib, TestMain) {
     Niflect::CNiflectTable table1;
     InitTestApp(table1);
 
-    TestSerializationTypeBased<CTestLib>();
-    TestSerializationTypeBased<CTestApp>();
+    TestSerializationOf<CTestLib>();
+    TestSerializationOf<CTestApp>();
 }
 
 int main(int argc, char** argv) {

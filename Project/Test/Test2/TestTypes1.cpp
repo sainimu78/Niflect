@@ -3,5 +3,5 @@
 
 void TestTypes1()
 {
-    TestSerializationTypeBased<CPrivateFields>();
+    TestSerializationOf<CPrivateFields>();
 }

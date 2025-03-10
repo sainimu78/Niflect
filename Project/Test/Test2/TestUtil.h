@@ -4,7 +4,7 @@
 #include "Niflect/NiflectType.h"
 
 template <typename TTestType>
-static void TestSerializationTypeBased()
+static void TestSerializationOf()
 {
     using namespace RwTree;
     CRwNode rw;
