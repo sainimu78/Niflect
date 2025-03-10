@@ -27,7 +27,8 @@ cpf_include(${c_RootProjectDirPath}/NiflectGenTool/NiflectGenTool/Exe.cmake)
 add_subdirectory(Test0)
 add_subdirectory(Test1)
 add_subdirectory(Test2)
-set(DefaultModuleName Test2)
+add_subdirectory(Test3)
+set(DefaultModuleName Test3)
 
 include(${c_RootCMakeProjectFrameworkDirPath}/Cleanup.cmake)
 
