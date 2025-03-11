@@ -61,7 +61,6 @@ namespace Niflect
 	template <typename TPtr, typename TMemory>
 	class TGenericSharedPtr
 	{
-	public:
 		typedef TPtr PtrType;
 		typedef TMemory MemoryType;
 
