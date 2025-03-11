@@ -58,12 +58,12 @@ namespace Niflect
 		InvokeDestructorFunc m_InvokeDestructorFunc;//为通用性增加该函数指针以支持基类未定义virtual析构也能够安全释放, 如有规范要求基类必须定义virtual析构, 则可不定义该函数指针以减少占用内存
 	};
 
-	template <typename TElement, typename TMemory>
+	template <typename TPtr, typename TMemory>
 	class TGenericSharedPtr
 	{
 	public:
-		typedef TElement CElement;
-		typedef TMemory CMemory;
+		typedef TPtr PtrType;
+		typedef TMemory MemoryType;
 
 	private:
 		template <typename TDerived, typename TSameMemory>
@@ -79,122 +79,122 @@ namespace Niflect
 
 	public:
 		TGenericSharedPtr()
-			: m_pointer(NULL)
+			: m_ptr(NULL)
 			, m_data(NULL)
 		{
 		}
 		TGenericSharedPtr(const TGenericSharedPtr& rhs)
-			: m_pointer(rhs.m_pointer)
+			: m_ptr(rhs.m_ptr)
 			, m_data(rhs.m_data)
 		{
 			this->IncRef();
 		}
 		//支持子类赋值到父类指针
-		template <typename TDerived, std::enable_if_t<std::is_convertible<TDerived*, CElement*>::value, int> = 0>
-		TGenericSharedPtr(const TGenericSharedPtr<TDerived, CMemory>& rhs)
-			: m_pointer(rhs.m_pointer)
+		template <typename TDerived, std::enable_if_t<std::is_convertible<TDerived*, PtrType*>::value, int> = 0>
+		TGenericSharedPtr(const TGenericSharedPtr<TDerived, MemoryType>& rhs)
+			: m_ptr(rhs.m_ptr)
 			, m_data(rhs.m_data)
 		{
 			this->IncRef();
 		}
-		TGenericSharedPtr(const std::nullptr_t pointer)
-			: m_pointer(NULL)
+		TGenericSharedPtr(const std::nullptr_t nullPtr)
+			: m_ptr(NULL)
 			, m_data(NULL)
 		{
-			ASSERT(pointer == nullptr);
+			ASSERT(nullPtr == nullptr);
 		}
 		~TGenericSharedPtr()
 		{
 			this->DecRef();
 		}
 		template <typename TDerived>
-		TGenericSharedPtr<TDerived, CMemory> Cast() const
+		TGenericSharedPtr<TDerived, MemoryType> Cast() const
 		{
-			return {static_cast<TDerived*>(m_pointer), m_data};
+			return {static_cast<TDerived*>(m_ptr), m_data};
 		}
 		template <typename TDerived>
-		TGenericSharedPtr<TDerived, CMemory> CastChecked() const
+		TGenericSharedPtr<TDerived, MemoryType> CastChecked() const
 		{
-			return { dynamic_cast<TDerived*>(m_pointer), m_data };
+			return { dynamic_cast<TDerived*>(m_ptr), m_data };
 		}
 
 	private:
-		TGenericSharedPtr(CElement* pointer, SGenericSharedPtrData* data)
-			: m_pointer(pointer)
+		TGenericSharedPtr(PtrType* ptr, SGenericSharedPtrData* data)
+			: m_ptr(ptr)
 			, m_data(data)
 		{
 			this->IncRef();
 		}
 
 	public:
-		inline CElement* Get() const
+		inline PtrType* Get() const
 		{
-			return m_pointer;
+			return m_ptr;
 		}
 
 	public:
 		TGenericSharedPtr& operator=(const TGenericSharedPtr& rhs)
 		{
-			if (m_pointer != rhs.m_pointer)
-				this->AssignFrom(rhs.m_pointer, rhs.m_data);
+			if (m_ptr != rhs.m_ptr)
+				this->AssignFrom(rhs.m_ptr, rhs.m_data);
 			return *this;
 		}
-		CElement& operator*()
+		PtrType& operator*()
 		{
-			return *m_pointer;
+			return *m_ptr;
 		}
-		const CElement& operator*() const
+		const PtrType& operator*() const
 		{
-			return *m_pointer;
+			return *m_ptr;
 		}
-		inline CElement* operator->() const
+		inline PtrType* operator->() const
 		{
-			return m_pointer;
+			return m_ptr;
 		}
 		bool operator==(const TGenericSharedPtr& rhs) const
 		{
-			return m_pointer == rhs.m_pointer;
+			return m_ptr == rhs.m_ptr;
 		}
 		bool operator!=(const TGenericSharedPtr& rhs) const
 		{
 			return !this->operator==(rhs);
 		}
-		bool operator==(const CElement* pointer) const
+		bool operator==(const PtrType* ptr) const
 		{
-			return m_pointer == pointer;
+			return m_ptr == ptr;
 		}
-		bool operator!=(const CElement* pointer) const
+		bool operator!=(const PtrType* ptr) const
 		{
-			return !this->operator==(pointer);
+			return !this->operator==(ptr);
 		}
-		friend bool operator==(const CElement* pointer, const TGenericSharedPtr& rhs)
+		friend bool operator==(const PtrType* ptr, const TGenericSharedPtr& rhs)
 		{
-			return rhs.operator==(pointer);
+			return rhs.operator==(ptr);
 		}
-		friend bool operator!=(const CElement* pointer, const TGenericSharedPtr& rhs)
+		friend bool operator!=(const PtrType* ptr, const TGenericSharedPtr& rhs)
 		{
-			return !(rhs.operator==(pointer));
+			return !(rhs.operator==(ptr));
 		}
 
 	public:
 		explicit operator bool() const
 		{
-			return m_pointer != NULL;
+			return m_ptr != NULL;
 		}
 
 	private:
-		void InitWithData(CElement* pointer, const InvokeDestructorFunc& DestructFunc)
+		void InitWithData(PtrType* ptr, const InvokeDestructorFunc& DestructFunc)
 		{
 			ASSERT(m_data == NULL);
-			m_pointer = pointer;
-			m_data = static_cast<SGenericSharedPtrData*>(CMemory::Alloc(sizeof(SGenericSharedPtrData)));
+			m_ptr = ptr;
+			m_data = static_cast<SGenericSharedPtrData*>(MemoryType::Alloc(sizeof(SGenericSharedPtrData)));
 			StaticInitData(m_data, DestructFunc, false);
 			this->IncRef();
 		}
-		void InitWithSharedData(CElement* pointer, const InvokeDestructorFunc& DestructFunc, SGenericSharedPtrData* data)
+		void InitWithSharedData(PtrType* ptr, const InvokeDestructorFunc& DestructFunc, SGenericSharedPtrData* data)
 		{
 			ASSERT(m_data == NULL);
-			m_pointer = pointer;
+			m_ptr = ptr;
 			m_data = data;
 #ifdef DETERMINE_CONSTRUCTED_FROM_MAKESHARED_OR_MAKESHARABLE_BY_A_BOOL
 			StaticInitData(m_data, DestructFunc, true);
@@ -240,22 +240,22 @@ namespace Niflect
 #ifdef DETERMINE_CONSTRUCTED_FROM_MAKESHARED_OR_MAKESHARABLE_BY_A_BOOL
 				if (m_data->m_isAllocatedByMakeShared)
 				{
-					m_data->m_InvokeDestructorFunc(m_pointer);
-					auto mem = reinterpret_cast<char*>(m_pointer) - sizeof(SGenericSharedPtrData);
-					CMemory::Free(mem);
+					m_data->m_InvokeDestructorFunc(m_ptr);
+					auto mem = reinterpret_cast<char*>(m_ptr) - sizeof(SGenericSharedPtrData);
+					MemoryType::Free(mem);
 				}
 				else
 				{
-					CGenericInstance::DestructAndFree<CMemory>(m_pointer, m_data->m_InvokeDestructorFunc);
+					CGenericInstance::DestructAndFree<MemoryType>(m_ptr, m_data->m_InvokeDestructorFunc);
 					//UE的实现方法, 定义一种析构代理类(见DefaultDeleter), MakeShareable时使用CRT默认new创建, 在删除时使用的CRT默认delete释放
-					CMemory::Free(m_data);
+					MemoryType::Free(m_data);
 				}
 #else
-				//虽然是连续内存, MkaeShared 的 m_pointer 地址一定比 m_data 大, 但隐患在于 m_data 可能是在一些分配和释放操作后再分配的, 就有一定可能性刚比 m_pointer 小
-				//if (reinterpret_cast<ptrdiff_t>(m_pointer) > reinterpret_cast<ptrdiff_t>(m_data))
+				//虽然是连续内存, MkaeShared 的 m_ptr 地址一定比 m_data 大, 但隐患在于 m_data 可能是在一些分配和释放操作后再分配的, 就有一定可能性刚比 m_ptr 小
+				//if (reinterpret_cast<ptrdiff_t>(m_ptr) > reinterpret_cast<ptrdiff_t>(m_data))
 				//{
 				//	...
-				//	void* mem = reinterpret_cast<char*>(m_pointer) - sizeof(SGenericSharedPtrData);
+				//	void* mem = reinterpret_cast<char*>(m_ptr) - sizeof(SGenericSharedPtrData);
 				//	if (mem == m_data)
 				//		...
 				//}
@@ -277,27 +277,27 @@ namespace Niflect
 				if ((funcAsInt & 0x1) != 0)
 				{
 					funcAsInt &= ~0x1;
-					void* mem = reinterpret_cast<char*>(m_pointer) - sizeof(SGenericSharedPtrData);
+					void* mem = reinterpret_cast<char*>(m_ptr) - sizeof(SGenericSharedPtrData);
 					ASSERT(m_data->m_debugIsAllocatedByMakeShared);
 					auto DestructorFunc = reinterpret_cast<InvokeDestructorFunc>(funcAsInt);
-					DestructorFunc(m_pointer);
-					CMemory::Free(mem);
+					DestructorFunc(m_ptr);
+					MemoryType::Free(mem);
 					return;
 				}
 
 				ASSERT((reinterpret_cast<ptrdiff_t>(m_data->m_InvokeDestructorFunc) & 0x1) == 0);
 				ASSERT(!m_data->m_debugIsAllocatedByMakeShared);
 
-				CGenericInstance::DestructAndFree<CMemory>(m_pointer, m_data->m_InvokeDestructorFunc);
+				CGenericInstance::DestructAndFree<MemoryType>(m_ptr, m_data->m_InvokeDestructorFunc);
 				//UE的实现方法, 定义一种析构代理类(见DefaultDeleter), MakeShareable时使用CRT默认new创建, 在删除时使用的CRT默认delete释放
-				CMemory::Free(m_data);
+				MemoryType::Free(m_data);
 #endif
 			}
 		}
-		void AssignFrom(CElement* pointer, SGenericSharedPtrData* data)
+		void AssignFrom(PtrType* ptr, SGenericSharedPtrData* data)
 		{
 			this->DecRef();
-			m_pointer = pointer;
+			m_ptr = ptr;
 			m_data = data;
 			this->IncRef();
 		}
@@ -306,12 +306,12 @@ namespace Niflect
 		template <typename TDerived>
 		inline static bool StaticCheck(TDerived& rhsRawPtr)
 		{
-			const TElement* thisRawPtr = rhsRawPtr;//静态检查是否为安全指针转换, 如父类转子类指针为不安全, 应先正确cast后再赋TSharedPtr
+			const PtrType* thisRawPtr = rhsRawPtr;//静态检查是否为安全指针转换, 如父类转子类指针为不安全, 应先正确cast后再赋TSharedPtr
 			return true;
 		}
 
 	private:
-		CElement* m_pointer;
+		PtrType* m_ptr;
 		SGenericSharedPtrData* m_data;
 	};
 	template <typename TBase, typename TMemory, typename TConstructFunc, typename ...TArgs>
@@ -473,7 +473,7 @@ namespace Niflect
 			{
 				//auto a = sizeof(std::shared_ptr<float>);
 				//auto b = sizeof(TGenericSharedPtrData<float>);
-				//auto c = sizeof(TGenericSharedPtr<float, CMemory>);
+				//auto c = sizeof(TGenericSharedPtr<float, MemoryType>);
 				//auto e = sizeof(std::aligned_union<1, float>::type);
 				//std::shared_ptr<float> dddddd;
 				//auto g = sizeof(dddddd.use_count());
