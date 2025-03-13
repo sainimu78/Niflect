@@ -61,6 +61,7 @@ namespace Niflect
 	template <typename TPtr, typename TMemory>
 	class TGenericSharedPtr
 	{
+	public:
 		typedef TPtr PtrType;
 		typedef TMemory MemoryType;
 
@@ -132,17 +133,17 @@ namespace Niflect
 		}
 
 	public:
-		TGenericSharedPtr& operator=(const TGenericSharedPtr& rhs)
+		inline TGenericSharedPtr& operator=(const TGenericSharedPtr& rhs)
 		{
 			if (m_ptr != rhs.m_ptr)
 				this->AssignFrom(rhs.m_ptr, rhs.m_data);
 			return *this;
 		}
-		PtrType& operator*()
+		inline PtrType& operator*()
 		{
 			return *m_ptr;
 		}
-		const PtrType& operator*() const
+		inline const PtrType& operator*() const
 		{
 			return *m_ptr;
 		}
@@ -150,33 +151,33 @@ namespace Niflect
 		{
 			return m_ptr;
 		}
-		bool operator==(const TGenericSharedPtr& rhs) const
+		inline bool operator==(const TGenericSharedPtr& rhs) const
 		{
 			return m_ptr == rhs.m_ptr;
 		}
-		bool operator!=(const TGenericSharedPtr& rhs) const
+		inline bool operator!=(const TGenericSharedPtr& rhs) const
 		{
 			return !this->operator==(rhs);
 		}
-		bool operator==(const PtrType* ptr) const
+		inline bool operator==(const PtrType* ptr) const
 		{
 			return m_ptr == ptr;
 		}
-		bool operator!=(const PtrType* ptr) const
+		inline bool operator!=(const PtrType* ptr) const
 		{
 			return !this->operator==(ptr);
 		}
-		friend bool operator==(const PtrType* ptr, const TGenericSharedPtr& rhs)
+		inline friend bool operator==(const PtrType* ptr, const TGenericSharedPtr& rhs)
 		{
 			return rhs.operator==(ptr);
 		}
-		friend bool operator!=(const PtrType* ptr, const TGenericSharedPtr& rhs)
+		inline friend bool operator!=(const PtrType* ptr, const TGenericSharedPtr& rhs)
 		{
 			return !(rhs.operator==(ptr));
 		}
 
 	public:
-		explicit operator bool() const
+		inline explicit operator bool() const
 		{
 			return m_ptr != NULL;
 		}
@@ -209,12 +210,12 @@ namespace Niflect
 #endif
 			this->IncRef();
 		}
-		void IncRef()
+		inline void IncRef()
 		{
 			if (m_data != NULL)
 				m_data->m_refCount++;
 		}
-		void DecRef()
+		inline void DecRef()
 		{
 			if (m_data != NULL)
 			{
@@ -293,7 +294,7 @@ namespace Niflect
 #endif
 			}
 		}
-		void AssignFrom(PtrType* ptr, SGenericSharedPtrData* data)
+		inline void AssignFrom(PtrType* ptr, SGenericSharedPtrData* data)
 		{
 			this->DecRef();
 			m_ptr = ptr;
