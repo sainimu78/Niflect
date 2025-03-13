@@ -358,7 +358,7 @@ namespace NiflectGen
 					{
 						auto& tpl = parentAs.m_bindingResocursorName;
 						auto arg = CXStringToCString(clang_getTypeSpelling(clang_getCursorType(cursor)));
-						GenLogError(context.m_log, GetCursorLogLocationInfo(cursor), NiflectUtil::FormatString("The template arg %s of the container template %s must be tagged", arg.c_str(), tpl.c_str()));
+						GenLogError(context.m_log, GetCursorLogLocationInfo(cursor), NiflectUtil::FormatString("The type %s must be tagged (if it can be), as it is used as a template parameter for the container template %s", arg.c_str(), tpl.c_str()));
 					}
 				}
 			}
