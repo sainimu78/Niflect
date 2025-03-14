@@ -437,6 +437,7 @@ namespace NiflectGen
 			auto& cursor = tt->GetCursor();
 			CXSourceRange range = clang_getCursorExtent(cursor);
 			CXTranslationUnit translationUnit = clang_Cursor_getTranslationUnit(cursor);
+			uint32 lastIncludeLineNum = INDEX_NONE;
 			{
 				CXFile begin_file;
 				unsigned begin_line, begin_column, begin_offset;
@@ -457,6 +458,7 @@ namespace NiflectGen
 					const Niflect::CString keywordInclude = "include";
 					while (std::getline(ss, line))
 					{
+						lastIncludeLineNum++;
 						bool found = false;
 						auto posSingleLineComment = line.find("//");
 						if (posSingleLineComment == std::string::npos)
@@ -507,7 +509,12 @@ R"(The conversion of %s to an include directive failed because the file could no
 						includedGenH = lastInclude == expectedIncludeFilePath;
 					}
 					if (!includedGenH)
-						GenLogError(context.m_log, NiflectUtil::FormatString("Expected `#include \"%s\"` at the top of the header and follows all other includes", expectedIncludeFilePath.c_str()));
+					{
+						auto locInfo = GetCursorLogLocationInfo(cursor);
+						ASSERT(lastIncludeLineNum != INDEX_NONE);
+						locInfo.m_line = lastIncludeLineNum;
+						GenLogError(context.m_log, locInfo, NiflectUtil::FormatString("Expected `#include \"%s\"` follows all other includes at the top of the header", expectedIncludeFilePath.c_str()));
+					}
 				}
 			}
 		}
