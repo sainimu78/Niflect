@@ -89,33 +89,43 @@ namespace NiflectGen
 			}
 		}
 		{
-			const char* hct = NULL;
 			auto infoTypeName = m_resolvedData->m_taggedMapping.GetInfoTypeName(m_bindingTypeIndexedRoot->m_taggedTypeIndex);
-			Niflect::CString funcName;
 			if (m_bindingTypeIndexedRoot->IsTaggedType())
 			{
-				funcName = "RegisterType3<" + m_bindingTypeIndexedRoot->m_resocursorName + ", " + infoTypeName + ">";
-				hct = HardCodedTemplate::InvokeRegisterTypeByFrameworkTableMethod;
+				Niflect::CString funcName = "RegisterTypeChecked<" + m_bindingTypeIndexedRoot->m_resocursorName + ", " + infoTypeName + ">";
+				CCodeTemplate tpl0;
+				ReadTemplateFromRawData(tpl0, HardCodedTemplate::InvokeRegisterTypeByFrameworkTableMethod);
+				CLabelToCodeMapping map;
+				MapLabelToText(map, LABEL_0, m_bindingTypeIndexedRoot->m_resocursorName);
+				MapLabelToText(map, LABEL_2, funcName);
+				MapLabelToText(map, LABEL_13, m_bindingTypeIndexedRoot->GetCreateTypeAccessorFuncName(context.m_moduleRegInfo.m_moduleScopeSymbolPrefix));
+				Niflect::CString nataNullOrVar;
+				WriteNataArgNullOrVar(linesNata, linesReg, nataNullOrVar);
+				MapLabelToText(map, LABEL_14, nataNullOrVar);
+				auto& tt = m_resolvedData->m_taggedMapping.m_vecType[m_bindingTypeIndexedRoot->m_taggedTypeIndex];
+				auto invokeCtorAddr = tt->GetInvokeCtorAddr(m_bindingTypeIndexedRoot->m_resocursorName);
+				MapLabelToText(map, LABEL_15, invokeCtorAddr);
+				Niflect::TSet<Niflect::CString> setReplacedLabel;
+				tpl0.ReplaceLabels(map, linesReg, &setReplacedLabel);
+				ASSERT(setReplacedLabel.size() == map.size());
 			}
 			else
 			{
-				funcName = "RegisterType<" + m_bindingTypeIndexedRoot->m_resocursorName + ", " + infoTypeName + ">";
+				Niflect::CString funcName = "RegisterType<" + m_bindingTypeIndexedRoot->m_resocursorName + ", " + infoTypeName + ">";
 				funcName = context.m_moduleRegInfo.m_moduleScopeSymbolPrefix + funcName;
-				hct = HardCodedTemplate::InvokeRegisterTypeByGeneratedStaticFunc;
+				CCodeTemplate tpl0;
+				ReadTemplateFromRawData(tpl0, HardCodedTemplate::InvokeRegisterTypeByGeneratedStaticFunc);
+				CLabelToCodeMapping map;
+				MapLabelToText(map, LABEL_0, m_bindingTypeIndexedRoot->m_resocursorName);
+				MapLabelToText(map, LABEL_2, funcName);
+				MapLabelToText(map, LABEL_13, m_bindingTypeIndexedRoot->GetCreateTypeAccessorFuncName(context.m_moduleRegInfo.m_moduleScopeSymbolPrefix));
+				Niflect::CString nataNullOrVar;
+				WriteNataArgNullOrVar(linesNata, linesReg, nataNullOrVar);
+				MapLabelToText(map, LABEL_14, nataNullOrVar);
+				Niflect::TSet<Niflect::CString> setReplacedLabel;
+				tpl0.ReplaceLabels(map, linesReg, &setReplacedLabel);
+				ASSERT(setReplacedLabel.size() == map.size());
 			}
-
-			CCodeTemplate tpl0;
-			ReadTemplateFromRawData(tpl0, hct);
-			CLabelToCodeMapping map;
-			MapLabelToText(map, LABEL_0, m_bindingTypeIndexedRoot->m_resocursorName);
-			MapLabelToText(map, LABEL_2, funcName);
-			MapLabelToText(map, LABEL_13, m_bindingTypeIndexedRoot->GetCreateTypeAccessorFuncName(context.m_moduleRegInfo.m_moduleScopeSymbolPrefix));
-			Niflect::CString nataNullOrVar;
-			WriteNataArgNullOrVar(linesNata, linesReg, nataNullOrVar);
-			MapLabelToText(map, LABEL_14, nataNullOrVar);
-			Niflect::TSet<Niflect::CString> setReplacedLabel;
-			tpl0.ReplaceLabels(map, linesReg, &setReplacedLabel);
-			ASSERT(setReplacedLabel.size() == map.size());
 		}
 		ReplaceLabelToImplScopeLines(linesReg, data.m_linesInvokeRegisterType);
 	}

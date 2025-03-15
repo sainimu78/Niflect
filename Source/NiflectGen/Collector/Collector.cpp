@@ -21,8 +21,6 @@ namespace NiflectGen
 {
 	using namespace Niflect;
 
-	using CCursorArray = Niflect::TArrayNif<CXCursor>;
-
 	static bool CXType_IsBuiltinType(CXTypeKind typeKind)
 	{
 		return (typeKind > CXType_FirstBuiltin && typeKind < CXType_LastBuiltin);

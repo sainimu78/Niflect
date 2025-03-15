@@ -16,11 +16,12 @@ namespace NiflectGen
 #define LABEL_10 "API"
 #define LABEL_13 "CreateTypeAccessorFuncName"
 #define LABEL_14 "NataNullOrVar"
+#define LABEL_15 "InvokeCtorAddr"
 
 	namespace HardCodedTemplate
 	{
 		constexpr const char* InvokeRegisterTypeByFrameworkTableMethod =
-"table->" MAKELABEL(LABEL_2) R"((")" MAKELABEL(LABEL_0) R"(", &)" MAKELABEL(LABEL_13) ", " MAKELABEL(LABEL_14) ");";
+"table->" MAKELABEL(LABEL_2) R"((")" MAKELABEL(LABEL_0) R"(", &)" MAKELABEL(LABEL_13) ", " MAKELABEL(LABEL_14) ", "  MAKELABEL(LABEL_15) ");";
 		constexpr const char* InvokeRegisterTypeByGeneratedStaticFunc =
 "" MAKELABEL(LABEL_2) R"((table, ")" MAKELABEL(LABEL_0) R"(", &)" MAKELABEL(LABEL_13) ", " MAKELABEL(LABEL_14) ");";
 		constexpr const char* CreateTypeAccessorDecl =

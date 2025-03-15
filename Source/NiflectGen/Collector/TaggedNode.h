@@ -8,6 +8,7 @@ namespace NiflectGen
 	class CGenLog;
 	class CTaggedNode2;
 
+	using CCursorArray = Niflect::TArrayNif<CXCursor>;
 	using CSharedTaggedNode = Niflect::TSharedPtr<CTaggedNode2>;
 
 	struct CXSourceLocationComp

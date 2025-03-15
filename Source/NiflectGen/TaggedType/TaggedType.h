@@ -72,6 +72,7 @@ namespace NiflectGen
 		}
 		void WriteUsingNamespaceDirectiveForNata(CCodeLines& lines) const;
 		void WriteTaggedTypeCopyNata(CCodeLines& lines) const;
+		virtual Niflect::CString GetInvokeCtorAddr(const Niflect::CString& resocursorName) const;
 
 	public:
 		static CTaggedType* CastChecked(CTaggedNode2* base)

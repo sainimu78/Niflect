@@ -13,7 +13,7 @@ namespace Niflect
 	struct STypeLifecycleMeta
 	{
 		uint32 m_typeSize;
-		InvokeConstructorFunc m_InvokeConstructorFunc;//一些其它框架中称作 Ctor 与 Dtor
+		void* m_InvokeConstructorFunc;//默认函数参数形式为 InvokeConstructorFunc
 		InvokeDestructorFunc m_InvokeDestructorFunc;
 	};
 
@@ -178,12 +178,7 @@ namespace Niflect
 				layout.m_vecAccessor.push_back(m_CreateTypeAccessorFunc());
 		}
 
-	public:
-		template <typename TBase>
-		TSharedPtr<TBase> MakeSharedInstance() const
-		{
-			return GenericPlacementMakeShared<TBase, CMemory>(m_lifecycleMeta.m_typeSize, m_lifecycleMeta.m_InvokeDestructorFunc, m_lifecycleMeta.m_InvokeConstructorFunc);
-		}
+	//public:
 		//template <typename TBase>
 		//inline TSharedPtr<TBase> MakeSharableInstance(TBase* obj) const
 		//{
@@ -245,6 +240,14 @@ namespace Niflect
 		size_t m_typeHash;
 	};
 	using CSharedNiflectType = TSharedPtr<CNiflectType>;
+
+	template <typename TBase>
+	inline static TSharedPtr<TBase> NiflectTypeMakeShared(const CNiflectType* type)
+	{
+		auto& meta = type->GetLifecycleMeta();
+		auto InvokeCtor = static_cast<InvokeConstructorFunc>(meta.m_InvokeConstructorFunc);
+		return GenericPlacementMakeShared<TBase, CMemory>(meta.m_typeSize, meta.m_InvokeDestructorFunc, InvokeCtor);
+	}
 	
 	class CEnumConstMeta
 	{

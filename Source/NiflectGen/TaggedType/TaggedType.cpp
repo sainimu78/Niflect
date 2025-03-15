@@ -82,6 +82,10 @@ namespace NiflectGen
 			this->WriteCopyNataCode(lines);
 		}
 	}
+	Niflect::CString CTaggedType::GetInvokeCtorAddr(const Niflect::CString& resocursorName) const
+	{
+		return "&GenericInstanceInvokeConstructor<" + resocursorName + ">";
+	}
 
 	void CTaggedTypesMapping::Resolve()
 	{

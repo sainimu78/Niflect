@@ -53,11 +53,12 @@ namespace Niflect
 			//ASSERT(TRegisteredType<TType>::IsValid());
 		}
 		template <typename TType, typename TInfo>
-		void RegisterTypeInternal(const Niflect::CString& id, const CreateTypeAccessorFunc& inCreateTypeAccessorFunc, CStaticNiflectTypeAddr* staticTypePtrAddr, const CSharedNata& nata)
+		void RegisterTypeDetailed(const Niflect::CString& id, const CreateTypeAccessorFunc& inCreateTypeAccessorFunc, CStaticNiflectTypeAddr* staticTypePtrAddr, const CSharedNata& nata, void* InvokeConstructorFunc)
 		{
 			STypeLifecycleMeta lifecycleMeta;
 			lifecycleMeta.m_typeSize = sizeof(TType);
-			lifecycleMeta.m_InvokeConstructorFunc = &GenericInstanceInvokeConstructor<TType>;
+			ASSERT(InvokeConstructorFunc != NULL);
+			lifecycleMeta.m_InvokeConstructorFunc = InvokeConstructorFunc;
 			lifecycleMeta.m_InvokeDestructorFunc = &GenericInstanceInvokeDestructor<TType>;
 
 			auto shared = Niflect::MakeShared<TInfo>();
@@ -67,11 +68,16 @@ namespace Niflect
 			this->InsertType(shared, idx);
 		}
 		template <typename TType, typename TInfo>
-		void RegisterType3(const Niflect::CString& id, const CreateTypeAccessorFunc& inCreateTypeAccessorFunc, const CSharedNata& nata)
+		void RegisterTypeChecked(const Niflect::CString& id, const CreateTypeAccessorFunc& inCreateTypeAccessorFunc, const CSharedNata& nata, void* InvokeConstructorFunc)
 		{
 			ASSERT(!TRegisteredType<TType>::IsValid());
-			this->RegisterTypeInternal<TType, TInfo>(id, inCreateTypeAccessorFunc, &TRegisteredType<TType>::s_type, nata);
+			this->RegisterTypeDetailed<TType, TInfo>(id, inCreateTypeAccessorFunc, &TRegisteredType<TType>::s_type, nata, InvokeConstructorFunc);
 			ASSERT(TRegisteredType<TType>::IsValid());
+		}
+		template <typename TType, typename TInfo>
+		void RegisterType3(const Niflect::CString& id, const CreateTypeAccessorFunc& inCreateTypeAccessorFunc, const CSharedNata& nata)
+		{
+			this->RegisterTypeChecked<TType, TInfo>(id, inCreateTypeAccessorFunc, nata, &GenericInstanceInvokeConstructor<TType>);
 		}
 		CNiflectModule2* GetModule() const
 		{

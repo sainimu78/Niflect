@@ -45,7 +45,7 @@ namespace Niflect
 	void )" MAKELABEL(LABEL_1) R"(RegisterType(CNiflectTable* table, const Niflect::CString& id, const CreateTypeAccessorFunc& inCreateTypeAccessorFunc, const CSharedNata& nata)
 	{
 		ASSERT(!)" MAKELABEL(LABEL_1) R"(TRegisteredType<TType>::IsValid());
-		table->RegisterTypeInternal<TType, TInfo>(id, inCreateTypeAccessorFunc, &)" MAKELABEL(LABEL_1) R"(TRegisteredType<TType>::s_type, nata);
+		table->RegisterTypeDetailed<TType, TInfo>(id, inCreateTypeAccessorFunc, &)" MAKELABEL(LABEL_1) R"(TRegisteredType<TType>::s_type, nata, &GenericInstanceInvokeConstructor<TType>);
 		ASSERT()" MAKELABEL(LABEL_1) R"(TRegisteredType<TType>::IsValid());
 	}
 })";
