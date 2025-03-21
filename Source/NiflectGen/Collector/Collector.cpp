@@ -1547,7 +1547,8 @@ namespace NiflectGen
 
 			if (clang_getCursorKind(bSubcursor.m_cursorDecl) == CXCursor_NoDeclFound)
 			{
-				auto pointerCursor = GetPointerCursorFromPointerType(bSubcursor.m_CXType);
+				Niflect::CString placeholder;
+				auto pointerCursor = CAccessorBindingMapping2::GetPointerCursor(bSubcursor.m_CXType, placeholder);
 				if (pointerCursor.IsValid())
 				{
 					auto ret = mapPointerCursorToIndex.insert({ pointerCursor, idx0 });

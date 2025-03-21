@@ -3,6 +3,13 @@
 
 namespace NiflectGen
 {
+	class CResolvedMethod
+	{
+	public:
+		Niflect::TArray<CResolvedCursorNode> m_vecArgument;
+		CResolvedCursorNode m_resultType;
+	};
+
 	class CTaggedInheritableType : public CTaggedType
 	{
 		typedef CTaggedType inherited;
@@ -28,12 +35,13 @@ namespace NiflectGen
 	private:
 		CXCursor m_baseTypeSpecifierCursor;
 		CTaggedType* m_baseTaggedType;
-		Niflect::TArrayNif<CTaggedInheritableTypeField*> m_vecMemberField;
-		Niflect::TArrayNif<CTaggedInheritableTypeMethod*> m_vecMemberMethod;
+		Niflect::TArray<CTaggedInheritableTypeField*> m_vecMemberField;
+		Niflect::TArray<CTaggedInheritableTypeMethod*> m_vecMemberMethod;
 #ifdef PORTING_ACCESS_METHOD
-		Niflect::TArrayNif<CTaggedInheritableTypeAccessMethod*> m_vecMemberAccessMethod;
+		Niflect::TArray<CTaggedInheritableTypeAccessMethod*> m_vecMemberAccessMethod;
 #endif
-		Niflect::TArrayNif<CResolvedCursorNode> m_vecMemberIndexedRoot;
+		Niflect::TArray<CResolvedCursorNode> m_vecMemberIndexedRoot;
+		Niflect::TArray<CResolvedMethod> m_vecResomethod;
 		uint32 m_generatedBodyLineNumber;
 	};
 }

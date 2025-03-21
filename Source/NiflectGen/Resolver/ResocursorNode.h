@@ -33,6 +33,7 @@ namespace NiflectGen
 		Niflect::CString GetCreateTypeAccessorFuncName(const Niflect::CString& prefix) const;
 		Niflect::CString GetStaticGetTypeFuncName(const Niflect::CString& prefix) const;
 		bool IsTaggedType() const;
+		Niflect::CString GetResocursorInstanceName() const;
 
 	public:
 		const Niflect::TArrayNif<Niflect::CString>& DebugGetHeaderFilePaths() const { return m_vecRequiredHeaderFilePath; }
@@ -44,6 +45,8 @@ namespace NiflectGen
 		Niflect::TArrayNif<CResolvedCursorNode> m_vecChild;
 		Niflect::CString m_key;
 		Niflect::CString m_resocursorName;
+		Niflect::CString m_qualifiers;
+		Niflect::CString m_referenceModifier;
 		//要求与 m_vecChild 互斥, 即无法支持容器模板含成员变量, 而结构模板可含成员变量
 		CSharedResolvedCursorNode m_elem;
 

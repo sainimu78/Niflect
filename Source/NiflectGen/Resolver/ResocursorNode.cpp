@@ -17,6 +17,17 @@ namespace NiflectGen
 			m_vecRequiredHeaderFilePath.push_back(headerFilePath);
 		}
 	}
+	Niflect::CString CResolvedCursorNode::GetResocursorInstanceName() const
+	{
+		ASSERT(!m_resocursorName.empty());
+		Niflect::CString result;
+		if (!m_qualifiers.empty())
+			result += m_qualifiers + " ";
+		result += m_resocursorName;
+		if (!m_referenceModifier.empty())
+			result += m_referenceModifier;
+		return result;
+	}
 	void CResolvedCursorNode::InitForTemplateBegin(const Niflect::CString& signature)
 	{
 		ASSERT(m_key.empty());

@@ -84,7 +84,7 @@ namespace NiflectGen
 	}
 	Niflect::CString CTaggedType::GetInvokeCtorAddr(const Niflect::CString& resocursorName) const
 	{
-		return "&GenericInstanceInvokeConstructor<" + resocursorName + ">";
+		return NIFLECTFRAMEWORK_TEMPLATEFUNCADDR_InvokeConstructorL + resocursorName + ">";
 	}
 
 	void CTaggedTypesMapping::Resolve()
@@ -189,6 +189,46 @@ namespace NiflectGen
 			accessStr = "private"; break;
 		}
 		printf(", %s, %s", memberTypeStr, accessStr);
+	}
+
+	class CMethodParmNode : public CTaggedNode2
+	{
+		typedef CTaggedNode2 inherited;
+	public:
+		CMethodParmNode(CTaggedInheritableTypeMethod* owner, uint32 detailIdx)
+			: m_owner(owner)
+			, m_detailIdx(detailIdx)
+		{
+
+		}
+		virtual bool CollectSibling(const CXCursor& cursor, const STaggedNodeCollectingContext& context) override
+		{
+			m_owner->m_vecParamDetailCursors[m_detailIdx].m_vecDetail.push_back(cursor);
+			return false;
+		}
+
+		CTaggedInheritableTypeMethod* m_owner;
+		uint32 m_detailIdx;
+	};
+
+	CTaggedInheritableTypeMethod::CTaggedInheritableTypeMethod()
+		: m_stage(EStage::ResultDetail)
+	{
+	}
+	bool CTaggedInheritableTypeMethod::CollectSibling(const CXCursor& cursor, const STaggedNodeCollectingContext& context)
+	{
+		auto kind = clang_getCursorKind(cursor);
+		if (kind == CXCursor_ParmDecl)
+		{
+			uint32 idx = static_cast<uint32>(m_vecParamDetailCursors.size());
+			auto taggedChild = Niflect::MakeShared<CMethodParmNode>(this, idx);
+			this->AddChildAndInitDefault(taggedChild, cursor, g_invalidCursor);
+			m_vecParamDetailCursors.push_back(SParamDetailCursors());
+			auto& paramDetailCursors = m_vecParamDetailCursors.back();
+			paramDetailCursors.m_parmDecl = cursor;
+			return true;
+		}
+		return inherited::CollectSibling(cursor, context);
 	}
 
 	CUntaggedTemplate::CUntaggedTemplate()

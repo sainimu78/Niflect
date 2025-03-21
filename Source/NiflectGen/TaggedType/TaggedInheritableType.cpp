@@ -87,6 +87,26 @@ namespace NiflectGen
 			DebugPrintIndexedNodeRecurs(*elem, indexedParent, mapping, lv);
 		}
 	}
+	struct SResolveByABMContext
+	{
+		const CResolvedCursorNode& m_taggedTypeResoroot;
+		const CXCursor& m_fieldOrArgCursor;
+		const CXType& m_fieldOrArgCXType;
+		const CResolvingDependenciesContext& m_resolvingCtx;
+		const CCursorArray& m_vecDetailCursor;
+	};
+	static bool ResolveByAccessorBindingMapping(const SResolveByABMContext& ctx, SResolvingDependenciesData& data, CResolvedCursorNode& outResonode)
+	{
+		SResonodesInitContext asMapCtx{ ctx.m_resolvingCtx.m_log };
+		auto& mappings = ctx.m_resolvingCtx.m_mappings;
+		mappings.m_accessorSetting.InitIndexedNodeForField(asMapCtx, ctx.m_taggedTypeResoroot, ctx.m_fieldOrArgCXType, ctx.m_vecDetailCursor, mappings.m_tagged, mappings.m_untaggedTemplate, mappings.m_aliasChain, outResonode);
+		if (outResonode.IsValid())
+		{
+			ResolveSignature(outResonode, ctx.m_resolvingCtx, data.m_signatureMapping);
+			return true;
+		}
+		return false;
+	}
 	void CTaggedInheritableType::ResolveDependcies(const CResolvingDependenciesContext& context, SResolvingDependenciesData& data)
 	{
 		//基类
@@ -115,24 +135,65 @@ namespace NiflectGen
 		m_vecMemberIndexedRoot.resize(m_vecMemberField.size());
 		for (uint32 idx0 = 0; idx0 < m_vecMemberField.size(); ++idx0)
 		{
+//			auto& it0 = m_vecMemberField[idx0];
+//			auto& indexedRoot = m_vecMemberIndexedRoot[idx0];
+//			auto& fieldCursor = it0->GetCursor();
+//			auto fieldCXType = clang_getCursorType(fieldCursor);
+//			SResonodesInitContext asMapCtx{ context.m_log };
+//			context.m_mappings.m_accessorSetting.InitIndexedNodeForField(asMapCtx, m_taggedResoRoot, fieldCXType, it0->m_vecDetailCursor, taggedMapping, context.m_mappings.m_untaggedTemplate, context.m_mappings.m_aliasChain, indexedRoot);
+//			if (!indexedRoot.IsValid())
+//			{
+//#ifdef FIELD_TYPE_CAN_BE_ALIAS_OF_BINDING_TYPE_IN_AS
+//#else
+//				//不计划支持 Field 的类型为 BindingType 的别名, 因为这样可能滥用别名, 导致与 AccessorBinding 的对应关系不直观, 如需要使用别名, 应在 AccessorBinding 中指定, 在 Field 中使用时, 应直接使用别名
+//				//如认为确实需要实现支持此用法, 可考虑在查找过程中, 引入逐级 aliasChain 查找对应的 BindingType
+//#endif
+//				GenLogError(context.m_log, GetCursorLogLocationInfo(fieldCursor), NiflectUtil::FormatString("The accessor of the field %s::%s is not specified", m_resocursorName.c_str(), CXStringToCString(clang_getCursorSpelling(fieldCursor)).c_str()));
+//				break;
+//			}
+//			//DebugPrintIndexedNodeRecurs(indexedRoot, indexedRoot, context.m_bindingAccessorMapping, 0);
+//			ResolveSignature(indexedRoot, context, data.m_signatureMapping);
+
+
 			auto& it0 = m_vecMemberField[idx0];
-			auto& indexedRoot = m_vecMemberIndexedRoot[idx0];
 			auto& fieldCursor = it0->GetCursor();
-			SResonodesInitContext asMapCtx{ context.m_log };
-			context.m_mappings.m_accessorSetting.InitIndexedNodeForField(asMapCtx, m_taggedResoRoot, fieldCursor, it0->m_vecDetailCursor, taggedMapping, context.m_mappings.m_untaggedTemplate, context.m_mappings.m_aliasChain, indexedRoot);
-			if (!indexedRoot.IsValid())
-			{
-#ifdef FIELD_TYPE_CAN_BE_ALIAS_OF_BINDING_TYPE_IN_AS
-#else
-				//不计划支持 Field 的类型为 BindingType 的别名, 因为这样可能滥用别名, 导致与 AccessorBinding 的对应关系不直观, 如需要使用别名, 应在 AccessorBinding 中指定, 在 Field 中使用时, 应直接使用别名
-				//如认为确实需要实现支持此用法, 可考虑在查找过程中, 引入逐级 aliasChain 查找对应的 BindingType
-#endif
+			SResolveByABMContext itemCtx{ m_taggedResoRoot, fieldCursor, clang_getCursorType(fieldCursor), context, it0->m_vecDetailCursor };
+			if (!ResolveByAccessorBindingMapping(itemCtx, data, m_vecMemberIndexedRoot[idx0]))
 				GenLogError(context.m_log, GetCursorLogLocationInfo(fieldCursor), NiflectUtil::FormatString("The accessor of the field %s::%s is not specified", m_resocursorName.c_str(), CXStringToCString(clang_getCursorSpelling(fieldCursor)).c_str()));
-				break;
-			}
-			//DebugPrintIndexedNodeRecurs(indexedRoot, indexedRoot, context.m_bindingAccessorMapping, 0);
-			ResolveSignature(indexedRoot, context, data.m_signatureMapping);
 		}
+
+		//m_vecResomethod.resize(m_vecMemberMethod.size());
+		//for (uint32 idx0 = 0; idx0 < m_vecMemberMethod.size(); ++idx0)
+		//{
+		//	auto& it0 = m_vecMemberMethod[idx0];
+		//	auto& methodCursor = it0->GetCursor();
+		//	auto& resomethod = m_vecResomethod[idx0];
+		//	auto resCXType = clang_getCursorResultType(methodCursor);
+		//	ASSERT(resCXType.kind != CXType_Invalid);
+		//	if (resCXType.kind != CXType_Void)
+		//	{
+		//		CXCursor resCursor = clang_getTypeDeclaration(resCXType);
+		//		SResolveByABMContext itemCtx{ m_taggedResoRoot, resCursor, resCXType, context, it0->m_vecDetailCursor };
+		//		if (!ResolveByAccessorBindingMapping(itemCtx, data, resomethod.m_resultType))
+		//			GenLogError(context.m_log, GetCursorLogLocationInfo(resCursor), NiflectUtil::FormatString("The accessor is not specified for the result type of %s::%s", m_resocursorName.c_str(), CXStringToCString(clang_getCursorSpelling(methodCursor)).c_str()));
+		//	}
+		//	uint32 argsCount = clang_Cursor_getNumArguments(methodCursor);
+		//	resomethod.m_vecArgument.resize(argsCount);
+		//	for (uint32 idx1 = 0; idx1 < argsCount; ++idx1)
+		//	{
+		//		CXCursor argCursor = clang_Cursor_getArgument(methodCursor, idx1);
+		//		SResolveByABMContext itemCtx{ m_taggedResoRoot, argCursor, clang_getCursorType(argCursor), context, it0->GetArgsDetailCursors()[idx1].m_vecDetail };
+		//		if (!ResolveByAccessorBindingMapping(itemCtx, data, resomethod.m_vecArgument[idx1]))
+		//			GenLogError(context.m_log, GetCursorLogLocationInfo(argCursor), NiflectUtil::FormatString("The accessor is not specified for the argument '%s' of %s::%s", CXStringToCString(clang_getCursorSpelling(argCursor)).c_str(), m_resocursorName.c_str(), CXStringToCString(clang_getCursorSpelling(methodCursor)).c_str()));
+		//	}
+
+		//	printf("Method: %s\n", CXStringToCString(clang_getCursorSpelling(methodCursor)).c_str());
+		//	if (resomethod.m_resultType.IsValid())
+		//		printf("Result: %s\n", resomethod.m_resultType.GetResocursorInstanceName().c_str());
+		//	for (uint32 idx1 = 0; idx1 < resomethod.m_vecArgument.size(); ++idx1)
+		//		printf("Arg[%u]: %s\n", idx1, resomethod.m_vecArgument[idx1].GetResocursorInstanceName().c_str());
+		//	printf("--------------------------------\n");
+		//}
 
 		//在后执行, 仅为使成员依赖的类型先注册, 实际上顺序并不重要, 但认为依赖出现在前更方便查看
 		inherited::ResolveDependcies(context, data);

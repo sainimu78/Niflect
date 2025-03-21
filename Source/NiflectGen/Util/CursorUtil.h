@@ -55,4 +55,6 @@ namespace NiflectGen
 	Niflect::CString GetMacroExpansionTokensInString(const CXCursor& cursor);
 
 	CLogLocationInfo GetCursorLogLocationInfo(const CXCursor& cursor);
+	
+	void CollectSubCursorChildrenFirstLevel(const CXCursor& typeAliasTemplateCursor, Niflect::TArray<CXCursor>& vecChild);
 }

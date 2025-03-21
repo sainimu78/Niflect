@@ -108,6 +108,7 @@ namespace NiflectGen
 			, m_aliasChain(aliasChain)
 			, m_outDetailIteratingIdx(detailIteratingIdx)
 			, m_continuing(true)
+			, m_originalOrDereferencedCXTypeToFind{}
 		{
 		}
 
@@ -117,6 +118,7 @@ namespace NiflectGen
 		const CAliasChain& m_aliasChain;
 		uint32& m_outDetailIteratingIdx;
 		bool m_continuing;
+		CXType m_originalOrDereferencedCXTypeToFind;
 	};
 
 	class CCollectedAccessorSettings
@@ -182,7 +184,7 @@ namespace NiflectGen
 	{
 	public:
 		void InitPatterns();
-		void InitIndexedNodeForField(const SResonodesInitContext& context, const CResolvedCursorNode& parentResonode, const CXCursor& fieldCursor, const Niflect::TArrayNif<CXCursor>& vecDetailCursor, const CTaggedTypesMapping& taggedMapping, const CUntaggedTemplatesMapping& untaggedTemplateMapping, const CAliasChain& aliasChain, CResolvedCursorNode& resultIndexedParent) const;
+		void InitIndexedNodeForField(const SResonodesInitContext& context, const CResolvedCursorNode& parentResonode, const CXType& fieldCXType, const Niflect::TArrayNif<CXCursor>& vecDetailCursor, const CTaggedTypesMapping& taggedMapping, const CUntaggedTemplatesMapping& untaggedTemplateMapping, const CAliasChain& aliasChain, CResolvedCursorNode& resultIndexedParent) const;
 
 	private:
 		bool IterateForTemplate(const SResonodesInitContext& context, const CXType& fieldOrArgCXType, const Niflect::TArrayNif<CXCursor>& vecDetailCursor, const CTaggedTypesMapping& taggedMapping, const CUntaggedTemplatesMapping& untaggedTemplateMapping, const CAliasChain& aliasChain, CResolvedCursorNode& resultIndexedParent, uint32& detailIteratingIdx) const;
@@ -191,7 +193,10 @@ namespace NiflectGen
 #else
 		bool InitResocursorNodeIfFound(CAccessorBindingFindingContext& ctx, CResolvedCursorNode& resocursorNode) const;
 #endif
-		void FindBindingTypeRecurs(const SResonodesInitContext& context, const CResolvedCursorNode& parentResonode, const CXType& fieldOrArgCXType, const Niflect::TArrayNif<CXCursor>& vecDetailCursor, const CTaggedTypesMapping& taggedMapping, const CUntaggedTemplatesMapping& untaggedTemplateMapping, const CAliasChain& aliasChain, CResolvedCursorNode& resultIndexedParent, uint32& detailIteratingIdx) const;
+		void FindBindingTypeRecurs(const SResonodesInitContext& context, const CResolvedCursorNode& parentResonode, const CXType& fieldOrArgCXType2, const Niflect::TArrayNif<CXCursor>& vecDetailCursor, const CTaggedTypesMapping& taggedMapping, const CUntaggedTemplatesMapping& untaggedTemplateMapping, const CAliasChain& aliasChain, CResolvedCursorNode& resultIndexedParent, uint32& detailIteratingIdx) const;
+
+	public:
+		static CPointerCursor GetPointerCursor(const CXType& pointerType, Niflect::CString& qualifiers);
 
 	public:
 		CCollectedAccessorSettings m_settings;
@@ -209,6 +214,4 @@ namespace NiflectGen
 		const CUntaggedTemplatesMapping& m_untaggedTemplate;
 		const CAliasChain& m_aliasChain;
 	};
-
-	CPointerCursor GetPointerCursorFromPointerType(const CXType& pointerType);
 }

@@ -442,4 +442,15 @@ namespace NiflectGen
 		auto filePathAbs = CXStringToCString(clang_getFileName(cxFile));
 		return CLogLocationInfo(filePathAbs, line, column);
 	}
+	void CollectSubCursorChildrenFirstLevel(const CXCursor& typeAliasTemplateCursor, Niflect::TArray<CXCursor>& vecChild) {
+		clang_visitChildren(
+			typeAliasTemplateCursor,
+			[](CXCursor c, CXCursor parent, CXClientData client_data) {
+				auto& vecChild = *static_cast<Niflect::TArray<CXCursor>*>(client_data);
+				vecChild.push_back(c);
+				return CXChildVisit_Continue;
+			},
+			&vecChild
+		);
+	}
 }

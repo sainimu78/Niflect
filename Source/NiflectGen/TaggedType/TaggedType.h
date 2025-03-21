@@ -121,14 +121,42 @@ namespace NiflectGen
 		}
 	};
 
+	struct SParamDetailCursors
+	{
+		CXCursor m_parmDecl;
+		CCursorArray m_vecDetail;
+	};
+
 	class CTaggedInheritableTypeMethod : public CTaggedInheritableTypeMember
 	{
 		typedef CTaggedInheritableTypeMember inherited;
+		friend class CMethodParmNode;
+	public:
+		CTaggedInheritableTypeMethod();
+
+	public:
+		virtual bool CollectSibling(const CXCursor& cursor, const STaggedNodeCollectingContext& context) override;
+
+	public:
+		const CCursorArray& GetResultDetailCursors() const { return m_vecDetailCursor; }
+		const Niflect::TArray<SParamDetailCursors>& GetArgsDetailCursors() const { return m_vecParamDetailCursors; }
+
 	public:
 		static CTaggedInheritableTypeMethod* CastChecked(CTaggedNode2* base)
 		{
 			return dynamic_cast<CTaggedInheritableTypeMethod*>(base);
 		}
+
+	private:
+		enum class EStage
+		{
+			ResultDetail,
+			ParmDetail,
+		};
+
+	private:
+		Niflect::TArray<SParamDetailCursors> m_vecParamDetailCursors;
+		EStage m_stage;
 	};
 
 #ifdef PORTING_ACCESS_METHOD
