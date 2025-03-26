@@ -35,8 +35,8 @@ namespace NiflectGen
 	private:
 		CXCursor m_baseTypeSpecifierCursor;
 		CTaggedType* m_baseTaggedType;
-		Niflect::TArray<CTaggedInheritableTypeField*> m_vecMemberField;
-		Niflect::TArray<CTaggedInheritableTypeMethod*> m_vecMemberMethod;
+		Niflect::TArray<CTaggedInheritableTypeField*> m_vecField;
+		Niflect::TArray<CTaggedInheritableTypeMethod*> m_vecMethod;
 #ifdef PORTING_ACCESS_METHOD
 		Niflect::TArray<CTaggedInheritableTypeAccessMethod*> m_vecMemberAccessMethod;
 #endif

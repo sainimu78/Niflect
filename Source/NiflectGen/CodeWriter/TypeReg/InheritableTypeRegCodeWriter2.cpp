@@ -13,12 +13,16 @@ namespace NiflectGen
 #ifdef PORTING_ACCESS_METHOD
 		, const Niflect::TArrayNif<CTaggedInheritableTypeAccessMethod*>& vecAccessMethod
 #endif
+		, const Niflect::TArray<CResolvedMethod>& vecResomethod
+		, const Niflect::TArray<CTaggedInheritableTypeMethod*>& vecMethod
 	)
 		: m_vecFieldResocursorNode(vecFieldResocursorNode)
 		, m_vecField(vecField)
 #ifdef PORTING_ACCESS_METHOD
 		, m_vecAccessMethod(vecAccessMethod)
 #endif
+		, m_vecResomethod(vecResomethod)
+		, m_vecMethod(vecMethod)
 		, m_baseTaggedType(baseTaggedType)
 		, m_generatedBodyLineNumber(generatedBodyLineNumber)
 	{
@@ -232,6 +236,10 @@ namespace NiflectGen
 
 			WriteNextInitChildAccessor2(m_bindingTypeIndexedRoot->m_resocursorName, fieldStaticGetTypeFuncName, fieldName, linesNata, data.m_linesResoBodyCode);
 		}
+		for (uint32 idx = 0; idx < m_vecResomethod.size(); ++idx)
+		{
+
+		}
 	}
 	void CInheritableTypeRegCodeWriter2::CollectDependencyHeaderFilePathAddrs(CDependencyHeaderFilePathAddrs& dependencyHeaderFilePathAddrs) const
 	{
@@ -288,6 +296,14 @@ namespace NiflectGen
 			}
 			MapLabelToText(map, LABEL_2, codeGetType);
 			MapLabelToText(map, LABEL_3, m_baseTaggedType->m_resocursorName);
+			{
+				//有必要不支持并提示 struct 从 class 或反之的继承?
+				Niflect::CString baseInfoTypeName;
+				if (m_resolvedData->m_taggedMapping.GetDerivedInfoTypeName(m_baseTaggedType->m_taggedResoRoot.m_taggedTypeIndex, baseInfoTypeName))
+					MapLabelToText(map, LABEL_7, baseInfoTypeName);
+				else
+					ASSERT(false);
+			}
 			Niflect::TSet<Niflect::CString> setReplacedLabel;
 			tpl1.ReplaceLabels(map, data.m_lines, &setReplacedLabel);
 		}

@@ -60,6 +60,10 @@ namespace NiflectGen
 			else if (kind == CXCursor_Constructor)
 			{
 				m_vecIsDefaultCtor.push_back(clang_CXXConstructor_isDefaultConstructor(cursor));
+				auto taggedChild = Niflect::MakeShared<CTaggedInheritableTypeMethod>();
+				taggedChild->InitMember(m_lastAccessSpecifier);
+				this->AddChildAndInitDefault(taggedChild, cursor, g_invalidCursor);
+				addedTaggedChild = true;
 			}
 			else if (kind == CXCursor_CXXAccessSpecifier)
 			{
@@ -73,14 +77,7 @@ namespace NiflectGen
 		else if (m_stage == EStage::FoundMember)
 		{
 			this->ErrorIfNoGeneratedBodyTag(cursor);
-
-			bool ok = false;
-			auto kind = clang_getCursorKind(cursor);
-			if (kind == CXCursor_FieldDecl)
-				ok = true;
-			else if (kind == CXCursor_CXXMethod)
-				ok = true;
-			if (ok)
+			if (m_createdTaggedChild != NULL)
 			{
 				CXCursor macroCursor;
 #ifdef SIMPLIFIED_MACRO_CURSOR_FINDING
@@ -90,8 +87,8 @@ namespace NiflectGen
 #endif
 				m_createdTaggedChild->InitMember(m_lastAccessSpecifier);
 				this->AddChildAndInitDefault(m_createdTaggedChild, cursor, macroCursor);
-				m_stage = EStage::None;
 				addedTaggedChild = true;
+				m_stage = EStage::None;
 			}
 			else
 			{

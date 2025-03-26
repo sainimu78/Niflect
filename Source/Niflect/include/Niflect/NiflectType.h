@@ -425,6 +425,6 @@ namespace Niflect
 		}
 
 	public:
-		TArrayNif<CNiflectMethod2> m_vecMethod;
+		TArray<CNiflectMethod> m_vecMethod;
 	};
 }

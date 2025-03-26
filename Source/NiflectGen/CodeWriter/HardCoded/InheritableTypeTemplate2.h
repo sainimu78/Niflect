@@ -12,6 +12,7 @@ namespace NiflectGen
 #define LABEL_5 "FieldName"
 #define LABEL_6 "FuncName"
 #endif
+#define LABEL_7 "BaseInfoType"
 
 	namespace HardCodedTemplate
 	{
@@ -21,7 +22,7 @@ namespace NiflectGen
 "" MAKELABEL(LABEL_1) "::Cast(StaticGetType<" MAKELABEL(LABEL_0) ">())";
 		static const char* InitTypeCode =
 "auto type = " MAKELABEL(LABEL_2) R"(;
-type->InitInheritableTypeMeta(CInheritableType::Cast(StaticGetType<)" MAKELABEL(LABEL_3) ">()));";
+type->InitInheritableTypeMeta()" MAKELABEL(LABEL_7) "::Cast(StaticGetType<" MAKELABEL(LABEL_3) ">()));";
 #ifdef PORTING_GETTER_SETTER_DEFAULTVALUE
 		static const char* GetterFunc =
 "" MAKELABEL(LABEL_4) " " MAKELABEL(LABEL_6) R"(() const

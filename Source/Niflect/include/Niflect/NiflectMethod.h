@@ -23,29 +23,29 @@
 //}
 
 #pragma once
-#include "Niflect/NiflectBase.h"
+#include "Niflect/Base/Array.h"
 #include "Niflect/NiflectAddr.h"
 
 namespace Niflect
 {
 	class CNiflectType;
 
-	class CNiflectMethod2
+	class CNiflectMethod
 	{
 		using InstanceType = CAddrOffset::DummyType;
 		using OffsetType = CAddrOffset::OffsetType;
-		typedef void (*InvokeMethodFunc2)(InstanceType* obj, InstanceType** inputInstanceArray, InstanceType** ouputInstanceArray, const TArrayNif<CNiflectType*>& vecInputType, const TArrayNif<CNiflectType*>& vecOutputType);
+		typedef void (*InvokeMethodFunc)(InstanceType* obj, InstanceType** inputInstanceArray, InstanceType** ouputInstanceArray, const TArray<CNiflectType*>& vecInputType, const TArray<CNiflectType*>& vecOutputType);
 	public:
-		CNiflectMethod2()
+		CNiflectMethod()
 			: m_InvokeFunc(NULL)
 		{
 		}
-		void Invoke(InstanceType* obj, InstanceType** inputInstanceArray, InstanceType** ouputInstanceArray) const
+		inline void Invoke(InstanceType* obj, InstanceType** inputInstanceArray, InstanceType** ouputInstanceArray) const
 		{
 			m_InvokeFunc(obj, inputInstanceArray, ouputInstanceArray, m_vecInputType, m_vecOutputType);
 		}
-		TArrayNif<CNiflectType*> m_vecInputType;
-		TArrayNif<CNiflectType*> m_vecOutputType;
-		InvokeMethodFunc2 m_InvokeFunc;
+		TArray<CNiflectType*> m_vecInputType;
+		TArray<CNiflectType*> m_vecOutputType;
+		InvokeMethodFunc m_InvokeFunc;
 	};
 }

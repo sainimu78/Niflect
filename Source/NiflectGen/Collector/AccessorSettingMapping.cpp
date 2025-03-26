@@ -154,7 +154,7 @@ namespace NiflectGen
 		{
 			//对于引用修饰则用于查找的类型为其所指类型, 这与对指针的处理是不同的
 			TryGetReferenceModifierCXType(ctx.m_fieldOrArgCXType, ctx.m_originalOrDereferencedCXTypeToFind, resocursorNode.m_qualifiers, resocursorNode.m_referenceModifier);
-			const auto& cxTypeToFind = ctx.m_originalOrDereferencedCXTypeToFind;
+			const auto cxTypeToFind = clang_getUnqualifiedType(ctx.m_originalOrDereferencedCXTypeToFind);//避免含 qualifier(const) 影响而查找失败
 			auto itFound = m_mapCXTypeToIndex.find(cxTypeToFind);
 			if (itFound != m_mapCXTypeToIndex.end())
 			{

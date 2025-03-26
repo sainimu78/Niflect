@@ -118,22 +118,22 @@ namespace NiflectGen
 			m_baseTaggedType = taggedMapping.m_vecType[itFound->second];
 
 		//成员变量
-		ASSERT(m_vecMemberField.size() == 0);
+		ASSERT(m_vecField.size() == 0);
 		for (auto& it : m_vecChild)
 		{
 			//嵌套类型也为taggedType的子节点
 			if (auto member = CTaggedInheritableTypeField::CastChecked(it.Get()))
-				m_vecMemberField.push_back(member);
+				m_vecField.push_back(member);
 			else if (auto member = CTaggedInheritableTypeMethod::CastChecked(it.Get()))
-				m_vecMemberMethod.push_back(member);
+				m_vecMethod.push_back(member);
 #ifdef PORTING_ACCESS_METHOD
 			else if (auto member = CTaggedInheritableTypeAccessMethod::CastChecked(it.Get()))
 				m_vecMemberAccessMethod.push_back(member);
 #endif
 		}
 
-		m_vecMemberIndexedRoot.resize(m_vecMemberField.size());
-		for (uint32 idx0 = 0; idx0 < m_vecMemberField.size(); ++idx0)
+		m_vecMemberIndexedRoot.resize(m_vecField.size());
+		for (uint32 idx0 = 0; idx0 < m_vecField.size(); ++idx0)
 		{
 //			auto& it0 = m_vecMemberField[idx0];
 //			auto& indexedRoot = m_vecMemberIndexedRoot[idx0];
@@ -155,45 +155,45 @@ namespace NiflectGen
 //			ResolveSignature(indexedRoot, context, data.m_signatureMapping);
 
 
-			auto& it0 = m_vecMemberField[idx0];
+			auto& it0 = m_vecField[idx0];
 			auto& fieldCursor = it0->GetCursor();
 			SResolveByABMContext itemCtx{ m_taggedResoRoot, fieldCursor, clang_getCursorType(fieldCursor), context, it0->m_vecDetailCursor };
 			if (!ResolveByAccessorBindingMapping(itemCtx, data, m_vecMemberIndexedRoot[idx0]))
 				GenLogError(context.m_log, GetCursorLogLocationInfo(fieldCursor), NiflectUtil::FormatString("The accessor of the field %s::%s is not specified", m_resocursorName.c_str(), CXStringToCString(clang_getCursorSpelling(fieldCursor)).c_str()));
 		}
 
-		//m_vecResomethod.resize(m_vecMemberMethod.size());
-		//for (uint32 idx0 = 0; idx0 < m_vecMemberMethod.size(); ++idx0)
-		//{
-		//	auto& it0 = m_vecMemberMethod[idx0];
-		//	auto& methodCursor = it0->GetCursor();
-		//	auto& resomethod = m_vecResomethod[idx0];
-		//	auto resCXType = clang_getCursorResultType(methodCursor);
-		//	ASSERT(resCXType.kind != CXType_Invalid);
-		//	if (resCXType.kind != CXType_Void)
-		//	{
-		//		CXCursor resCursor = clang_getTypeDeclaration(resCXType);
-		//		SResolveByABMContext itemCtx{ m_taggedResoRoot, resCursor, resCXType, context, it0->m_vecDetailCursor };
-		//		if (!ResolveByAccessorBindingMapping(itemCtx, data, resomethod.m_resultType))
-		//			GenLogError(context.m_log, GetCursorLogLocationInfo(resCursor), NiflectUtil::FormatString("The accessor is not specified for the result type of %s::%s", m_resocursorName.c_str(), CXStringToCString(clang_getCursorSpelling(methodCursor)).c_str()));
-		//	}
-		//	uint32 argsCount = clang_Cursor_getNumArguments(methodCursor);
-		//	resomethod.m_vecArgument.resize(argsCount);
-		//	for (uint32 idx1 = 0; idx1 < argsCount; ++idx1)
-		//	{
-		//		CXCursor argCursor = clang_Cursor_getArgument(methodCursor, idx1);
-		//		SResolveByABMContext itemCtx{ m_taggedResoRoot, argCursor, clang_getCursorType(argCursor), context, it0->GetArgsDetailCursors()[idx1].m_vecDetail };
-		//		if (!ResolveByAccessorBindingMapping(itemCtx, data, resomethod.m_vecArgument[idx1]))
-		//			GenLogError(context.m_log, GetCursorLogLocationInfo(argCursor), NiflectUtil::FormatString("The accessor is not specified for the argument '%s' of %s::%s", CXStringToCString(clang_getCursorSpelling(argCursor)).c_str(), m_resocursorName.c_str(), CXStringToCString(clang_getCursorSpelling(methodCursor)).c_str()));
-		//	}
+		m_vecResomethod.resize(m_vecMethod.size());
+		for (uint32 idx0 = 0; idx0 < m_vecMethod.size(); ++idx0)
+		{
+			auto& it0 = m_vecMethod[idx0];
+			auto& methodCursor = it0->GetCursor();
+			auto& resomethod = m_vecResomethod[idx0];
+			auto resCXType = clang_getCursorResultType(methodCursor);
+			ASSERT(resCXType.kind != CXType_Invalid);
+			if (resCXType.kind != CXType_Void)
+			{
+				CXCursor resCursor = clang_getTypeDeclaration(resCXType);
+				SResolveByABMContext itemCtx{ m_taggedResoRoot, resCursor, resCXType, context, it0->m_vecDetailCursor };
+				if (!ResolveByAccessorBindingMapping(itemCtx, data, resomethod.m_resultType))
+					GenLogError(context.m_log, GetCursorLogLocationInfo(resCursor), NiflectUtil::FormatString("The accessor is not specified for the result type of %s::%s", m_resocursorName.c_str(), CXStringToCString(clang_getCursorSpelling(methodCursor)).c_str()));
+			}
+			uint32 argsCount = clang_Cursor_getNumArguments(methodCursor);
+			resomethod.m_vecArgument.resize(argsCount);
+			for (uint32 idx1 = 0; idx1 < argsCount; ++idx1)
+			{
+				CXCursor argCursor = clang_Cursor_getArgument(methodCursor, idx1);
+				SResolveByABMContext itemCtx{ m_taggedResoRoot, argCursor, clang_getCursorType(argCursor), context, it0->GetArgsDetailCursors()[idx1].m_vecDetail };
+				if (!ResolveByAccessorBindingMapping(itemCtx, data, resomethod.m_vecArgument[idx1]))
+					GenLogError(context.m_log, GetCursorLogLocationInfo(argCursor), NiflectUtil::FormatString("The accessor is not specified for the argument '%s' of %s::%s", CXStringToCString(clang_getCursorSpelling(argCursor)).c_str(), m_resocursorName.c_str(), CXStringToCString(clang_getCursorSpelling(methodCursor)).c_str()));
+			}
 
-		//	printf("Method: %s\n", CXStringToCString(clang_getCursorSpelling(methodCursor)).c_str());
-		//	if (resomethod.m_resultType.IsValid())
-		//		printf("Result: %s\n", resomethod.m_resultType.GetResocursorInstanceName().c_str());
-		//	for (uint32 idx1 = 0; idx1 < resomethod.m_vecArgument.size(); ++idx1)
-		//		printf("Arg[%u]: %s\n", idx1, resomethod.m_vecArgument[idx1].GetResocursorInstanceName().c_str());
-		//	printf("--------------------------------\n");
-		//}
+			//printf("Method: %s\n", CXStringToCString(clang_getCursorSpelling(methodCursor)).c_str());
+			//if (resomethod.m_resultType.IsValid())
+			//	printf("Result: %s\n", resomethod.m_resultType.GetResocursorInstanceName().c_str());
+			//for (uint32 idx1 = 0; idx1 < resomethod.m_vecArgument.size(); ++idx1)
+			//	printf("Arg[%u]: %s\n", idx1, resomethod.m_vecArgument[idx1].GetResocursorInstanceName().c_str());
+			//printf("--------------------------------\n");
+		}
 
 		//在后执行, 仅为使成员依赖的类型先注册, 实际上顺序并不重要, 但认为依赖出现在前更方便查看
 		inherited::ResolveDependcies(context, data);
@@ -206,10 +206,12 @@ namespace NiflectGen
 		//return Niflect::MakeShared<CInheritableTypeRegCodeWriter_ObjectAccessor>(this->GetCursor(), setting, baseTypeCursorDecl, m_vecMember);
 
 		return Niflect::MakeShared<CInheritableTypeRegCodeWriter2>(m_vecMemberIndexedRoot, m_baseTaggedType, m_generatedBodyLineNumber
-			, m_vecMemberField
+			, m_vecField
 #ifdef PORTING_ACCESS_METHOD
 			, m_vecMemberAccessMethod
 #endif
+			, m_vecResomethod
+			, m_vecMethod
 		);
 	}
 	void CTaggedInheritableType::DebugDerivedPrint(FILE* fp) const
