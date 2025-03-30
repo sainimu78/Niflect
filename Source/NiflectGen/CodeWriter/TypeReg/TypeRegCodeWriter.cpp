@@ -316,10 +316,16 @@ namespace NiflectGen
 					ReplaceLabelToLines1(HardCodedTemplate::MacroBodyThisType, LABEL_9, resocursorNameForLastTemplateArg, md.m_linesBody);
 					data.m_lineNumberMacroData.m_vecMacroDefinitionData.push_back(md);
 				}
+				//{
+				//	CMacroDefinitionData md;
+				//	md.m_namePostfix = "ExposeToAccessor";
+				//	ReplaceLabelToLines1(HardCodedTemplate::MacroBodyExposeToAccessor, LABEL_9, resocursorNameForLastTemplateArg, md.m_linesBody);
+				//	data.m_lineNumberMacroData.m_vecMacroDefinitionData.push_back(md);
+				//}
 				{
 					CMacroDefinitionData md;
-					md.m_namePostfix = "ExposeToAccessor";
-					ReplaceLabelToLines1(HardCodedTemplate::MacroBodyExposeToAccessor, LABEL_9, resocursorNameForLastTemplateArg, md.m_linesBody);
+					md.m_namePostfix = "ExposeToCTypeBody";
+					md.m_linesBody.push_back(HardCodedTemplate::MacroBodyExposeToCTypeBody);
 					data.m_lineNumberMacroData.m_vecMacroDefinitionData.push_back(md);
 				}
 				{

@@ -63,6 +63,8 @@ CNiflectType* )" MAKELABEL(LABEL_2) R"(()
 "using CThis = " MAKELABEL(LABEL_9) ";";
 	static const char* MacroBodyExposeToAccessor =
 R"(friend Niflect::CSharedAccessor Niflect::)" NIFLECTFRAMEWORK_TEMPLATEFUNC_CTypeBody_CreateTypeAccessorL MAKELABEL(LABEL_9) ">();";
+	static const char* MacroBodyExposeToCTypeBody =
+"friend class Niflect::CTypeBody;";
 	static const char* MacroBodyAnotherExample0 =
 "using _DebugMyAnotherLineNumberMacroExpansionDecl = " MAKELABEL(LABEL_9) ";";
 	}

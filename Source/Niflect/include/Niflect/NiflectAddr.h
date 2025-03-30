@@ -1,12 +1,14 @@
 #pragma once
+#include <stddef.h>
 
 namespace Niflect
-{	
+{
+	using InstanceType = void;
+	using OffsetType = ptrdiff_t;
+
 	class CAddrOffset
 	{
 	public:
-		using DummyType = void;
-		using OffsetType = ptrdiff_t;
 		enum __InternalConst : OffsetType { None };
 
 	public:
@@ -28,11 +30,11 @@ namespace Niflect
 		}
 
 	public:
-		inline const DummyType* GetAddr(const DummyType*& base) const
+		inline const InstanceType* GetAddr(const InstanceType*& base) const
 		{
 			return static_cast<const char*>(base) + m_addrDiff;
 		}
-		inline DummyType* GetAddr(DummyType*& base) const
+		inline InstanceType* GetAddr(InstanceType*& base) const
 		{
 			return static_cast<char*>(base) + m_addrDiff;
 		}
@@ -42,13 +44,13 @@ namespace Niflect
 	};
 
 	template <typename U, typename T>
-	inline static CAddrOffset::OffsetType GetMemberVariableOffset(U T::*member)
+	inline static OffsetType GetMemberVariableOffset(U T::*member)
 	{
 		return (char*)&((T*)nullptr->*member) - (char*)nullptr;
 	}
 
 	template <typename U, typename T>
-	inline static CAddrOffset::OffsetType GetFieldOffset(U T::* member)
+	inline static OffsetType GetFieldOffset(U T::* member)
 	{
 		return (char*)&((T*)nullptr->*member) - (char*)nullptr;
 	}

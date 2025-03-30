@@ -32,8 +32,6 @@ namespace Niflect
 
 	class CNiflectMethod
 	{
-		using InstanceType = CAddrOffset::DummyType;
-		using OffsetType = CAddrOffset::OffsetType;
 		typedef void (*InvokeMethodFunc)(InstanceType* obj, InstanceType** inputInstanceArray, InstanceType** ouputInstanceArray, const TArray<CNiflectType*>& vecInputType, const TArray<CNiflectType*>& vecOutputType);
 	public:
 		CNiflectMethod()

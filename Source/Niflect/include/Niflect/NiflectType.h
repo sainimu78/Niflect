@@ -23,8 +23,6 @@ namespace Niflect
 
 	class CNiflectType
 	{
-		using InstanceType = CAddrOffset::DummyType;
-		using OffsetType = CAddrOffset::OffsetType;
 	public:
 		CNiflectType()
 			: m_table(NULL)

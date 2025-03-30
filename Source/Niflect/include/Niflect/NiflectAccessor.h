@@ -15,7 +15,6 @@ namespace Niflect
 
 	class CTypeLayout
 	{
-		using InstanceType = CAddrOffset::DummyType;
 	public:
 		bool AccessorsSaveToRwNode(const InstanceType* base, CRwNode* rw) const;
 		bool AccessorsLoadFromRwNode(InstanceType* base, const CRwNode* rw) const;
@@ -24,7 +23,6 @@ namespace Niflect
 
 	class CField
 	{
-		using InstanceType = CAddrOffset::DummyType;
 		friend class CNiflectType;
 	public:
 		void Init(const Niflect::CString& name, const CSharedNata& nata)
@@ -62,8 +60,8 @@ namespace Niflect
 	class CAccessor
 	{
 	protected:
-		using InstanceType = CAddrOffset::DummyType;
-		using OffsetType = CAddrOffset::OffsetType;
+		using InstanceType = Niflect::InstanceType;
+
 	public:
 		CAccessor()
 			: m_type(NULL)
@@ -245,6 +243,11 @@ namespace Niflect
 		{
 			static_assert(sizeof(TType) == 0, "This function must be specialized for type TType");//仅为避免 Intellisense 的绿线, 实际上只需要声明即可
 			return NULL;
+		}
+		template <typename TType, uint32 MethodIndex>
+		static void InvokeMethod(InstanceType* base, uint32 inputsCount, InstanceType** inputArray, uint32 outputsCount, InstanceType** outputArray)
+		{
+			static_assert(sizeof(TType) == 0, "This function must be specialized for type TType");//仅为避免 Intellisense 的绿线, 实际上只需要声明即可
 		}
 	};
 }
