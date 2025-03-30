@@ -237,6 +237,13 @@ namespace Niflect
 		return true;
 	}
 
-	template <typename TType>
-	CSharedAccessor CreateTypeAccessor();
+	class CTypeBody
+	{
+	public:
+		template <typename TType>
+		static CSharedAccessor CreateTypeAccessor()
+		{
+			static_assert(false);//仅为避免 Intellisense 的绿线, 实际上只需要声明即可
+		}
+	};
 }

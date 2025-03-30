@@ -38,8 +38,12 @@ namespace Niflect
 		return )" MAKELABEL(LABEL_1) R"(TRegisteredType<T>::s_type;
 	}
 
-	template <typename T>
-	CSharedAccessor )" MAKELABEL(LABEL_1) R"(CreateTypeAccessor();
+	class )" MAKELABEL(LABEL_1) R"(CTypeBody
+	{
+	public:
+		template <typename T>
+		static CSharedAccessor CreateTypeAccessor();
+	};
 
 	template <typename TType, typename TInfo>
 	void )" MAKELABEL(LABEL_1) R"(RegisterType(CNiflectTable* table, const Niflect::CString& id, const CreateTypeAccessorFunc& inCreateTypeAccessorFunc, const CSharedNata& nata)

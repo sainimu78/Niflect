@@ -1,5 +1,6 @@
 #pragma once
 #include "NiflectGen/CodeWriter/HardCoded/HardCodedTemplate.h"
+#include "NiflectGen/Base/NiflectGenDefinition.h"
 
 namespace NiflectGen
 {
@@ -61,7 +62,7 @@ CNiflectType* )" MAKELABEL(LABEL_2) R"(()
 	static const char* MacroBodyThisType =
 "using CThis = " MAKELABEL(LABEL_9) ";";
 	static const char* MacroBodyExposeToAccessor =
-R"(friend Niflect::CSharedAccessor Niflect::CreateTypeAccessor<)" MAKELABEL(LABEL_9) R"(>();)";
+R"(friend Niflect::CSharedAccessor Niflect::)" NIFLECTFRAMEWORK_TEMPLATEFUNC_CTypeBody_CreateTypeAccessorL MAKELABEL(LABEL_9) ">();";
 	static const char* MacroBodyAnotherExample0 =
 "using _DebugMyAnotherLineNumberMacroExpansionDecl = " MAKELABEL(LABEL_9) ";";
 	}

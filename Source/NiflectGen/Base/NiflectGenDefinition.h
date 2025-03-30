@@ -188,6 +188,7 @@ namespace NiflectGenDefinition
 			constexpr const char* CopyDerivedMeta = "MakeDerivedNata";
 		}
 #define NIFLECTFRAMEWORK_TEMPLATEFUNCADDR_InvokeConstructorL "&GenericInstanceInvokeConstructor<"
+#define NIFLECTFRAMEWORK_TEMPLATEFUNC_CTypeBody_CreateTypeAccessorL "CTypeBody::CreateTypeAccessor<"
 #ifdef PORTING_GETTER_SETTER_DEFAULTVALUE
 		namespace BuiltinMetadata
 		{

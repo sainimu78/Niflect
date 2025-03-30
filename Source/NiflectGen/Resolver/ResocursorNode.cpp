@@ -148,7 +148,7 @@ namespace NiflectGen
 	}
 	Niflect::CString CResolvedCursorNode::GetCreateTypeAccessorFuncName(const Niflect::CString& prefix) const
 	{
-		Niflect::CString funcName = "CreateTypeAccessor<" + this->GetResocursorNameForLastTemplateArg() + ">";
+		Niflect::CString funcName = NIFLECTFRAMEWORK_TEMPLATEFUNC_CTypeBody_CreateTypeAccessorL + this->GetResocursorNameForLastTemplateArg() + ">";
 		if (!this->IsTaggedType())
 			funcName = prefix + funcName;
 		return funcName;
