@@ -53,7 +53,7 @@ namespace Niflect
 			//ASSERT(TRegisteredType<TType>::IsValid());
 		}
 		template <typename TType, typename TInfo>
-		void RegisterTypeDetailed(const Niflect::CString& id, const CreateTypeAccessorFunc& inCreateTypeAccessorFunc, CStaticNiflectTypeAddr* staticTypePtrAddr, const CSharedNata& nata, void* InvokeConstructorFunc)
+		void RegisterTypeDetailed(const Niflect::CString& id, const CreateTypeAccessorFunc& inCreateTypeAccessorFunc, CStaticNiflectTypeAddr* staticTypePtrAddr, const CSharedNata& nata, const InvokeConstructorFunc& InvokeConstructorFunc)
 		{
 			STypeLifecycleMeta lifecycleMeta;
 			lifecycleMeta.m_typeSize = sizeof(TType);
@@ -68,7 +68,7 @@ namespace Niflect
 			this->InsertType(shared, idx);
 		}
 		template <typename TType, typename TInfo>
-		void RegisterTypeChecked(const Niflect::CString& id, const CreateTypeAccessorFunc& inCreateTypeAccessorFunc, const CSharedNata& nata, void* InvokeConstructorFunc)
+		void RegisterTypeChecked(const Niflect::CString& id, const CreateTypeAccessorFunc& inCreateTypeAccessorFunc, const CSharedNata& nata, const InvokeConstructorFunc& InvokeConstructorFunc)
 		{
 			ASSERT(!TRegisteredType<TType>::IsValid());
 			this->RegisterTypeDetailed<TType, TInfo>(id, inCreateTypeAccessorFunc, &TRegisteredType<TType>::s_type, nata, InvokeConstructorFunc);
