@@ -32,6 +32,9 @@ target_link_libraries(${ModuleName} PRIVATE TestModule0)
 list(APPEND v_ListModuleHeaderFilePath ${ModuleHeaders})
 include(${c_TestProjectRootDirPath}/TestIntegrateNiflectGenTool.cmake)
 
+include(${c_TestProjectRootDirPath}/Licensed_googletest.cmake)
+add_test(NAME ${ModuleName} COMMAND ${ModuleName})
+
 #include(${c_ProjectDirPath}/Install.cmake)
 
 #if(UNIX)

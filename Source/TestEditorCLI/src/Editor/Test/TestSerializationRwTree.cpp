@@ -75,8 +75,11 @@ namespace TestSerializationRwTree
 				CRwNode root;
 				DebugBuildStructure(&root);
 				//std::ofstream ofs(TestDefinition::FilePath::InputJson_JsonFormat, std::ios::binary);
-				NiflectUtil::COutputFileStream ofs(TestDefinition::FilePath::InputJson_JsonFormat);
-				CJsonFormat::Write(&root, ofs);
+				std::ofstream ofs;
+				if (NiflectUtil::OpenFileStream(ofs, TestDefinition::FilePath::InputJson_JsonFormat))
+					CJsonFormat::Write(&root, ofs);
+				else
+					ASSERT(false);
 			}
 			if (!oldData.empty())
 			{
@@ -89,12 +92,18 @@ namespace TestSerializationRwTree
 			{
 				CRwNode root;
 				//std::ifstream ifs(TestDefinition::FilePath::InputJson_JsonFormat, std::ios::binary);
-				NiflectUtil::CInputFileStream ifs(TestDefinition::FilePath::InputJson_JsonFormat);
-				CJsonFormat::Read(&root, ifs);
+				std::ifstream ifs;
+				if (NiflectUtil::OpenFileStream(ifs, TestDefinition::FilePath::InputJson_JsonFormat))
+					CJsonFormat::Read(&root, ifs);
+				else
+					ASSERT(false);
 
 				//std::ofstream ofs(TestDefinition::FilePath::OutputJson_JsonFormat, std::ios::binary);
-				NiflectUtil::COutputFileStream ofs(TestDefinition::FilePath::OutputJson_JsonFormat);
-				CJsonFormat::Write(&root, ofs);
+				std::ofstream ofs;
+				if (NiflectUtil::OpenFileStream(ofs, TestDefinition::FilePath::OutputJson_JsonFormat))
+					CJsonFormat::Write(&root, ofs);
+				else
+					ASSERT(false);
 			}
 			auto a = NiflectUtil::ReadStringFromFile(TestDefinition::FilePath::InputJson_JsonFormat);
 			auto b = NiflectUtil::ReadStringFromFile(TestDefinition::FilePath::OutputJson_JsonFormat);
@@ -104,11 +113,17 @@ namespace TestSerializationRwTree
 		{
 			{
 				CRwNode root;
-				NiflectUtil::CInputFileStream ifs(TestDefinition::FilePath::InputJson_AnimGraphEditorData);
-				CJsonFormat::Read(&root, ifs);
+				std::ifstream ifs;
+				if (NiflectUtil::OpenFileStream(ifs, TestDefinition::FilePath::InputJson_AnimGraphEditorData))
+					CJsonFormat::Read(&root, ifs);
+				else
+					ASSERT(false);
 
-				NiflectUtil::COutputFileStream ofs(TestDefinition::FilePath::OutputJson_AnimGraphEditorData);
-				CJsonFormat::Write(&root, ofs);
+				std::ofstream ofs;
+				if (NiflectUtil::OpenFileStream(ofs, TestDefinition::FilePath::OutputJson_AnimGraphEditorData))
+					CJsonFormat::Write(&root, ofs);
+				else
+					ASSERT(false);
 			}
 
 			//写的结果存在一些差异
@@ -196,24 +211,36 @@ namespace TestSerializationRwTree
 				DebugBuildStructure(&root);
 				{
 					//std::ofstream ofs(TestDefinition::FilePath::OutputBinary_0, std::ios::binary);
-					NiflectUtil::COutputFileStream ofs(TestDefinition::FilePath::OutputBinary_0);
-					CBinaryFormat::A_2(&root, ofs);
+					std::ofstream ofs;
+					if (NiflectUtil::OpenFileStream(ofs, TestDefinition::FilePath::OutputBinary_0))
+						CBinaryFormat::A_2(&root, ofs);
+					else
+						ASSERT(false);
 				}
 				{
 					//std::ofstream ofs(TestDefinition::FilePath::OutputJson_0, std::ios::binary);
-					NiflectUtil::COutputFileStream ofs(TestDefinition::FilePath::OutputJson_0);
-					CJsonFormat::Write(&root, ofs);
+					std::ofstream ofs;
+					if (NiflectUtil::OpenFileStream(ofs, TestDefinition::FilePath::OutputJson_0))
+						CJsonFormat::Write(&root, ofs);
+					else
+						ASSERT(false);
 				}
 			}
 			{
 				CRwNode root;
 				//std::ifstream ifs(TestDefinition::FilePath::OutputBinary_0, std::ios::binary);
-				NiflectUtil::CInputFileStream ifs(TestDefinition::FilePath::OutputBinary_0);
-				CBinaryFormat::B_2(&root, ifs);
+				std::ifstream ifs;
+				if (NiflectUtil::OpenFileStream(ifs, TestDefinition::FilePath::OutputBinary_0))
+					CBinaryFormat::B_2(&root, ifs);
+				else
+					ASSERT(false);
 
 				//std::ofstream ofs(TestDefinition::FilePath::OutputJson_1, std::ios::binary);
-				NiflectUtil::COutputFileStream ofs(TestDefinition::FilePath::OutputJson_1);
-				CJsonFormat::Write(&root, ofs);
+				std::ofstream ofs;
+				if (NiflectUtil::OpenFileStream(ofs, TestDefinition::FilePath::OutputJson_1))
+					CJsonFormat::Write(&root, ofs);
+				else
+					ASSERT(false);
 			}
 
 			ASSERT(NiflectUtil::ReadStringFromFile(TestDefinition::FilePath::OutputJson_0) == NiflectUtil::ReadStringFromFile(TestDefinition::FilePath::OutputJson_1));
