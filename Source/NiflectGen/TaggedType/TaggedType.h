@@ -217,4 +217,5 @@ namespace NiflectGen
 #endif
 
 	Niflect::CString ResolveSignature(const CResolvedCursorNode& indexedParent, const CResolvingDependenciesContext& ctx, CResolvedCursorRootsMapping& signatureMapping);
+	bool GetInfoTypeNameFromCursor(const CXCursor& cursor, Niflect::CString& infoTypeName);
 }

@@ -299,7 +299,7 @@ namespace NiflectGen
 			{
 				//有必要不支持并提示 struct 从 class 或反之的继承?
 				Niflect::CString baseInfoTypeName;
-				if (m_resolvedData->m_taggedMapping.GetDerivedInfoTypeName(m_baseTaggedType->m_taggedResoRoot.m_taggedTypeIndex, baseInfoTypeName))
+				if (GetInfoTypeNameFromCursor(m_baseTaggedType->GetCursor(), baseInfoTypeName))
 					MapLabelToText(map, LABEL_7, baseInfoTypeName);
 				else
 					ASSERT(false);

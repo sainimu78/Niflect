@@ -115,6 +115,20 @@ namespace NiflectGen
 		this->GetDerivedInfoTypeName(taggedTypeIdx, infoTypeName);
 		return infoTypeName;
 	}
+	bool GetInfoTypeNameFromCursor(const CXCursor& cursor, Niflect::CString& infoTypeName)
+	{
+		auto kind = clang_getCursorKind(cursor);
+		switch (kind)
+		{
+		case CXCursor_ClassDecl: infoTypeName = NiflectGenDefinition::NiflectFramework::InfoTypeName::Class; break;
+		case CXCursor_StructDecl: infoTypeName = NiflectGenDefinition::NiflectFramework::InfoTypeName::Struct; break;
+		case CXCursor_EnumDecl: infoTypeName = NiflectGenDefinition::NiflectFramework::InfoTypeName::Enum; break;
+		default:
+			ASSERT(false);
+			return false;//‘§¡ÙµƒºÏ≤È, –Î±‹√‚∑µªÿtrue
+		}
+		return true;
+	}
 	bool CTaggedTypesMapping::GetDerivedInfoTypeName(uint32 taggedTypeIdx, Niflect::CString& infoTypeName) const
 	{
 		bool isDerivedType = false;
@@ -122,17 +136,7 @@ namespace NiflectGen
 		{
 			auto& tagged = m_vecType[taggedTypeIdx];
 			auto& cursor = tagged->GetCursor();
-			auto kind = clang_getCursorKind(cursor);
-			switch (kind)
-			{
-			case CXCursor_ClassDecl: infoTypeName = NiflectGenDefinition::NiflectFramework::InfoTypeName::Class; break;
-			case CXCursor_StructDecl: infoTypeName = NiflectGenDefinition::NiflectFramework::InfoTypeName::Struct; break;
-			case CXCursor_EnumDecl: infoTypeName = NiflectGenDefinition::NiflectFramework::InfoTypeName::Enum; break;
-			default:
-				ASSERT(false);
-				return false;//‘§¡ÙµƒºÏ≤È, –Î±‹√‚∑µªÿtrue
-				break;
-			}
+			GetInfoTypeNameFromCursor(cursor, infoTypeName);
 			isDerivedType = true;
 		}
 		return isDerivedType;

@@ -8,6 +8,8 @@ include(${c_RootCMakeProjectFrameworkDirPath}/ProjectBegin.cmake)
 project(${c_ProjectName})
 include(${c_RootCMakeProjectFrameworkDirPath}/ProjectEnd.cmake)
 
+set(c_TestProjectRootDirPath ${CMAKE_CURRENT_SOURCE_DIR})
+
 enable_testing() 
 
 set(ModuleName MyTestExample_0)
@@ -28,7 +30,8 @@ add_subdirectory(Test0)
 add_subdirectory(Test1)
 add_subdirectory(Test2)
 add_subdirectory(Test3)
-set(DefaultModuleName Test3)
+add_subdirectory(TestEditorCLI)
+set(DefaultModuleName TestEditorCLI)
 
 include(${c_RootCMakeProjectFrameworkDirPath}/Cleanup.cmake)
 
