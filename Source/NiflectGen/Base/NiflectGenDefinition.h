@@ -189,6 +189,7 @@ namespace NiflectGenDefinition
 		}
 #define NIFLECTFRAMEWORK_TEMPLATEFUNCADDR_InvokeConstructorL "&GenericInstanceInvokeConstructor<"
 #define NIFLECTFRAMEWORK_TEMPLATEFUNC_CTypeBody_CreateTypeAccessorL "CTypeBody::CreateTypeAccessor<"
+#define NIFLECTFRAMEWORK_TEMPLATEFUNC_CTypeBody_BuildTypeMetaL "CTypeBody::BuildTypeMeta<"
 #ifdef PORTING_GETTER_SETTER_DEFAULTVALUE
 		namespace BuiltinMetadata
 		{

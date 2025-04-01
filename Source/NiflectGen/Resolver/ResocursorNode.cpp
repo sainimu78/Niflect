@@ -154,6 +154,13 @@ namespace NiflectGen
 		return funcName;
 
 	}
+	Niflect::CString CResolvedCursorNode::GetBuildTypeMetaFuncName(const Niflect::CString& prefix) const
+	{
+		Niflect::CString funcName = NIFLECTFRAMEWORK_TEMPLATEFUNC_CTypeBody_BuildTypeMetaL + this->GetResocursorNameForLastTemplateArg() + ">";
+		if (!this->IsTaggedType())
+			funcName = prefix + funcName;
+		return funcName;
+	}
 	Niflect::CString CResolvedCursorNode::GetStaticGetTypeFuncName(const Niflect::CString& prefix) const
 	{
 		Niflect::CString funcName = "StaticGetType<" + this->GetResocursorNameForLastTemplateArg() + ">";

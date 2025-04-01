@@ -169,6 +169,16 @@ namespace NiflectGen
             };
             it0->WriteWriteCreateTypeAccessorFunc(createTypeAccessorCtx, createTypeAccessorData);
 
+            STypeRegBuildTypeMetaFuncWritingInput btmWritinginput{ context.m_moduleRegInfo, context.m_log };
+            STypeRegBuildTypeMetaFuncWritingOutput btmWritingOutput{data.m_registerTypeAndfieldLayout.m_linesBuildTypeMetaFuncDecl
+                , data.m_registerTypeAndfieldLayout.m_linesBuildTypeMetaFuncImpl
+                , data.m_registerTypeAndfieldLayout.m_dependencyHeaderFilePathAddrs
+#ifdef PORTING_GETTER_SETTER_DEFAULTVALUE
+                , vecGetSetData
+#endif
+            };
+            it0->WriteBuildTypeMetaFunc(btmWritinginput, btmWritingOutput);
+
             {
                 STypeRegClassGenHWritingContext regClassCtx{ context.m_moduleRegInfo, context.m_log };
                 it0->WriteGeneratedBody(regClassCtx, data.m_taggedTypeGeneratedBody);

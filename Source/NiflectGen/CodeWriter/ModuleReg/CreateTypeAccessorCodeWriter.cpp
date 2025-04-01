@@ -50,6 +50,13 @@ namespace NiflectGen
                     for (auto& it2 : it1->m_registerTypeAndfieldLayout.m_linesCreateFieldLayoutOfTypeImpl)
                         linesCpp.push_back(it2);
                 }
+                for (auto& it1 : it0.m_vecTypeRegDataRef)
+                {
+                    for (auto& it2 : it1->m_registerTypeAndfieldLayout.m_linesBuildTypeMetaFuncDecl)
+                        linesH.push_back(it2);
+                    for (auto& it2 : it1->m_registerTypeAndfieldLayout.m_linesBuildTypeMetaFuncImpl)
+                        linesCpp.push_back(it2);
+                }
                 {
                     CCodeTemplate tpl1;
                     ReadTemplateFromRawData(tpl1, HardCodedTemplate::FieldLayoutSpecH);

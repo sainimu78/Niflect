@@ -34,6 +34,15 @@ CSharedAccessor )" MAKELABEL(LABEL_2) R"(()
 {
 	)" MAKELABEL(LABEL_3) R"(
 })";
+		constexpr const char* BuildTypeMetaDecl =
+R"(template <>
+void )" MAKELABEL(LABEL_2) R"((CNiflectType* type0);)";
+		constexpr const char* BuildTypeMetaImpl =
+R"(template <>
+void )" MAKELABEL(LABEL_2) R"((CNiflectType* type0)
+{
+	)" MAKELABEL(LABEL_3) R"(
+})";
 		constexpr const char* CreateAndInitTypeAccessor =
 "auto node0 = Niflect::MakeShared<" MAKELABEL(LABEL_4) R"(>();
 node0->InitType2()" MAKELABEL(LABEL_2) R"(());

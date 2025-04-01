@@ -139,6 +139,40 @@ namespace NiflectGen
 
 		this->CollectDependencyHeaderFilePathAddrs(data.m_dependencyHeaderFilePathAddrs);
 	}
+	void CTypeRegCodeWriter2::WriteBuildTypeMetaFunc(const STypeRegBuildTypeMetaFuncWritingInput& input, STypeRegBuildTypeMetaFuncWritingOutput& output) const
+	{
+		auto funcName = m_bindingTypeIndexedRoot->GetBuildTypeMetaFuncName(input.m_moduleRegInfo.m_moduleScopeSymbolPrefix);
+		{
+			CCodeTemplate tpl0;
+			ReadTemplateFromRawData(tpl0, HardCodedTemplate::BuildTypeMetaDecl);
+			CLabelToCodeMapping map;
+			MapLabelToText(map, LABEL_2, funcName);
+			Niflect::TSet<Niflect::CString> setReplacedLabel;
+			tpl0.ReplaceLabels(map, output.m_linesDecl, &setReplacedLabel);
+			ASSERT(setReplacedLabel.size() == map.size());
+		}
+		{
+			CCodeTemplate tpl0;
+			ReadTemplateFromRawData(tpl0, HardCodedTemplate::BuildTypeMetaImpl);
+			CLabelToCodeMapping map;
+			MapLabelToText(map, LABEL_2, funcName);
+
+			CCodeLines linesBody;
+//			this->WriteAddFields(input, linesBody, output.m_dependencyHeaderFilePathAddrs
+//#ifdef PORTING_GETTER_SETTER_DEFAULTVALUE
+//				, data.m_vecGetSetData
+//#endif
+//			);
+
+			MapLabelToLines(map, LABEL_3, linesBody);
+
+			Niflect::TSet<Niflect::CString> setReplacedLabel;
+			tpl0.ReplaceLabels(map, output.m_linesImpl, &setReplacedLabel);
+			ASSERT(setReplacedLabel.size() == map.size());
+		}
+
+		this->CollectDependencyHeaderFilePathAddrs(output.m_dependencyHeaderFilePathAddrs);
+	}
 	void CTypeRegCodeWriter2::WriteCreateTypeAccessor(const STypeRegCreateTypeAccessorWritingContext& context, CCodeLines& dataDecl, CCodeLines& dataImpl, CDependencyHeaderFilePathAddrs& dependencyHeaderFilePathAddrs
 #ifdef PORTING_GETTER_SETTER_DEFAULTVALUE
 		, Niflect::TArrayNif<SGetterSetterData>& vecGetSetData
@@ -253,6 +287,85 @@ namespace NiflectGen
 #ifdef DEBUG_FOR_TYPE_REG
 		DebugPrintCodeLines(dataImpl);
 #endif
+	}
+	void CTypeRegCodeWriter2::WriteAddFields(const STypeRegBuildTypeMetaFuncWritingInput& input, CCodeLines& linesBody, CDependencyHeaderFilePathAddrs& dependencyHeaderFilePathAddrs
+#ifdef PORTING_GETTER_SETTER_DEFAULTVALUE
+		, Niflect::TArrayNif<SGetterSetterData>& vecGetSetData
+#endif
+	) const
+	{
+		Niflect::CString accessorResocursorName;
+		{
+			if (m_bindingTypeIndexedRoot->m_accessorBindingIndex != INDEX_NONE)
+			{
+				auto& setting = m_resolvedData->m_accessorBindingMapping->m_settings.m_vecAccessorBindingSetting[m_bindingTypeIndexedRoot->m_accessorBindingIndex];
+				accessorResocursorName = setting.m_accessorSettingResolvedInfo.m_resoInfo.m_resocursorName;
+				dependencyHeaderFilePathAddrs.m_vecImpl.push_back(&setting.m_accessorSettingResolvedInfo.m_resoInfo.m_requiredHeaderFilePath);
+
+				if (IsCursorTemplateDecl(setting.GetAccessorTypeDecl().m_cursorDecl))//注, 特化的 Kind 为 ClassDecl
+				{
+					auto& arg = m_bindingTypeIndexedRoot->m_resocursorName;
+					NiflectGenDefinition::CodeStyle::TemplateAngleBracketL(accessorResocursorName);
+					accessorResocursorName += arg;
+					NiflectGenDefinition::CodeStyle::TemplateAngleBracketR(accessorResocursorName);
+				}
+			}
+			else
+			{
+				ASSERT(m_bindingTypeIndexedRoot->m_taggedTypeIndex != INDEX_NONE);
+				auto& tt = m_resolvedData->m_taggedMapping.m_vecType[m_bindingTypeIndexedRoot->m_taggedTypeIndex];
+				auto& cursor = tt->GetCursor();
+				auto kind = clang_getCursorKind(cursor);
+				CBindingSettingData* p = NULL;
+				if (kind == CXCursor_ClassDecl || kind == CXCursor_StructDecl)
+				{
+					p = &m_resolvedData->m_accessorBindingMapping->m_settings.m_settingCompound;
+				}
+				else if (kind == CXCursor_EnumDecl)
+				{
+					if (clang_EnumDecl_isScoped(cursor))
+						p = &m_resolvedData->m_accessorBindingMapping->m_settings.m_settingEnumClass;
+					else
+						p = &m_resolvedData->m_accessorBindingMapping->m_settings.m_settingEnumBitMask;
+				}
+				else
+				{
+					ASSERT(false);
+				}
+				if (p != NULL)
+				{
+					ASSERT(p->IsValid());//todo: 报错
+					accessorResocursorName = p->m_accessorSettingResolvedInfo.m_resoInfo.m_resocursorName;
+					dependencyHeaderFilePathAddrs.m_vecImpl.push_back(&p->m_accessorSettingResolvedInfo.m_resoInfo.m_requiredHeaderFilePath);
+				}
+				else
+				{
+					ASSERT(false);
+				}
+
+				tt->WriteUsingNamespaceDirectiveForNata(linesBody);
+			}
+			NiflectGenDefinition::CodeStyle::TryFormatNestedTemplate(accessorResocursorName);
+		}
+
+		{
+			CCodeTemplate tpl0;
+			ReadTemplateFromRawData(tpl0, HardCodedTemplate::CreateAndInitTypeAccessor);
+			CLabelToCodeMapping map;
+			MapLabelToText(map, LABEL_4, accessorResocursorName);
+			MapLabelToText(map, LABEL_2, m_bindingTypeIndexedRoot->GetStaticGetTypeFuncName(input.m_moduleRegInfo.m_moduleScopeSymbolPrefix));
+#ifdef PORTING_GETTER_SETTER_DEFAULTVALUE
+			SGetterSetterWritingData dddddData{ vecGetSetData };
+#else
+			SGetterSetterWritingData dddddData;
+#endif
+			SResocursorNodeBodyCodeWritingContext bodyCodeCtx{ input.m_moduleRegInfo, input.m_log };
+			this->WriteResocursorNodeBodyCode(bodyCodeCtx, dddddData);
+			MapLabelToLines(map, LABEL_5, dddddData.m_linesResoBodyCode);
+			Niflect::TSet<Niflect::CString> setReplacedLabel;
+			tpl0.ReplaceLabels(map, linesBody, &setReplacedLabel);
+			ASSERT(setReplacedLabel.size() == map.size());
+		}
 	}
 	bool CTypeRegCodeWriter2::CompareLess(const CTypeRegCodeWriter2& a, const CTypeRegCodeWriter2& b)
 	{

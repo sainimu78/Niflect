@@ -120,6 +120,8 @@ namespace NiflectGen
 		CCodeLines m_linesInvokeRegisterType;
 		CCodeLines m_linesCreateFieldLayoutOfTypeDecl;
 		CCodeLines m_linesCreateFieldLayoutOfTypeImpl;
+		CCodeLines m_linesBuildTypeMetaFuncDecl;
+		CCodeLines m_linesBuildTypeMetaFuncImpl;
 		Niflect::CString m_fieldLayoutFuncName;
 		const Niflect::CString* m_taggedTypeHeaderFilePathAddr;//只需要引用缓存在IndexedNode中的路径地址, 在生成无重复includes时才需要获取实际字符串
 		CDependencyHeaderFilePathAddrs m_dependencyHeaderFilePathAddrs;
@@ -198,6 +200,22 @@ namespace NiflectGen
 #endif
 	};
 
+	struct STypeRegBuildTypeMetaFuncWritingInput
+	{
+		const CModuleRegInfoValidated& m_moduleRegInfo;
+		CGenLog* m_log;
+	};
+
+	struct STypeRegBuildTypeMetaFuncWritingOutput
+	{
+		CCodeLines& m_linesDecl;
+		CCodeLines& m_linesImpl;
+		CDependencyHeaderFilePathAddrs& m_dependencyHeaderFilePathAddrs;
+#ifdef PORTING_GETTER_SETTER_DEFAULTVALUE
+		Niflect::TArrayNif<SGetterSetterData>& m_vecGetSetData;
+#endif
+	};
+
 	struct STypeRegRegisterTypeContext
 	{
 		const CModuleRegInfoValidated& m_moduleRegInfo;
@@ -231,6 +249,7 @@ namespace NiflectGen
 		void Init(const CResolvedData* resolvedData, const CResolvedCursorNode* bindingTypeIndexedRoot);
 		virtual void WriteInvokeRegisterType(const STypeRegRegisterTypeContext& context, STypeRegInvokeRegisterTypeWritingData& data) const;
 		void WriteWriteCreateTypeAccessorFunc(const STypeRegCreateTypeAccessorWritingContext& context, STypeRegCreateTypeAccessorWritingData& data) const;
+		void WriteBuildTypeMetaFunc(const STypeRegBuildTypeMetaFuncWritingInput& input, STypeRegBuildTypeMetaFuncWritingOutput& output) const;
 		virtual void Deprecated_WriteTypeRegClass(const STypeRegClassWritingContext& context, CTypeRegClassWritingData2& data) const {}
 		virtual void WriteInvokeInitType(const STypeRegClassWritingContext& context, CTypeRegTaggedTypeInitWritingData2& data) const {}
 		void WriteGeneratedBody(const STypeRegClassGenHWritingContext& context, CTypeRegTaggedTypeGeneratedHeaderData& data) const;
@@ -242,6 +261,11 @@ namespace NiflectGen
 
 	private:
 		void WriteCreateTypeAccessor(const STypeRegCreateTypeAccessorWritingContext& context, CCodeLines& dataDecl, CCodeLines& dataImpl, CDependencyHeaderFilePathAddrs& dependencyHeaderFilePathAddrs
+#ifdef PORTING_GETTER_SETTER_DEFAULTVALUE
+			, Niflect::TArrayNif<SGetterSetterData>& vecGetSetData
+#endif
+		) const;
+		void WriteAddFields(const STypeRegBuildTypeMetaFuncWritingInput& input, CCodeLines& linesBody, CDependencyHeaderFilePathAddrs& dependencyHeaderFilePathAddrs
 #ifdef PORTING_GETTER_SETTER_DEFAULTVALUE
 			, Niflect::TArrayNif<SGetterSetterData>& vecGetSetData
 #endif
