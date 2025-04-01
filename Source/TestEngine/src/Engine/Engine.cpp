@@ -93,6 +93,12 @@ void TestEngineRun()
 	{
 		auto type = Niflect::CEnum::Cast(Niflect::StaticGetType<TestModule1::ETestEnum0>());
 		auto& em = type->GetEnumMeta();
+		Niflect::TArray<Niflect::CString> vecExpected;
+		vecExpected.push_back("MyDefault");
+		vecExpected.push_back("Nihao opt 0");
+		vecExpected.push_back("Option1");
+		vecExpected.push_back("Option2");
+		uint32 idx = 0;
 		for (auto& it : em.m_vecEnumConstMeta)
 		{
 			Niflect::CString name = it.m_name;
@@ -101,6 +107,7 @@ void TestEngineRun()
 				auto ecn = TestModule1::CMyEnumConstNata::Cast(nata);
 				name = ecn->m_friendlyName;
 			}
+			ASSERT(name == vecExpected[idx++]);
 			printf("%s\n", name.c_str());
 		}
 		printf("");
