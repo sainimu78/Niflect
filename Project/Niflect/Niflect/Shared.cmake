@@ -12,10 +12,8 @@ list(APPEND SrcAll ${ModuleSources})
 list(APPEND SrcAll ${ModuleHeaders})
 
 add_library(${ModuleName} SHARED ${SrcAll})
-#set_target_properties(${ModuleName} PROPERTIES 
-#    RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG}
-#    RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE}
-#)
+
+target_precompile_headers(${ModuleName} PUBLIC ${ModuleHeaderDirPath}/${ModuleName}/NiflectDevelopmentMacro.h)
 
 target_include_directories(${ModuleName}
 	PUBLIC ${ModuleHeaderDirPath}

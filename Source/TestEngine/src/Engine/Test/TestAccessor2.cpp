@@ -23,6 +23,11 @@ namespace TestAccessor2
 
 namespace Engine
 {
+#ifdef TEMP_DISABLED_FOR_REFACTORING_0
+	void TestFieldLayout()
+	{
+	}
+#else
 	using namespace Niflect;
 
 	template <typename TAccessor, typename TType>
@@ -1001,4 +1006,5 @@ namespace TestAccessor2
 		if (false)//if (true)
 			TestProperty0();
 	}
+#endif
 }

@@ -72,6 +72,11 @@ namespace Engine
 
 namespace TestAccessor
 {
+#ifdef TEMP_DISABLED_FOR_REFACTORING_0
+	void TestFieldLayout()
+	{
+	}
+#else
 	using namespace Engine;
 	using namespace Niflect;
 
@@ -315,4 +320,5 @@ namespace TestAccessor
 			printf("");
 		}
 	}
+#endif
 }

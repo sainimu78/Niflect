@@ -15,16 +15,9 @@ list(APPEND SrcAll ${ModuleHeaders} ${ModuleSources})
 add_library(${ModuleName} SHARED ${SrcAll})
 
 target_include_directories(${ModuleName} PUBLIC ${ModuleRootDirPath})
-target_link_libraries(${ModuleName} PRIVATE Niflect)
 target_compile_definitions(${ModuleName} PRIVATE -DTESTLIB_EXPORTS)
 
 list(APPEND v_ListAccessorSettingHeaderFilePath ${ModuleAccessorSetting})
 list(APPEND v_ListModuleHeaderFilePath ${ModuleHeaders})
 #set(v_EnabledDebuggerAttaching ON)
-
-set(IntegratedToolName NiflectGenTool)
-list(APPEND v_ListIntegratedToolDependency ${IntegratedToolName})
-set(v_IntegratedToolName ${IntegratedToolName})
-set(v_NiflectGenToolBinDirPath "$<IF:$<CONFIG:Debug>,${c_ProjectBinDirPathDebug},${c_ProjectBinDirPathRelease}>")
-set(v_NiflectRootPath ${c_RootSourceDirPath}/Niflect)
-include(${c_RootCMakeProjectFrameworkDirPath}/IntegrateNiflectGenTool.cmake)
+include(${c_TestProjectRootDirPath}/TestIntegrateNiflectGenTool.cmake)

@@ -1,4 +1,5 @@
 #pragma once
+#include "Niflect/NiflectDevelopmentMacro.h"//虽已加入 PrecompileHeader, 但仍须避免有时可能将带宏标签的类型所在头文件包含在 PrecompileHeader 中导致开发宏未定义的编译错误
 #include "Niflect/NiflectCommon.h"
 #include "Niflect/NiflectRegisteredType.h"
 #include "Niflect/NiflectMethod.h"
@@ -21,6 +22,143 @@ namespace Niflect
 	class CNiflectType;
 	using CStaticNiflectTypeAddr = CNiflectType*;
 
+#ifdef REFACTORING_0_TYPE_ACCESSOR_FIELD_RESTRUACTURING
+	typedef void (*BuildTypeMetaFunc)(CNiflectType* type);
+#endif
+
+#ifdef REFACTORING_0_TYPE_ACCESSOR_FIELD_RESTRUACTURING
+	class CNiflectType
+	{
+		friend class CTypeLayout;
+	public:
+		CNiflectType()
+			: m_table(NULL)
+			, m_tableIdx(INDEX_NONE)
+			, m_lifecycleMeta{}
+			//, m_CreateTypeAccessorFunc(NULL)
+			, m_BuildTypeMetaFunc(NULL)
+			, m_staticTypePtrAddr(NULL)
+			, m_typeHash(0)
+		{
+		}
+		~CNiflectType()
+		{
+			if (m_staticTypePtrAddr != NULL)
+				*m_staticTypePtrAddr = NULL;
+		}
+
+	public:
+		void InitTypeMeta(CNiflectTable* table, uint32 tableIdx, const STypeLifecycleMeta& lifecycleMeta, size_t typeHash, const CString& id, const BuildTypeMetaFunc& inBuildTypeMetaFunc, CStaticNiflectTypeAddr* staticTypePtrAddr, const CSharedNata& nata)
+		{
+			m_name = id;
+			m_table = table;
+			m_tableIdx = tableIdx;
+			m_nata = nata;
+			m_lifecycleMeta = lifecycleMeta;
+			//m_CreateTypeAccessorFunc = inCreateTypeAccessorFunc;
+			m_BuildTypeMetaFunc = inBuildTypeMetaFunc;
+			m_staticTypePtrAddr = staticTypePtrAddr;
+			*m_staticTypePtrAddr = this;
+			m_typeHash = typeHash;
+		}
+
+	public:
+		CNiflectTable* GetTable() const
+		{
+			return m_table;
+		}
+		const uint32& GetTableIndex() const
+		{
+			return m_tableIdx;
+		}
+		const CString& GetTypeName() const//todo: 计划改名为 GetNativeTypeName
+		{
+			return m_name;
+		}
+		const uint32& GetTypeSize() const//todo: 计划改名为 GetNativeTypeSize
+		{
+			return m_lifecycleMeta.m_typeSize;//对于C++ Built in类型, 返回类型为const ref是为了方便赋值类型用auto
+		}
+		const STypeLifecycleMeta& GetLifecycleMeta() const
+		{
+			return m_lifecycleMeta;
+		}
+		const CTypeLayout& GetTypeLayout() const
+		{
+			return m_layout;
+		}
+		const Niflect::TArray<CField>& GetFields() const
+		{
+			return m_vecFiled;
+		}
+
+	public:
+		bool SaveInstanceToRwNode(const InstanceType* base, CRwNode* rw) const
+		{
+			return m_layout.AccessorsSaveToRwNode(base, rw);
+		}
+		bool LoadInstanceFromRwNode(InstanceType* base, const CRwNode* rw) const
+		{
+			return m_layout.AccessorsLoadFromRwNode(base, rw);
+		}
+
+	public:
+		void BuildTypeMeta()
+		{
+			ASSERT(m_layout.m_vecSection.size() == 0);
+			this->InitTypeLayout(m_layout);
+			m_BuildTypeMetaFunc(this);
+		}
+		void InitAccessor(const CSharedAccessor& accessor)
+		{
+			ASSERT(m_accessor == NULL);
+			m_accessor = accessor;
+		}
+		void InitAddField(const Niflect::CString& name, const OffsetType& offset, CNiflectType* type, const CSharedNata& nata)
+		{
+			CField field;
+			field.Init(name, offset, type, nata);
+			m_vecFiled.push_back(field);
+		}
+
+	protected:
+		virtual void InitTypeLayout(CTypeLayout& layout)
+		{
+			layout.m_vecSection.push_back(this);
+		}
+
+	public:
+		void InitNata(const CSharedNata& nata)
+		{
+			m_nata = nata;
+		}
+		CNata* GetNata() const
+		{
+			return m_nata.Get();
+		}
+
+	public:
+		template <typename T>
+		static size_t GetTypeHash()
+		{
+			return typeid(T).hash_code();
+		}
+
+	private:
+		CString m_name;
+		CSharedNata m_nata;
+		CNiflectTable* m_table;
+		uint32 m_tableIdx;
+		CTypeLayout m_layout;
+		CSharedAccessor m_accessor;
+		Niflect::TArray<CField> m_vecFiled;
+		STypeLifecycleMeta m_lifecycleMeta;
+		//CreateTypeAccessorFunc m_CreateTypeAccessorFunc;
+		BuildTypeMetaFunc m_BuildTypeMetaFunc;
+		CStaticNiflectTypeAddr* m_staticTypePtrAddr;
+		size_t m_typeHash;
+	};
+#else
 	class CNiflectType
 	{
 	public:
@@ -237,6 +375,7 @@ namespace Niflect
 		CStaticNiflectTypeAddr* m_staticTypePtrAddr;
 		size_t m_typeHash;
 	};
+#endif
 	using CSharedNiflectType = TSharedPtr<CNiflectType>;
 
 	template <typename TBase>
@@ -325,6 +464,54 @@ namespace Niflect
 	{
 	};
 
+#ifdef REFACTORING_0_TYPE_ACCESSOR_FIELD_RESTRUACTURING
+	class CInheritableType : public CNiflectType
+	{
+		typedef CNiflectType inherited;
+	public:
+		CInheritableType()
+			: m_parent(NULL)
+		{
+		}
+		void InitInheritableTypeMeta(CInheritableType* parent)
+		{
+			m_parent = parent;
+		}
+		CInheritableType* GetParent() const
+		{
+			return m_parent;
+		}
+
+	protected:
+		virtual void InitTypeLayout(CTypeLayout& layout) override
+		{
+			if (m_parent != NULL)
+			{
+				auto par = m_parent;
+				while (par != NULL)
+				{
+					layout.m_vecSection.insert(layout.m_vecSection.begin(), par);
+					par = par->m_parent;
+				}
+			}
+			inherited::InitTypeLayout(layout);
+		}
+
+	public:
+		static CInheritableType* Cast(CNiflectType* base)
+		{
+			ASSERT(dynamic_cast<CInheritableType*>(base) != NULL);
+			return static_cast<CInheritableType*>(base);
+		}
+		static CInheritableType* CastChecked(CNiflectType* base)
+		{
+			return dynamic_cast<CInheritableType*>(base);
+		}
+
+	private:
+		CInheritableType* m_parent;//todo: 应定义AddChild建立层级关系; 进一步地, 可能还需要另外的容器建立引用关系, 目前不确认引用关系是静态或动态建立
+	};
+#else
 	class CInheritableType : public CNiflectType
 	{
 		typedef CNiflectType inherited;
@@ -398,6 +585,7 @@ namespace Niflect
 	private:
 		CInheritableType* m_parent;//todo: 应定义AddChild建立层级关系; 进一步地, 可能还需要另外的容器建立引用关系, 目前不确认引用关系是静态或动态建立
 	};
+#endif
 
 	class CStruct : public CInheritableType
 	{

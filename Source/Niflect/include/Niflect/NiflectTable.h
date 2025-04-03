@@ -18,6 +18,35 @@ namespace Niflect
 		{
 			m_name = name;
 		}
+#ifdef REFACTORING_0_TYPE_ACCESSOR_FIELD_RESTRUACTURING
+		template <typename TType, typename TInfo>
+		void RegisterTypeDetailed(const Niflect::CString& id, const BuildTypeMetaFunc& inBuildTypeMetaFunc, CStaticNiflectTypeAddr* staticTypePtrAddr, const CSharedNata& nata, const InvokeConstructorFunc& InvokeConstructorFunc)
+		{
+			STypeLifecycleMeta lifecycleMeta;
+			lifecycleMeta.m_typeSize = sizeof(TType);
+			ASSERT(InvokeConstructorFunc != NULL);
+			lifecycleMeta.m_InvokeConstructorFunc = InvokeConstructorFunc;
+			lifecycleMeta.m_InvokeDestructorFunc = &GenericInstanceInvokeDestructor<TType>;
+
+			auto shared = Niflect::MakeShared<TInfo>();
+			CNiflectType* type = shared.Get();
+			auto idx = this->GetTypesCount();
+			type->InitTypeMeta(this, idx, lifecycleMeta, CNiflectType::GetTypeHash<TType>(), id, inBuildTypeMetaFunc, staticTypePtrAddr, nata);
+			this->InsertType(shared, idx);
+		}
+		template <typename TType, typename TInfo>
+		void RegisterTypeChecked(const Niflect::CString& id, const BuildTypeMetaFunc& inBuildTypeMetaFunc, const CSharedNata& nata, const InvokeConstructorFunc& InvokeConstructorFunc)
+		{
+			ASSERT(!TRegisteredType<TType>::IsValid());
+			this->RegisterTypeDetailed<TType, TInfo>(id, inBuildTypeMetaFunc, &TRegisteredType<TType>::s_type, nata, InvokeConstructorFunc);
+			ASSERT(TRegisteredType<TType>::IsValid());
+		}
+		template <typename TType, typename TInfo>
+		void RegisterType(const Niflect::CString& id, const BuildTypeMetaFunc& inBuildTypeMetaFunc, const CSharedNata& nata)
+		{
+			this->RegisterTypeChecked<TType, TInfo>(id, inBuildTypeMetaFunc, nata, &GenericInstanceInvokeConstructor<TType>);
+		}
+#else
 		template <typename TInfo, typename TType>
 		void RegisterType(const CString& typeName, const CreateFieldLayoutOfTypeFuncOld& Func)
 		{
@@ -79,6 +108,7 @@ namespace Niflect
 		{
 			this->RegisterTypeChecked<TType, TInfo>(id, inCreateTypeAccessorFunc, nata, &GenericInstanceInvokeConstructor<TType>);
 		}
+#endif
 		CNiflectModule2* GetModule() const
 		{
 			return m_module;
@@ -100,8 +130,13 @@ namespace Niflect
 		}
 		void InitTypesLayout() const
 		{
+#ifdef REFACTORING_0_TYPE_ACCESSOR_FIELD_RESTRUACTURING
+			for (auto& it : m_vecType)
+				it->BuildTypeMeta();
+#else
 			for (auto& it : m_vecType)
 				it->InitTypeLayout();
+#endif
 		}
 		void InsertType(const CSharedNiflectType& type, uint32 idx)
 		{

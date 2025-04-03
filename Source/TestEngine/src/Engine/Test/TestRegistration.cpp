@@ -73,6 +73,8 @@ namespace TestRegistration
 
 	//NIFLECT_REGISTER(Niflect::CClass, CMyRegClass, GetSSSSSS(), Niflect::CTypeCustomData())
 
+#ifdef TEMP_DISABLED_FOR_REFACTORING_0
+#else
 	static Niflect::CSharedAccessor SSSSCreateFieldLayout()
 	{
 		auto node0 = Niflect::MakeShared<Niflect::CCompoundAccessor>();
@@ -91,6 +93,7 @@ namespace TestRegistration
 		}
 		return node0;
 	}
+#endif
 
 	class CMyRegClassNata : public Niflect::CNata
 	{
@@ -124,6 +127,11 @@ namespace TestRegistration
 	Niflect::TStaticTableTypeReg<Niflect::CClass, CMyRegClass> ss(GetSSSSSS(), "CMyRegClass", &SSSSCreateFieldLayout, CMyRegClassNatimeta().SetExampleOption(1.23f));
 #endif
 
+#ifdef TEMP_DISABLED_FOR_REFACTORING_0
+	void TestTypeNatimeta()
+	{
+	}
+#else
 	void TestTypeNatimeta()
 	{
 		using namespace Niflect;
@@ -239,4 +247,5 @@ namespace TestRegistration
 		}
 		printf("");
 	}
+#endif
 }
