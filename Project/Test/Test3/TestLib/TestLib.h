@@ -115,6 +115,8 @@ public:
 	Niflect::CString* m_string_2;
 	NIF_F()
 	float m_float_0;
+	NIF_F()
+	Niflect::TArray<float> m_array_float_3;
 };
 
 #ifdef TESTLIB_API
