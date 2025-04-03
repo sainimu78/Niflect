@@ -31,7 +31,7 @@ namespace NiflectGen
 		}
 	}
 #ifdef REFACTORING_0_TYPE_ACCESSOR_FIELD_RESTRUACTURING
-	void CMiscTypeRegCodeWriter::WriteResocursorElementsBodyCode(const SResocursorNodeBodyCodeWritingContext& context, SGetterSetterWritingData& data) const
+	void CMiscTypeRegCodeWriter::WriteResocursorNodeBodyCode(const SResocursorNodeBodyCodeWritingContext& context, SGetterSetterWritingData& data) const
 	{
 		//linesResoBodyCode.push_back(NiflectUtil::FormatString("My Name: %s", m_bindingTypeIndexedRoot->m_resocursorName.c_str()));
 		ASSERT(m_bindingTypeIndexedRoot->m_accessorBindingIndex != INDEX_NONE);
@@ -47,19 +47,10 @@ namespace NiflectGen
 				if (!as.m_accessorSettingResolvedInfo.m_isPointerTemplate)
 				{
 					auto elemStaticGetTypeFuncName = elemResocursorNode->GetStaticGetTypeFuncName(context.m_moduleRegInfo.m_moduleScopeSymbolPrefix);
-					WriteNextInitElementAccessor2(elemStaticGetTypeFuncName, data.m_linesResoBodyCode);
+					WriteNextInitElementAccessor2(elemStaticGetTypeFuncName, data.m_linesResoElemCode);
 				}
 			}
-		}
-	}
-	void CMiscTypeRegCodeWriter::WriteResocursorChildrenBodyCode(const SResocursorNodeBodyCodeWritingContext& context, SGetterSetterWritingData& data) const
-	{
-		//linesResoBodyCode.push_back(NiflectUtil::FormatString("My Name: %s", m_bindingTypeIndexedRoot->m_resocursorName.c_str()));
-		ASSERT(m_bindingTypeIndexedRoot->m_accessorBindingIndex != INDEX_NONE);
-		if (m_bindingTypeIndexedRoot->m_untaggedTemplateIndex != INDEX_NONE)
-		{
-			//linesResoBodyCode.push_back("---------------");
-			if (m_bindingTypeIndexedRoot->m_elem == NULL)
+			else
 			{
 				auto ut = m_resolvedData->m_untaggedTemplateMapping.m_vecType[m_bindingTypeIndexedRoot->m_untaggedTemplateIndex];
 				if (ut->m_originalUntaggedDecl != NULL)

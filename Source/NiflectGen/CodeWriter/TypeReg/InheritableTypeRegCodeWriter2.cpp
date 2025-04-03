@@ -187,7 +187,7 @@ namespace NiflectGen
 	}
 #endif
 #ifdef REFACTORING_0_TYPE_ACCESSOR_FIELD_RESTRUACTURING
-	void CInheritableTypeRegCodeWriter2::WriteResocursorChildrenBodyCode(const SResocursorNodeBodyCodeWritingContext& context, SGetterSetterWritingData& data) const
+	void CInheritableTypeRegCodeWriter2::WriteResocursorNodeBodyCode(const SResocursorNodeBodyCodeWritingContext& context, SGetterSetterWritingData& data) const
 	{
 #ifdef PORTING_GETTER_SETTER_DEFAULTVALUE
 		data.m_vecGetSetData.resize(m_vecFieldResocursorNode.size());

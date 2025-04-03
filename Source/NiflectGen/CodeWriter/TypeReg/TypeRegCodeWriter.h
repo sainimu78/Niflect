@@ -244,6 +244,9 @@ namespace NiflectGen
 #ifdef PORTING_GETTER_SETTER_DEFAULTVALUE
 		Niflect::TArrayNif<SGetterSetterData>& m_vecGetSetData;
 #endif
+#ifdef REFACTORING_0_TYPE_ACCESSOR_FIELD_RESTRUACTURING
+		CCodeLines m_linesResoElemCode;
+#endif
 		CCodeLines m_linesResoBodyCode;
 	};
 
@@ -264,8 +267,7 @@ namespace NiflectGen
 
 	protected:
 #ifdef REFACTORING_0_TYPE_ACCESSOR_FIELD_RESTRUACTURING
-		virtual void WriteResocursorElementsBodyCode(const SResocursorNodeBodyCodeWritingContext& context, SGetterSetterWritingData& data) const {}
-		virtual void WriteResocursorChildrenBodyCode(const SResocursorNodeBodyCodeWritingContext& context, SGetterSetterWritingData& data) const {}
+		virtual void WriteResocursorNodeBodyCode(const SResocursorNodeBodyCodeWritingContext& context, SGetterSetterWritingData& data) const {}
 #else
 		virtual void WriteResocursorNodeBodyCode(const SResocursorNodeBodyCodeWritingContext& context, SGetterSetterWritingData& data) const {}
 #endif

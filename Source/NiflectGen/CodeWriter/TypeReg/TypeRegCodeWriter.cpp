@@ -244,13 +244,11 @@ namespace NiflectGen
 			SGetterSetterWritingData dddddData;
 #endif
 			SResocursorNodeBodyCodeWritingContext bodyCodeCtx{ input.m_moduleRegInfo, input.m_log };
-			this->WriteResocursorElementsBodyCode(bodyCodeCtx, dddddData);
-			MapLabelToLines(map, LABEL_5, dddddData.m_linesResoBodyCode);
+			this->WriteResocursorNodeBodyCode(bodyCodeCtx, dddddData);
+			MapLabelToLines(map, LABEL_5, dddddData.m_linesResoElemCode);
 			Niflect::TSet<Niflect::CString> setReplacedLabel;
 			tpl0.ReplaceLabels(map, linesBody, &setReplacedLabel);
-			SGetterSetterWritingData dddddData2;
-			this->WriteResocursorChildrenBodyCode(bodyCodeCtx, dddddData2);
-			for (auto& it : dddddData2.m_linesResoBodyCode)
+			for (auto& it : dddddData.m_linesResoBodyCode)
 				linesBody.push_back(it);
 			ASSERT(setReplacedLabel.size() == map.size());
 		}
