@@ -11,6 +11,52 @@ namespace NiflectGen
 #define LABEL_0 "Include"
 #define LABEL_1 "Prefix"
 
+#ifdef REFACTORING_0_TYPE_ACCESSOR_FIELD_RESTRUACTURING
+		constexpr const char* ModuleRegisteredTypeHeader =
+R"(#pragma once
+)" MAKELABEL(LABEL_0) R"(
+
+namespace Niflect
+{
+	template <typename T>
+	class )" MAKELABEL(LABEL_1) R"(TRegisteredType
+	{
+	public:
+		static bool IsValid()
+		{
+			return s_type != NULL;
+		}
+
+		static CNiflectType* s_type;
+	};
+
+	template <typename T>
+	CNiflectType* )" MAKELABEL(LABEL_1) R"(TRegisteredType<T>::s_type = NULL;
+
+	template <typename T>
+	CNiflectType* )" MAKELABEL(LABEL_1) R"(StaticGetType()
+	{
+		return )" MAKELABEL(LABEL_1) R"(TRegisteredType<T>::s_type;
+	}
+
+	class )" MAKELABEL(LABEL_1) R"(CTypeBody
+	{
+	public:
+		template <typename T>
+		static CSharedAccessor CreateTypeAccessor();
+		template <typename T>
+		static void BuildTypeMeta(CNiflectType* type0);
+	};
+
+	template <typename TType, typename TInfo>
+	void )" MAKELABEL(LABEL_1) R"(RegisterType(CNiflectTable* table, const Niflect::CString& id, const BuildTypeMetaFunc& inBuildTypeMetaFunc, const CSharedNata& nata)
+	{
+		ASSERT(!)" MAKELABEL(LABEL_1) R"(TRegisteredType<TType>::IsValid());
+		table->RegisterTypeDetailed<TType, TInfo>(id, inBuildTypeMetaFunc, &)" MAKELABEL(LABEL_1) R"(TRegisteredType<TType>::s_type, nata, )" NIFLECTFRAMEWORK_TEMPLATEFUNCADDR_InvokeConstructorL R"(TType>);
+		ASSERT()" MAKELABEL(LABEL_1) R"(TRegisteredType<TType>::IsValid());
+	}
+})";
+#else
 		constexpr const char* ModuleRegisteredTypeHeader =
 R"(#pragma once
 )" MAKELABEL(LABEL_0) R"(
@@ -55,6 +101,7 @@ namespace Niflect
 		ASSERT()" MAKELABEL(LABEL_1) R"(TRegisteredType<TType>::IsValid());
 	}
 })";
+#endif
 	}
 
 	void WriteModuleRegisteredTypeHeaderCodeWriter(const SModuleRegisteredTypeHeaderWritingContext& context, SModuleRegisteredTypeHeaderGenData& data)

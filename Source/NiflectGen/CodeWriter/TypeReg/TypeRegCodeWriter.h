@@ -118,10 +118,13 @@ namespace NiflectGen
 
 		}
 		CCodeLines m_linesInvokeRegisterType;
-		CCodeLines m_linesCreateFieldLayoutOfTypeDecl;
-		CCodeLines m_linesCreateFieldLayoutOfTypeImpl;
+#ifdef REFACTORING_0_TYPE_ACCESSOR_FIELD_RESTRUACTURING
 		CCodeLines m_linesBuildTypeMetaFuncDecl;
 		CCodeLines m_linesBuildTypeMetaFuncImpl;
+#else
+		CCodeLines m_linesCreateFieldLayoutOfTypeDecl;
+		CCodeLines m_linesCreateFieldLayoutOfTypeImpl;
+#endif
 		Niflect::CString m_fieldLayoutFuncName;
 		const Niflect::CString* m_taggedTypeHeaderFilePathAddr;//只需要引用缓存在IndexedNode中的路径地址, 在生成无重复includes时才需要获取实际字符串
 		CDependencyHeaderFilePathAddrs m_dependencyHeaderFilePathAddrs;
@@ -174,12 +177,6 @@ namespace NiflectGen
 		CGenLog* m_log;
 	};
 
-	struct STypeRegCreateTypeAccessorWritingContext
-	{
-		const CModuleRegInfoValidated& m_moduleRegInfo;
-		CGenLog* m_log;
-	};
-
 #ifdef PORTING_GETTER_SETTER_DEFAULTVALUE
 	struct SGetterSetterData
 	{
@@ -190,16 +187,7 @@ namespace NiflectGen
 	};
 #endif
 
-	struct STypeRegCreateTypeAccessorWritingData
-	{
-		CCodeLines& m_linesCreateTypeAccessorDecl;
-		CCodeLines& m_linesCreateTypeAccessorImpl;
-		CDependencyHeaderFilePathAddrs& m_dependencyHeaderFilePathAddrs;
-#ifdef PORTING_GETTER_SETTER_DEFAULTVALUE
-		Niflect::TArrayNif<SGetterSetterData>& m_vecGetSetData;
-#endif
-	};
-
+#ifdef REFACTORING_0_TYPE_ACCESSOR_FIELD_RESTRUACTURING
 	struct STypeRegBuildTypeMetaFuncWritingInput
 	{
 		const CModuleRegInfoValidated& m_moduleRegInfo;
@@ -215,6 +203,23 @@ namespace NiflectGen
 		Niflect::TArrayNif<SGetterSetterData>& m_vecGetSetData;
 #endif
 	};
+#else
+	struct STypeRegCreateTypeAccessorWritingContext
+	{
+		const CModuleRegInfoValidated& m_moduleRegInfo;
+		CGenLog* m_log;
+	};
+
+	struct STypeRegCreateTypeAccessorWritingData
+	{
+		CCodeLines& m_linesCreateTypeAccessorDecl;
+		CCodeLines& m_linesCreateTypeAccessorImpl;
+		CDependencyHeaderFilePathAddrs& m_dependencyHeaderFilePathAddrs;
+#ifdef PORTING_GETTER_SETTER_DEFAULTVALUE
+		Niflect::TArrayNif<SGetterSetterData>& m_vecGetSetData;
+#endif
+	};
+#endif
 
 	struct STypeRegRegisterTypeContext
 	{
@@ -248,28 +253,39 @@ namespace NiflectGen
 		CTypeRegCodeWriter2();
 		void Init(const CResolvedData* resolvedData, const CResolvedCursorNode* bindingTypeIndexedRoot);
 		virtual void WriteInvokeRegisterType(const STypeRegRegisterTypeContext& context, STypeRegInvokeRegisterTypeWritingData& data) const;
-		void WriteWriteCreateTypeAccessorFunc(const STypeRegCreateTypeAccessorWritingContext& context, STypeRegCreateTypeAccessorWritingData& data) const;
+#ifdef REFACTORING_0_TYPE_ACCESSOR_FIELD_RESTRUACTURING
 		void WriteBuildTypeMetaFunc(const STypeRegBuildTypeMetaFuncWritingInput& input, STypeRegBuildTypeMetaFuncWritingOutput& output) const;
+#else
+		void WriteWriteCreateTypeAccessorFunc(const STypeRegCreateTypeAccessorWritingContext& context, STypeRegCreateTypeAccessorWritingData& data) const;
+#endif
 		virtual void Deprecated_WriteTypeRegClass(const STypeRegClassWritingContext& context, CTypeRegClassWritingData2& data) const {}
 		virtual void WriteInvokeInitType(const STypeRegClassWritingContext& context, CTypeRegTaggedTypeInitWritingData2& data) const {}
 		void WriteGeneratedBody(const STypeRegClassGenHWritingContext& context, CTypeRegTaggedTypeGeneratedHeaderData& data) const;
 
 	protected:
+#ifdef REFACTORING_0_TYPE_ACCESSOR_FIELD_RESTRUACTURING
+		virtual void WriteResocursorElementsBodyCode(const SResocursorNodeBodyCodeWritingContext& context, SGetterSetterWritingData& data) const {}
+		virtual void WriteResocursorChildrenBodyCode(const SResocursorNodeBodyCodeWritingContext& context, SGetterSetterWritingData& data) const {}
+#else
 		virtual void WriteResocursorNodeBodyCode(const SResocursorNodeBodyCodeWritingContext& context, SGetterSetterWritingData& data) const {}
+#endif
 		virtual void CollectDependencyHeaderFilePathAddrs(CDependencyHeaderFilePathAddrs& dependencyHeaderFilePathAddrs) const = 0;
 		virtual void CollectDataForGenH(SCollectingGeneratedBodyWritingData& data) const {}
 
 	private:
-		void WriteCreateTypeAccessor(const STypeRegCreateTypeAccessorWritingContext& context, CCodeLines& dataDecl, CCodeLines& dataImpl, CDependencyHeaderFilePathAddrs& dependencyHeaderFilePathAddrs
-#ifdef PORTING_GETTER_SETTER_DEFAULTVALUE
-			, Niflect::TArrayNif<SGetterSetterData>& vecGetSetData
-#endif
-		) const;
+#ifdef REFACTORING_0_TYPE_ACCESSOR_FIELD_RESTRUACTURING
 		void WriteAddFields(const STypeRegBuildTypeMetaFuncWritingInput& input, CCodeLines& linesBody, CDependencyHeaderFilePathAddrs& dependencyHeaderFilePathAddrs
 #ifdef PORTING_GETTER_SETTER_DEFAULTVALUE
 			, Niflect::TArrayNif<SGetterSetterData>& vecGetSetData
 #endif
 		) const;
+#else
+		void WriteCreateTypeAccessor(const STypeRegCreateTypeAccessorWritingContext& context, CCodeLines& dataDecl, CCodeLines& dataImpl, CDependencyHeaderFilePathAddrs& dependencyHeaderFilePathAddrs
+#ifdef PORTING_GETTER_SETTER_DEFAULTVALUE
+			, Niflect::TArrayNif<SGetterSetterData>& vecGetSetData
+#endif
+		) const;
+#endif
 
 	public:
 		static bool CompareLess(const CTypeRegCodeWriter2& a, const CTypeRegCodeWriter2& b);

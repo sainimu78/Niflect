@@ -156,6 +156,18 @@ namespace NiflectGen
             };
             it0->WriteInvokeRegisterType(invokeRegisterTypeCtx, invokeRegisterTypeData);
 
+#ifdef REFACTORING_0_TYPE_ACCESSOR_FIELD_RESTRUACTURING
+
+            STypeRegBuildTypeMetaFuncWritingInput btmWritinginput{ context.m_moduleRegInfo, context.m_log };
+            STypeRegBuildTypeMetaFuncWritingOutput btmWritingOutput{data.m_registerTypeAndfieldLayout.m_linesBuildTypeMetaFuncDecl
+                , data.m_registerTypeAndfieldLayout.m_linesBuildTypeMetaFuncImpl
+                , data.m_registerTypeAndfieldLayout.m_dependencyHeaderFilePathAddrs
+#ifdef PORTING_GETTER_SETTER_DEFAULTVALUE
+                , vecGetSetData
+#endif
+            };
+            it0->WriteBuildTypeMetaFunc(btmWritinginput, btmWritingOutput);
+#else
 #ifdef PORTING_GETTER_SETTER_DEFAULTVALUE
             Niflect::TArrayNif<SGetterSetterData> vecGetSetData;
 #endif
@@ -168,16 +180,7 @@ namespace NiflectGen
 #endif
             };
             it0->WriteWriteCreateTypeAccessorFunc(createTypeAccessorCtx, createTypeAccessorData);
-
-            STypeRegBuildTypeMetaFuncWritingInput btmWritinginput{ context.m_moduleRegInfo, context.m_log };
-            STypeRegBuildTypeMetaFuncWritingOutput btmWritingOutput{data.m_registerTypeAndfieldLayout.m_linesBuildTypeMetaFuncDecl
-                , data.m_registerTypeAndfieldLayout.m_linesBuildTypeMetaFuncImpl
-                , data.m_registerTypeAndfieldLayout.m_dependencyHeaderFilePathAddrs
-#ifdef PORTING_GETTER_SETTER_DEFAULTVALUE
-                , vecGetSetData
 #endif
-            };
-            it0->WriteBuildTypeMetaFunc(btmWritinginput, btmWritingOutput);
 
             {
                 STypeRegClassGenHWritingContext regClassCtx{ context.m_moduleRegInfo, context.m_log };
@@ -243,7 +246,11 @@ namespace NiflectGen
             {
                 auto& it0 = context.m_vecTypeRegData[idx0];
                 smr.m_vecTypeRegDataRef.push_back(&it0);
+#ifdef REFACTORING_0_TYPE_ACCESSOR_FIELD_RESTRUACTURING
+                splitLinesCounter += static_cast<uint32>(it0.m_registerTypeAndfieldLayout.m_linesBuildTypeMetaFuncImpl.size());
+#else
                 splitLinesCounter += static_cast<uint32>(it0.m_registerTypeAndfieldLayout.m_linesCreateFieldLayoutOfTypeImpl.size());
+#endif
                 if (splitLinesCounter > NiflectGenDefinition::NiflectFramework::Setting::ThresholdLinesCountForRegCodeSplitting)
                 {
                     vecSplittedModuleRegInfo.push_back(smr);

@@ -15,7 +15,11 @@ namespace NiflectGen
 #define LABEL_8 "FieldName"
 #define LABEL_9 "TypeForLastTemplateArg"
 #define LABEL_10 "API"
+#ifdef REFACTORING_0_TYPE_ACCESSOR_FIELD_RESTRUACTURING
+#define LABEL_13 "BuildTypeMetaFuncName"
+#else
 #define LABEL_13 "CreateTypeAccessorFuncName"
+#endif
 #define LABEL_14 "NataNullOrVar"
 #define LABEL_15 "InvokeCtorAddr"
 
@@ -43,20 +47,40 @@ void )" MAKELABEL(LABEL_2) R"((CNiflectType* type0)
 {
 	)" MAKELABEL(LABEL_3) R"(
 })";
+#ifdef REFACTORING_0_TYPE_ACCESSOR_FIELD_RESTRUACTURING
+		constexpr const char* BuildTypeMetaBlock =
+R"({
+	auto node0 = Niflect::MakeShared<)" MAKELABEL(LABEL_4) R"(>();
+	node0->InitType()" MAKELABEL(LABEL_2) R"(());
+	type0->InitAccessor(node0);
+	)" MAKELABEL(LABEL_5) R"(
+})";
+#else
 		constexpr const char* CreateAndInitTypeAccessor =
 "auto node0 = Niflect::MakeShared<" MAKELABEL(LABEL_4) R"(>();
 node0->InitType2()" MAKELABEL(LABEL_2) R"(());
 )" MAKELABEL(LABEL_5) R"(
 return node0;
 )";
+#endif
 		constexpr const char* CreateAndInitNextsAccessor =
 "auto type1 = " MAKELABEL(LABEL_2) "();";
+#ifdef REFACTORING_0_TYPE_ACCESSOR_FIELD_RESTRUACTURING
+		constexpr const char* InitChildAccessor =
+R"(type0->InitAddField(")" MAKELABEL(LABEL_0) R"(", )" MAKELABEL(LABEL_7) ", type1, " MAKELABEL(LABEL_14) ");";
+#else
 	constexpr const char* InitChildAccessor =
 R"(type1->InitAddFieldToAccessor(node0.Get(), ")" MAKELABEL(LABEL_0) R"(", )" MAKELABEL(LABEL_7) ", " MAKELABEL(LABEL_14) ");";
+#endif
 	constexpr const char* GetFieldOffset =
 R"(GetFieldOffset(&)" MAKELABEL(LABEL_0) "::" MAKELABEL(LABEL_8) R"())";
+#ifdef REFACTORING_0_TYPE_ACCESSOR_FIELD_RESTRUACTURING
+	constexpr const char* InitElementAccessor =
+"node0->InitElementType(type1);";
+#else
 	constexpr const char* InitElementAccessor =
 R"(type1->InitAccessorElementLayout(node0.Get());)";
+#endif
 	constexpr const char* StaticGetTypeFuncName =
 R"(StaticGetType<)" MAKELABEL(LABEL_9) ">";
 	constexpr const char* StaticGetTypeSpecDecl =

@@ -30,8 +30,11 @@ namespace NiflectGen
 		const Niflect::CString* GetHeaderFilePathAddrForTaggedType() const;
 		void GetHeaderFilePathAddrs(Niflect::TArrayNif<const Niflect::CString*>& vecAddr) const;
 		Niflect::CString GetResocursorNameForLastTemplateArg() const;
-		Niflect::CString GetCreateTypeAccessorFuncName(const Niflect::CString& prefix) const;
+#ifdef REFACTORING_0_TYPE_ACCESSOR_FIELD_RESTRUACTURING
 		Niflect::CString GetBuildTypeMetaFuncName(const Niflect::CString& prefix) const;
+#else
+		Niflect::CString GetCreateTypeAccessorFuncName(const Niflect::CString& prefix) const;
+#endif
 		Niflect::CString GetStaticGetTypeFuncName(const Niflect::CString& prefix) const;
 		bool IsTaggedType() const;
 		Niflect::CString GetResocursorInstanceName() const;

@@ -186,6 +186,63 @@ namespace NiflectGen
 		return found;
 	}
 #endif
+#ifdef REFACTORING_0_TYPE_ACCESSOR_FIELD_RESTRUACTURING
+	void CInheritableTypeRegCodeWriter2::WriteResocursorChildrenBodyCode(const SResocursorNodeBodyCodeWritingContext& context, SGetterSetterWritingData& data) const
+	{
+#ifdef PORTING_GETTER_SETTER_DEFAULTVALUE
+		data.m_vecGetSetData.resize(m_vecFieldResocursorNode.size());
+#endif
+		for (uint32 idx = 0; idx < m_vecFieldResocursorNode.size(); ++idx)
+		{
+			auto& itB = m_vecField[idx];
+			auto fieldName = CXStringToCString(clang_getCursorSpelling(itB->GetCursor()));
+			auto fieldStaticGetTypeFuncName = m_vecFieldResocursorNode[idx].GetStaticGetTypeFuncName(context.m_moduleRegInfo.m_moduleScopeSymbolPrefix);
+
+#ifdef PORTING_GETTER_SETTER_DEFAULTVALUE
+			auto& fieldCursor = itB->GetCursor();
+			auto& fieldResonode = m_vecFieldResocursorNode[idx];
+			auto fieldTypeName = fieldResonode.GetResocursorNameForLastTemplateArg();
+			CCodeLines linesNata;
+			CBuiltinMetadata builtinMetadata;
+			itB->WriteCopyNataCodeExtractBuiltinMetadata(linesNata, builtinMetadata, context.m_log);
+			auto& gs = data.m_vecGetSetData[idx];
+			if (builtinMetadata.m_getterName.empty())
+				WriteGetterSetter(HardCodedTemplate::GetterFunc, "Get", fieldTypeName, fieldName, gs.m_linesGetter, builtinMetadata.m_getterName);
+#ifdef DEPRECATED_ACCESSMETHOD_MACRO_TAG
+#else
+			else
+				ErrorIfSpecifiedButNotTagged(builtinMetadata.m_getterName, NiflectGenDefinition::NiflectFramework::BuiltinMetadata::Getter, m_vecAccessMethod, context.m_log);
+#endif
+			if (builtinMetadata.m_setterName.empty())
+				WriteGetterSetter(HardCodedTemplate::SetterFunc, "Set", fieldTypeName, fieldName, gs.m_linesSetter, builtinMetadata.m_setterName);
+#ifdef DEPRECATED_ACCESSMETHOD_MACRO_TAG
+#else
+			else
+				ErrorIfSpecifiedButNotTagged(builtinMetadata.m_setterName, NiflectGenDefinition::NiflectFramework::BuiltinMetadata::Setter, m_vecAccessMethod, context.m_log);
+#endif
+			if (builtinMetadata.m_defaultValue.empty())
+				TryParseInClassInitializer(fieldCursor, builtinMetadata.m_defaultValue);
+
+			{
+				//现未使用 Getter, Setter, DefaultValue 关键字, Field 的 In-class 初始化, 仅打印解析结果预留功能
+				Niflect::CString strNata;
+				for (auto& it1 : linesNata)
+					strNata += it1 += EscapeChar::NewLine;
+				printf("%s, %s, %s, %s\n", builtinMetadata.m_getterName.c_str(), builtinMetadata.m_setterName.c_str(), builtinMetadata.m_defaultValue.c_str(), strNata.c_str());
+			}
+#else
+			CCodeLines linesNata;
+			itB->WriteCopyNataCode(linesNata);
+#endif
+
+			WriteNextInitChildAccessor2(m_bindingTypeIndexedRoot->m_resocursorName, fieldStaticGetTypeFuncName, fieldName, linesNata, data.m_linesResoBodyCode);
+		}
+		for (uint32 idx = 0; idx < m_vecResomethod.size(); ++idx)
+		{
+
+		}
+	}
+#else
 	void CInheritableTypeRegCodeWriter2::WriteResocursorNodeBodyCode(const SResocursorNodeBodyCodeWritingContext& context, SGetterSetterWritingData& data) const
 	{
 #ifdef PORTING_GETTER_SETTER_DEFAULTVALUE
@@ -241,6 +298,7 @@ namespace NiflectGen
 
 		}
 	}
+#endif
 	void CInheritableTypeRegCodeWriter2::CollectDependencyHeaderFilePathAddrs(CDependencyHeaderFilePathAddrs& dependencyHeaderFilePathAddrs) const
 	{
 		//还差基类的include

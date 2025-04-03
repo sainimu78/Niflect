@@ -146,6 +146,15 @@ namespace NiflectGen
 		NiflectGenDefinition::CodeStyle::TryFormatNestedTemplate(name);
 		return name;
 	}
+#ifdef REFACTORING_0_TYPE_ACCESSOR_FIELD_RESTRUACTURING
+	Niflect::CString CResolvedCursorNode::GetBuildTypeMetaFuncName(const Niflect::CString& prefix) const
+	{
+		Niflect::CString funcName = NIFLECTFRAMEWORK_TEMPLATEFUNC_CTypeBody_BuildTypeMetaL + this->GetResocursorNameForLastTemplateArg() + ">";
+		if (!this->IsTaggedType())
+			funcName = prefix + funcName;
+		return funcName;
+	}
+#else
 	Niflect::CString CResolvedCursorNode::GetCreateTypeAccessorFuncName(const Niflect::CString& prefix) const
 	{
 		Niflect::CString funcName = NIFLECTFRAMEWORK_TEMPLATEFUNC_CTypeBody_CreateTypeAccessorL + this->GetResocursorNameForLastTemplateArg() + ">";
@@ -154,13 +163,7 @@ namespace NiflectGen
 		return funcName;
 
 	}
-	Niflect::CString CResolvedCursorNode::GetBuildTypeMetaFuncName(const Niflect::CString& prefix) const
-	{
-		Niflect::CString funcName = NIFLECTFRAMEWORK_TEMPLATEFUNC_CTypeBody_BuildTypeMetaL + this->GetResocursorNameForLastTemplateArg() + ">";
-		if (!this->IsTaggedType())
-			funcName = prefix + funcName;
-		return funcName;
-	}
+#endif
 	Niflect::CString CResolvedCursorNode::GetStaticGetTypeFuncName(const Niflect::CString& prefix) const
 	{
 		Niflect::CString funcName = "StaticGetType<" + this->GetResocursorNameForLastTemplateArg() + ">";
