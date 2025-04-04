@@ -43,8 +43,6 @@ namespace Niflect
 	{
 	public:
 		template <typename T>
-		static CSharedAccessor CreateTypeAccessor();
-		template <typename T>
 		static void BuildTypeMeta(CNiflectType* type0);
 	};
 

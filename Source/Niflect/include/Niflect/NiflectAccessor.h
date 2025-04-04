@@ -352,17 +352,20 @@ namespace Niflect
 	class CTypeBody
 	{
 	public:
+#ifdef REFACTORING_0_TYPE_ACCESSOR_FIELD_RESTRUACTURING
+		template <typename TType>
+		static void BuildTypeMeta(CNiflectType* type0)
+		{
+			static_assert(sizeof(TType) == 0, "This function must be specialized for type TType");//仅为避免 Intellisense 的绿线, 实际上只需要声明即可
+		}
+#else
 		template <typename TType>
 		static CSharedAccessor CreateTypeAccessor()
 		{
 			static_assert(sizeof(TType) == 0, "This function must be specialized for type TType");//仅为避免 Intellisense 的绿线, 实际上只需要声明即可
 			return NULL;
 		}
-		template <typename TType>
-		static void BuildTypeMeta(CNiflectType* type0)
-		{
-			static_assert(sizeof(TType) == 0, "This function must be specialized for type TType");//仅为避免 Intellisense 的绿线, 实际上只需要声明即可
-		}
+#endif
 		template <typename TType, uint32 MethodIndex>
 		static void InvokeMethod(InstanceType* base, uint32 inputsCount, InstanceType** inputArray, uint32 outputsCount, InstanceType** outputArray)
 		{
