@@ -41,7 +41,7 @@ namespace NiflectGen
 		const Niflect::TArrayNif<CTaggedInheritableTypeAccessMethod*>& m_vecAccessMethod;
 #endif
 		const Niflect::TArray<CResolvedMethod>& m_vecResomethod;
-		const Niflect::TArray<CTaggedInheritableTypeMethod*>& m_vecMethod;
+		const Niflect::TArray<CTaggedInheritableTypeMethod*>& m_vecTaggedMethod;
 		const CTaggedType* m_baseTaggedType;
 		const uint32 m_generatedBodyLineNumber;
 	};

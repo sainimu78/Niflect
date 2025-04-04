@@ -22,7 +22,7 @@ namespace NiflectGen
 		, m_vecAccessMethod(vecAccessMethod)
 #endif
 		, m_vecResomethod(vecResomethod)
-		, m_vecMethod(vecMethod)
+		, m_vecTaggedMethod(vecMethod)
 		, m_baseTaggedType(baseTaggedType)
 		, m_generatedBodyLineNumber(generatedBodyLineNumber)
 	{
@@ -237,9 +237,21 @@ namespace NiflectGen
 
 			WriteNextInitChildAccessor2(m_bindingTypeIndexedRoot->m_resocursorName, fieldStaticGetTypeFuncName, fieldName, linesNata, data.m_linesResoBodyCode);
 		}
-		for (uint32 idx = 0; idx < m_vecResomethod.size(); ++idx)
-		{
 
+		ASSERT(m_vecTaggedMethod.size() == m_vecResomethod.size());
+		for (uint32 idx0 = 0; idx0 < m_vecResomethod.size(); ++idx0)
+		{
+			auto& resomethod = m_vecResomethod[idx0];
+			auto& taggedMethod = m_vecTaggedMethod[idx0];
+			auto& methodCursor = taggedMethod->GetCursor();
+			auto kind = clang_getCursorKind(methodCursor);
+			Niflect::CString methodName;
+			if (kind == CXCursor_Constructor)
+				methodName = CXStringToCString(clang_getCursorSpelling(m_resolvedData->m_taggedMapping.m_vecType[m_bindingTypeIndexedRoot->m_taggedTypeIndex]->GetCursor()));
+			else if (kind == CXCursor_CXXMethod)
+				methodName = resomethod.m_resultType.GetResocursorInstanceName();
+			else
+				ASSERT(false);
 		}
 	}
 #else

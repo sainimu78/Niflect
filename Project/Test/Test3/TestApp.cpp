@@ -33,6 +33,7 @@ TEST(TestAppAndLib, TestMain) {
     Niflect::CNiflectTable table1;
     InitTestApp(table1);
 
+    using namespace TestLibScope;
     TestSerializationOf<CTestLib>();
     TestSerializationOf<CTestApp>();
 }
