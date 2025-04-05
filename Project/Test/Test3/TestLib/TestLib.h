@@ -24,26 +24,46 @@ namespace TestLibScope
 	};
 
 	NIF_T()
+	enum class ETestOption
+	{
+		Opt0
+	};
+
+	class CMyMethodNata : public Niflect::CNata
+	{
+	public:
+		CMyMethodNata()
+			: m_value(0.0f)
+		{
+		}
+		CMyMethodNata& SetExampleValue(float a) { m_value = a; return *this; }
+		float m_value;
+	};
+
+	NIF_T()
 	class CTestLib : public CTestBase
 	{
 		GENERATED_BODY()
 	public:
-		CTestLib()
-			: m_float_0(0.0f)
-			, m_string_2(NULL)
-		{
-		}
+		//CTestLib()
+		//	: m_float_0(0.0f)
+		//	, m_string_2(NULL)
+		//{
+		//}
 		//CTestLib(Niflect::TArray<float> a, const Niflect::TArray<bool>& b, Niflect::CString, Niflect::TMap<Niflect::CString, float>)
 		//	: m_float_0(0.0f)
 		//	, m_string_2(NULL)
 		//{
 		//}
-		//NIF_M()
-		//CTestLib(const float& a)
-		//	: m_float_0(0.0f)
-		//	, m_string_2(NULL)
-		//{
-		//}
+		NIF_M(CMyMethodNata().SetExampleValue(222.0f))
+		CTestLib(const float& a)
+			: m_float_0(0.0f)
+			, m_string_2(NULL)
+			, m_value(0.0f)
+		{
+			static int cnt = 0;
+			printf("ctor, %f, %d\n", a, ++cnt);
+		}
 		//NIF_M()
 		//Niflect::CString FuncB(
 		//	//Niflect::TMap<Niflect::CString, float> a,
@@ -61,10 +81,28 @@ namespace TestLibScope
 		//	return "";
 		//}
 
-	private:
+	public:
+		NIF_M()
 		void Nihao()
 		{
+			static int cnt = 0;
+			printf("nihao, %d\n", ++cnt);
 		}
+		NIF_M()
+		void Nihao1(float a)
+		{
+			static int cnt = 0;
+			printf("nihao1, %f, %d\n", a, ++cnt);
+		}
+		NIF_M()
+		const float& Nihao2(const Niflect::CString& a)
+		{
+			static int cnt = 0;
+			printf("nihao2, %s, %d\n", a.c_str(), ++cnt);
+			m_value = cnt;
+			return m_value;
+		}
+		float m_value;
 
 	public:
 		//NIF_M()

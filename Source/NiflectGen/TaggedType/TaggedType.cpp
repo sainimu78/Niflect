@@ -84,7 +84,11 @@ namespace NiflectGen
 	}
 	Niflect::CString CTaggedType::GetInvokeCtorAddr(const Niflect::CString& resocursorName) const
 	{
+#ifdef REFACTORING_0_TYPE_ACCESSOR_FIELD_RESTRUACTURING
+		return NIFLECTFRAMEWORK_TEMPLATEFUNCADDR_InvokeDefaultConstructorL + resocursorName + ">";
+#else
 		return NIFLECTFRAMEWORK_TEMPLATEFUNCADDR_InvokeConstructorL + resocursorName + ">";
+#endif
 	}
 
 	void CTaggedTypesMapping::Resolve()

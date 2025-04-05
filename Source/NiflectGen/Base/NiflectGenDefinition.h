@@ -168,6 +168,7 @@ namespace NiflectGenDefinition
 			constexpr const char* NiflectMacroHeader = "Niflect/NiflectMacro.h";
 			constexpr const char* NiflectModuleInfoHeader = "Niflect/NiflectModuleInfo.h";
 			constexpr const char* NiflectModuleRegistryHeader = "Niflect/NiflectModuleRegistry.h";
+			constexpr const char* NiflectMethodHeader = "Niflect/NiflectMethod.h";
 		}
 		namespace Setting
 		{
@@ -187,7 +188,11 @@ namespace NiflectGenDefinition
 		{
 			constexpr const char* CopyDerivedMeta = "MakeDerivedNata";
 		}
+#ifdef REFACTORING_0_TYPE_ACCESSOR_FIELD_RESTRUACTURING
+#define NIFLECTFRAMEWORK_TEMPLATEFUNCADDR_InvokeDefaultConstructorL "&InvokeDefaultConstructor<"
+#else
 #define NIFLECTFRAMEWORK_TEMPLATEFUNCADDR_InvokeConstructorL "&GenericInstanceInvokeConstructor<"
+#endif
 #define NIFLECTFRAMEWORK_TEMPLATEFUNC_CTypeBody_CreateTypeAccessorL "CTypeBody::CreateTypeAccessor<"
 #define NIFLECTFRAMEWORK_TEMPLATEFUNC_CTypeBody_BuildTypeMetaL "CTypeBody::BuildTypeMeta<"
 #ifdef PORTING_GETTER_SETTER_DEFAULTVALUE

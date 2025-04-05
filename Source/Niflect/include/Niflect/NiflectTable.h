@@ -20,31 +20,22 @@ namespace Niflect
 		}
 #ifdef REFACTORING_0_TYPE_ACCESSOR_FIELD_RESTRUACTURING
 		template <typename TType, typename TInfo>
-		void RegisterTypeDetailed(const Niflect::CString& id, const BuildTypeMetaFunc& inBuildTypeMetaFunc, CStaticNiflectTypeAddr* staticTypePtrAddr, const CSharedNata& nata, const InvokeConstructorFunc& InvokeConstructorFunc)
+		void RegisterTypeDetailed(const Niflect::CString& id, const BuildTypeMetaFunc& inBuildTypeMetaFunc, CStaticNiflectTypeAddr* staticTypePtrAddr, const CSharedNata& nata, const CConstructorInfo& ctorInfo)
 		{
-			STypeLifecycleMeta lifecycleMeta;
-			lifecycleMeta.m_typeSize = sizeof(TType);
-			ASSERT(InvokeConstructorFunc != NULL);
-			lifecycleMeta.m_InvokeConstructorFunc = InvokeConstructorFunc;
-			lifecycleMeta.m_InvokeDestructorFunc = &GenericInstanceInvokeDestructor<TType>;
-
 			auto shared = Niflect::MakeShared<TInfo>();
 			CNiflectType* type = shared.Get();
 			auto idx = this->GetTypesCount();
-			type->InitTypeMeta(this, idx, lifecycleMeta, CNiflectType::GetTypeHash<TType>(), id, inBuildTypeMetaFunc, staticTypePtrAddr, nata);
+			type->InitTypeMeta(this, idx, sizeof(TType), &GenericInstanceInvokeDestructor<TType>, CNiflectType::GetTypeHash<TType>(), id, inBuildTypeMetaFunc, staticTypePtrAddr, nata);
+			if (ctorInfo.m_Func != NULL)
+				type->m_vecConstructorInfo.push_back(ctorInfo);
 			this->InsertType(shared, idx);
 		}
 		template <typename TType, typename TInfo>
-		void RegisterTypeChecked(const Niflect::CString& id, const BuildTypeMetaFunc& inBuildTypeMetaFunc, const CSharedNata& nata, const InvokeConstructorFunc& InvokeConstructorFunc)
+		void RegisterType(const Niflect::CString& id, const BuildTypeMetaFunc& inBuildTypeMetaFunc, const CSharedNata& nata, const InvokeMethodFunc& inInvokeConstructorFunc)
 		{
 			ASSERT(!TRegisteredType<TType>::IsValid());
-			this->RegisterTypeDetailed<TType, TInfo>(id, inBuildTypeMetaFunc, &TRegisteredType<TType>::s_type, nata, InvokeConstructorFunc);
+			this->RegisterTypeDetailed<TType, TInfo>(id, inBuildTypeMetaFunc, &TRegisteredType<TType>::s_type, nata, CConstructorInfo(inInvokeConstructorFunc, NULL));
 			ASSERT(TRegisteredType<TType>::IsValid());
-		}
-		template <typename TType, typename TInfo>
-		void RegisterType(const Niflect::CString& id, const BuildTypeMetaFunc& inBuildTypeMetaFunc, const CSharedNata& nata)
-		{
-			this->RegisterTypeChecked<TType, TInfo>(id, inBuildTypeMetaFunc, nata, &GenericInstanceInvokeConstructor<TType>);
 		}
 #else
 		template <typename TInfo, typename TType>
@@ -161,7 +152,9 @@ namespace Niflect
 		CNiflectModule2* m_module;
 	};
 	using CSharedTable = TSharedPtr<CNiflectTable>;
-	
+
+#ifdef REFACTORING_0_TYPE_ACCESSOR_FIELD_RESTRUACTURING
+#else
 	template <typename TInfo, typename TType>
 	class TStaticTableTypeReg
 	{
@@ -231,4 +224,5 @@ namespace Niflect
 
 #define NIFLECT_CLASS_REGISTER(typeName, invokeGetTable, staticCreateFieldLayoutFuncAddr, nataType, nataObj)\
 	NIFLECT_TYPE_REGISTER(typeName, Niflect::CClass, invokeGetTable, staticCreateFieldLayoutFuncAddr, nataType, nataObj)
+#endif
 }

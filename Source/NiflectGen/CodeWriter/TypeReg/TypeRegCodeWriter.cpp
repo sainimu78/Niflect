@@ -90,9 +90,15 @@ namespace NiflectGen
 		}
 		{
 			auto infoTypeName = m_resolvedData->m_taggedMapping.GetInfoTypeName(m_bindingTypeIndexedRoot->m_taggedTypeIndex);
+#ifdef REFACTORING_0_TYPE_ACCESSOR_FIELD_RESTRUACTURING
+			Niflect::CString funcName = "RegisterType<" + m_bindingTypeIndexedRoot->m_resocursorName + ", " + infoTypeName + ">";
+#endif
 			if (m_bindingTypeIndexedRoot->IsTaggedType())
 			{
+#ifdef REFACTORING_0_TYPE_ACCESSOR_FIELD_RESTRUACTURING
+#else
 				Niflect::CString funcName = "RegisterTypeChecked<" + m_bindingTypeIndexedRoot->m_resocursorName + ", " + infoTypeName + ">";
+#endif
 				CCodeTemplate tpl0;
 				ReadTemplateFromRawData(tpl0, HardCodedTemplate::InvokeRegisterTypeByFrameworkTableMethod);
 				CLabelToCodeMapping map;
@@ -115,7 +121,10 @@ namespace NiflectGen
 			}
 			else
 			{
+#ifdef REFACTORING_0_TYPE_ACCESSOR_FIELD_RESTRUACTURING
+#else
 				Niflect::CString funcName = "RegisterType<" + m_bindingTypeIndexedRoot->m_resocursorName + ", " + infoTypeName + ">";
+#endif
 				funcName = context.m_moduleRegInfo.m_moduleScopeSymbolPrefix + funcName;
 				CCodeTemplate tpl0;
 				ReadTemplateFromRawData(tpl0, HardCodedTemplate::InvokeRegisterTypeByGeneratedStaticFunc);
@@ -157,7 +166,7 @@ namespace NiflectGen
 			MapLabelToText(map, LABEL_2, funcName);
 
 			CCodeLines linesBody;
-			this->WriteAddFields(input, linesBody, output.m_dependencyHeaderFilePathAddrs
+			this->WriteAddFields(input, output.m_linesInvokeMethodFuncsImpl, linesBody, output.m_dependencyHeaderFilePathAddrs
 #ifdef PORTING_GETTER_SETTER_DEFAULTVALUE
 				, data.m_vecGetSetData
 #endif
@@ -172,7 +181,7 @@ namespace NiflectGen
 
 		this->CollectDependencyHeaderFilePathAddrs(output.m_dependencyHeaderFilePathAddrs);
 	}
-	void CTypeRegCodeWriter2::WriteAddFields(const STypeRegBuildTypeMetaFuncWritingInput& input, CCodeLines& linesBody, CDependencyHeaderFilePathAddrs& dependencyHeaderFilePathAddrs
+	void CTypeRegCodeWriter2::WriteAddFields(const STypeRegBuildTypeMetaFuncWritingInput& input, CCodeLines& linesInvokeMethodFuncImpl, CCodeLines& linesBody, CDependencyHeaderFilePathAddrs& dependencyHeaderFilePathAddrs
 #ifdef PORTING_GETTER_SETTER_DEFAULTVALUE
 		, Niflect::TArrayNif<SGetterSetterData>& vecGetSetData
 #endif
@@ -241,7 +250,7 @@ namespace NiflectGen
 #ifdef PORTING_GETTER_SETTER_DEFAULTVALUE
 			SGetterSetterWritingData dddddData{ vecGetSetData };
 #else
-			SGetterSetterWritingData dddddData;
+			SGetterSetterWritingData dddddData { linesInvokeMethodFuncImpl };
 #endif
 			SResocursorNodeBodyCodeWritingContext bodyCodeCtx{ input.m_moduleRegInfo, input.m_log };
 			this->WriteResocursorNodeBodyCode(bodyCodeCtx, dddddData);

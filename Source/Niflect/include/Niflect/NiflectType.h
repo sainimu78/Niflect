@@ -7,7 +7,8 @@
 
 namespace Niflect
 {
-
+#ifdef REFACTORING_0_TYPE_ACCESSOR_FIELD_RESTRUACTURING
+#else
 	typedef CSharedAccessor (*CreateTypeAccessorFunc)();
 	using CreateFieldLayoutOfTypeFuncOld = CreateTypeAccessorFunc;
 
@@ -17,6 +18,7 @@ namespace Niflect
 		InvokeConstructorFunc m_InvokeConstructorFunc;//默认函数参数形式为 InvokeConstructorFunc
 		InvokeDestructorFunc m_InvokeDestructorFunc;
 	};
+#endif
 
 	class CNiflectTable;
 	class CNiflectType;
@@ -34,8 +36,8 @@ namespace Niflect
 		CNiflectType()
 			: m_table(NULL)
 			, m_tableIdx(INDEX_NONE)
-			, m_lifecycleMeta{}
-			//, m_CreateTypeAccessorFunc(NULL)
+			, m_typeSize(0)
+			, m_InvokeDestructorFunc(NULL)
 			, m_BuildTypeMetaFunc(NULL)
 			, m_staticTypePtrAddr(NULL)
 			, m_typeHash(0)
@@ -48,14 +50,14 @@ namespace Niflect
 		}
 
 	public:
-		void InitTypeMeta(CNiflectTable* table, uint32 tableIdx, const STypeLifecycleMeta& lifecycleMeta, size_t typeHash, const CString& id, const BuildTypeMetaFunc& inBuildTypeMetaFunc, CStaticNiflectTypeAddr* staticTypePtrAddr, const CSharedNata& nata)
+		void InitTypeMeta(CNiflectTable* table, uint32 tableIdx, uint32 typeSize, const InvokeDestructorFunc& inInvokeDestructorFunc, size_t typeHash, const CString& id, const BuildTypeMetaFunc& inBuildTypeMetaFunc, CStaticNiflectTypeAddr* staticTypePtrAddr, const CSharedNata& nata)
 		{
 			m_name = id;
 			m_table = table;
 			m_tableIdx = tableIdx;
 			m_nata = nata;
-			m_lifecycleMeta = lifecycleMeta;
-			//m_CreateTypeAccessorFunc = inCreateTypeAccessorFunc;
+			m_typeSize = typeSize;
+			m_InvokeDestructorFunc = inInvokeDestructorFunc;
 			m_BuildTypeMetaFunc = inBuildTypeMetaFunc;
 			m_staticTypePtrAddr = staticTypePtrAddr;
 			*m_staticTypePtrAddr = this;
@@ -77,11 +79,7 @@ namespace Niflect
 		}
 		const uint32& GetTypeSize() const//todo: 计划改名为 GetNativeTypeSize
 		{
-			return m_lifecycleMeta.m_typeSize;//对于C++ Built in类型, 返回类型为const ref是为了方便赋值类型用auto
-		}
-		const STypeLifecycleMeta& GetLifecycleMeta() const
-		{
-			return m_lifecycleMeta;
+			return m_typeSize;//对于C++ Built in类型, 返回类型为const ref是为了方便赋值类型用auto
 		}
 		const CTypeLayout& GetTypeLayout() const
 		{
@@ -120,6 +118,14 @@ namespace Niflect
 			field.Init(name, offset, type, nata);
 			m_vecFiled.push_back(field);
 		}
+		void InitAddMethodInfo(const CMethodInfo& info)
+		{
+			m_vecMethodInfo.push_back(info);
+		}
+		void InitAddConstructorInfo(const CConstructorInfo& info)
+		{
+			m_vecConstructorInfo.push_back(info);
+		}
 
 	protected:
 		virtual void InitTypeLayout(CTypeLayout& layout)
@@ -152,8 +158,14 @@ namespace Niflect
 		CTypeLayout m_layout;
 		CSharedAccessor m_accessor;
 		Niflect::TArray<CField> m_vecFiled;
-		STypeLifecycleMeta m_lifecycleMeta;
-		//CreateTypeAccessorFunc m_CreateTypeAccessorFunc;
+
+	public:
+		Niflect::TArray<CConstructorInfo> m_vecConstructorInfo;
+		Niflect::TArray<CMethodInfo> m_vecMethodInfo;
+		InvokeDestructorFunc m_InvokeDestructorFunc;
+
+	private:
+		uint32 m_typeSize;
 		BuildTypeMetaFunc m_BuildTypeMetaFunc;
 		CStaticNiflectTypeAddr* m_staticTypePtrAddr;
 		size_t m_typeHash;
@@ -378,12 +390,15 @@ namespace Niflect
 #endif
 	using CSharedNiflectType = TSharedPtr<CNiflectType>;
 
+#ifdef REFACTORING_0_TYPE_ACCESSOR_FIELD_RESTRUACTURING
+#else
 	template <typename TBase>
 	inline static TSharedPtr<TBase> NiflectTypeMakeShared(const CNiflectType* type)
 	{
 		auto& meta = type->GetLifecycleMeta();
 		return GenericPlacementMakeShared<TBase, CMemory>(meta.m_typeSize, meta.m_InvokeDestructorFunc, meta.m_InvokeConstructorFunc);
 	}
+#endif
 	
 	class CEnumConstMeta
 	{
@@ -610,6 +625,6 @@ namespace Niflect
 		}
 
 	public:
-		TArray<CNiflectMethod> m_vecMethod;
+		//TArray<CNiflectMethod> m_vecMethod;
 	};
 }

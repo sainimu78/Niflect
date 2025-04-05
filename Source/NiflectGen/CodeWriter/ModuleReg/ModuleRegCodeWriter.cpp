@@ -159,14 +159,20 @@ namespace NiflectGen
 #ifdef REFACTORING_0_TYPE_ACCESSOR_FIELD_RESTRUACTURING
 
             STypeRegBuildTypeMetaFuncWritingInput btmWritinginput{ context.m_moduleRegInfo, context.m_log };
+            CCodeLines linesInvokeMethodFuncsImpl;
+            CCodeLines linesBuildTypeMetaFuncsImpl;
             STypeRegBuildTypeMetaFuncWritingOutput btmWritingOutput{data.m_registerTypeAndfieldLayout.m_linesBuildTypeMetaFuncDecl
-                , data.m_registerTypeAndfieldLayout.m_linesBuildTypeMetaFuncImpl
+                , linesBuildTypeMetaFuncsImpl
+                , linesInvokeMethodFuncsImpl
                 , data.m_registerTypeAndfieldLayout.m_dependencyHeaderFilePathAddrs
 #ifdef PORTING_GETTER_SETTER_DEFAULTVALUE
                 , vecGetSetData
 #endif
             };
             it0->WriteBuildTypeMetaFunc(btmWritinginput, btmWritingOutput);
+            data.m_registerTypeAndfieldLayout.m_linesBuildTypeMetaFuncImpl = linesInvokeMethodFuncsImpl;
+            for (auto& it1 : linesBuildTypeMetaFuncsImpl)
+                data.m_registerTypeAndfieldLayout.m_linesBuildTypeMetaFuncImpl.push_back(it1);
 #else
 #ifdef PORTING_GETTER_SETTER_DEFAULTVALUE
             Niflect::TArrayNif<SGetterSetterData> vecGetSetData;

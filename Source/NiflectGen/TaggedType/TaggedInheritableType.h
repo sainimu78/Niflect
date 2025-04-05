@@ -28,6 +28,7 @@ namespace NiflectGen
 		virtual void Deprecated_ResolveDependcies(const TCursorMap<CTaggedType*>& mapCursorDeclToTaggedType) override;
 		virtual void ResolveDependcies(const CResolvingDependenciesContext& context, SResolvingDependenciesData& data) override;
 		virtual CSharedTypeRegCodeWriter2 CreateCodeWriter2() const override;
+		virtual Niflect::CString GetInvokeCtorAddr(const Niflect::CString& resocursorName) const override;
 
 	protected:
 		virtual void DebugDerivedPrint(FILE* fp) const override;

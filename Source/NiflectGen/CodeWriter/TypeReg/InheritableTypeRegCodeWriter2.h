@@ -18,6 +18,9 @@ namespace NiflectGen
 			, const Niflect::TArray<CResolvedMethod>& vecResomethod
 			, const Niflect::TArray<CTaggedInheritableTypeMethod*>& vecMethod
 		);
+//#ifdef REFACTORING_0_TYPE_ACCESSOR_FIELD_RESTRUACTURING
+//		virtual void WriteInvokeMethodFunc(const STypeReginvokeMethodFuncWritingInput& input, STypeReginvokeMethodFuncWritingOutput& output) const override;
+//#endif
 
 	protected:
 #ifdef REFACTORING_0_TYPE_ACCESSOR_FIELD_RESTRUACTURING

@@ -214,6 +214,21 @@ namespace NiflectGen
 			, m_vecMethod
 		);
 	}
+	Niflect::CString CTaggedInheritableType::GetInvokeCtorAddr(const Niflect::CString& resocursorName) const
+	{
+		bool hasDefaultCtor = m_vecMethod.size() == 0;
+		for (auto& it : m_vecMethod)
+		{
+			if (clang_CXXConstructor_isDefaultConstructor(it->GetCursor()))
+			{
+				hasDefaultCtor = true;
+				break;
+			}
+		}
+		if (!hasDefaultCtor)
+			return "NULL/*No default constructor*/";//在实现获取成员函数参数的 resocursorName 后也可考虑实现生成与构造参数形式相同的 GenericInstanceInvokeConstructor 特化
+		return inherited::GetInvokeCtorAddr(resocursorName);
+	}
 	void CTaggedInheritableType::DebugDerivedPrint(FILE* fp) const
 	{
 		Niflect::CString baseClassStr;

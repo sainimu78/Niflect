@@ -11,7 +11,6 @@ namespace NiflectGen
 
 	public:
 		virtual bool CollectSibling(const CXCursor& cursor, const STaggedNodeCollectingContext& context) override;
-		virtual Niflect::CString GetInvokeCtorAddr(const Niflect::CString& resocursorName) const override;
 
 	private:
 		enum class EStage
@@ -26,6 +25,5 @@ namespace NiflectGen
 #endif
 		CX_CXXAccessSpecifier m_lastAccessSpecifier;
 		Niflect::TSharedPtr<CTaggedInheritableTypeMember> m_createdTaggedChild;
-		Niflect::TArray<bool> m_vecIsDefaultCtor;
 	};
 }

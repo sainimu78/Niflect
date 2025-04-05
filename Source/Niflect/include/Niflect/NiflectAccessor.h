@@ -366,8 +366,13 @@ namespace Niflect
 			return NULL;
 		}
 #endif
-		template <typename TType, uint32 MethodIndex>
-		static void InvokeMethod(InstanceType* base, uint32 inputsCount, InstanceType** inputArray, uint32 outputsCount, InstanceType** outputArray)
+		template <typename TType, int MethodIndex>
+		static void InvokeMethod(InstanceType* base, InstanceType** const args)
+		{
+			static_assert(sizeof(TType) == 0, "This function must be specialized for type TType");//仅为避免 Intellisense 的绿线, 实际上只需要声明即可
+		}
+		template <typename TType, int MethodIndex>
+		static void InvokeConstructor(InstanceType* base, InstanceType** const args)
 		{
 			static_assert(sizeof(TType) == 0, "This function must be specialized for type TType");//仅为避免 Intellisense 的绿线, 实际上只需要声明即可
 		}

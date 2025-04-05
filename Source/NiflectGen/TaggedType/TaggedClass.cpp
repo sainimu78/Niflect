@@ -59,7 +59,6 @@ namespace NiflectGen
 			}
 			else if (kind == CXCursor_Constructor)
 			{
-				m_vecIsDefaultCtor.push_back(clang_CXXConstructor_isDefaultConstructor(cursor));
 				auto taggedChild = Niflect::MakeShared<CTaggedInheritableTypeMethod>();
 				taggedChild->InitMember(m_lastAccessSpecifier);
 				this->AddChildAndInitDefault(taggedChild, cursor, g_invalidCursor);
@@ -96,24 +95,5 @@ namespace NiflectGen
 			}
 		}
 		return addedTaggedChild;
-	}
-	Niflect::CString CTaggedClass::GetInvokeCtorAddr(const Niflect::CString& resocursorName) const
-	{
-		bool hasDefaultCtor = true;
-		if (m_vecIsDefaultCtor.size() > 0)
-		{
-			hasDefaultCtor = false;
-			for (const auto& it : m_vecIsDefaultCtor)
-			{
-				if (it)
-				{
-					hasDefaultCtor = true;
-					break;
-				}
-			}
-		}
-		if (!hasDefaultCtor)
-			return "NULL/*No default constructor*/";//在实现获取成员函数参数的 resocursorName 后也可考虑实现生成与构造参数形式相同的 GenericInstanceInvokeConstructor 特化
-		return inherited::GetInvokeCtorAddr(resocursorName);
 	}
 }

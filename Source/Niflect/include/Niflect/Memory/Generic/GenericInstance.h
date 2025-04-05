@@ -3,8 +3,8 @@
 
 namespace Niflect
 {
-	typedef void (*InvokeConstructorFunc)(void* obj);
-	typedef void (*InvokeDestructorFunc)(void* obj);
+	typedef void (*InvokeConstructorFunc)(void* instance);
+	typedef void (*InvokeDestructorFunc)(void* instance);
 	
 	//template <typename TClass>
 	//static void GenericInstanceInvokeConstructor(void* obj)
@@ -13,32 +13,32 @@ namespace Niflect
 	//}
 	
 	//该模板函数取地址, 可兼容有参数和无参数的函数指针类型
-	template <typename TClass, typename ...TArgs>
-	inline static void GenericInstanceInvokeConstructor(void* obj, TArgs&& ...args)
+	template <typename TType, typename ...TArgs>
+	inline static void GenericInstanceInvokeConstructor(void* instance, TArgs&& ...args)
 	{
-		new (obj) TClass(args...);
+		new (instance) TType(args...);
 	}
 
-	template <typename TClass>
-	inline static void GenericInstanceInvokeDestructor(void* obj)
+	template <typename TType>
+	inline static void GenericInstanceInvokeDestructor(void* instance)
 	{
-		static_cast<TClass*>(obj)->~TClass();
+		static_cast<TType*>(instance)->~TType();
 	}
 	
 	class CGenericInstance
 	{
 	public:
-		template <typename TMemory, typename TClass, typename ...TArgs>
-		inline static TClass* New(TArgs&& ...args)
+		template <typename TMemory, typename TType, typename ...TArgs>
+		inline static TType* New(TArgs&& ...args)
 		{
-			auto mem = TMemory::Alloc(sizeof(TClass));
-			GenericInstanceInvokeConstructor<TClass>(mem, std::forward<TArgs>(args)...);
-			return static_cast<TClass*>(mem);
+			auto mem = TMemory::Alloc(sizeof(TType));
+			GenericInstanceInvokeConstructor<TType>(mem, std::forward<TArgs>(args)...);
+			return static_cast<TType*>(mem);
 		}
-		template <typename TMemory, typename TClass>
-		inline static void Delete(TClass* obj)
+		template <typename TMemory, typename TType>
+		inline static void Delete(TType* obj)
 		{
-			GenericInstanceInvokeDestructor<TClass>(obj);
+			GenericInstanceInvokeDestructor<TType>(obj);
 			TMemory::Free(obj);
 		}
 		template <typename TMemory>

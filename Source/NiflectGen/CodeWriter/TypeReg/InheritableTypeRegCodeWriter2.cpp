@@ -187,8 +187,49 @@ namespace NiflectGen
 	}
 #endif
 #ifdef REFACTORING_0_TYPE_ACCESSOR_FIELD_RESTRUACTURING
+	//void CInheritableTypeRegCodeWriter2::WriteInvokeMethodFunc(const STypeReginvokeMethodFuncWritingInput& input, STypeReginvokeMethodFuncWritingOutput& output) const
+	//{
+
+	//	this->CollectDependencyHeaderFilePathAddrs(output.m_dependencyHeaderFilePathAddrs);
+	//}
 	void CInheritableTypeRegCodeWriter2::WriteResocursorNodeBodyCode(const SResocursorNodeBodyCodeWritingContext& context, SGetterSetterWritingData& data) const
 	{
+		ASSERT(m_vecTaggedMethod.size() == m_vecResomethod.size());
+		uint32 constructorsCount = 0;
+		uint32 methodsCount = 0;
+		for (uint32 idx0 = 0; idx0 < m_vecResomethod.size(); ++idx0)
+		{
+			auto& resomethod = m_vecResomethod[idx0];
+			auto& taggedMethod = m_vecTaggedMethod[idx0];
+			auto& methodCursor = taggedMethod->GetCursor();
+
+			CCodeLines linesNata;
+			taggedMethod->WriteCopyNataCode(linesNata);
+
+			Niflect::CString typeBodyFuncName;
+			auto kind = clang_getCursorKind(methodCursor);
+			if (kind == CXCursor_Constructor)
+			{
+				if (!clang_CXXConstructor_isDefaultConstructor(methodCursor))
+				{
+					WriteInvokeConstructorBody(m_bindingTypeIndexedRoot->m_resocursorName, m_bindingTypeIndexedRoot->GetResocursorNameForLastTemplateArg(), constructorsCount, resomethod.m_vecArgument, typeBodyFuncName, data.m_linesInvokeMethodFuncImpl);
+					WriteMethodRegConstructorInfo(typeBodyFuncName, linesNata, context.m_moduleRegInfo.m_moduleScopeSymbolPrefix, resomethod.m_vecArgument, resomethod.m_resultType, data.m_linesResoBodyCode);
+					constructorsCount++;
+				}
+			}
+			else if (kind == CXCursor_CXXMethod)
+			{
+				auto methodName = CXStringToCString(clang_getCursorSpelling(methodCursor));
+				WriteInvokeMethodBody(m_bindingTypeIndexedRoot->m_resocursorName, methodsCount, resomethod.m_vecArgument, resomethod.m_resultType, methodName, typeBodyFuncName, data.m_linesInvokeMethodFuncImpl);
+				WriteMethodRegMethodInfo(typeBodyFuncName, linesNata, context.m_moduleRegInfo.m_moduleScopeSymbolPrefix, resomethod.m_vecArgument, resomethod.m_resultType, methodName, data.m_linesResoBodyCode);
+				methodsCount++;
+			}
+			else
+			{
+				ASSERT(false);
+			}
+		}
+
 #ifdef PORTING_GETTER_SETTER_DEFAULTVALUE
 		data.m_vecGetSetData.resize(m_vecFieldResocursorNode.size());
 #endif
@@ -236,22 +277,6 @@ namespace NiflectGen
 #endif
 
 			WriteNextInitChildAccessor2(m_bindingTypeIndexedRoot->m_resocursorName, fieldStaticGetTypeFuncName, fieldName, linesNata, data.m_linesResoBodyCode);
-		}
-
-		ASSERT(m_vecTaggedMethod.size() == m_vecResomethod.size());
-		for (uint32 idx0 = 0; idx0 < m_vecResomethod.size(); ++idx0)
-		{
-			auto& resomethod = m_vecResomethod[idx0];
-			auto& taggedMethod = m_vecTaggedMethod[idx0];
-			auto& methodCursor = taggedMethod->GetCursor();
-			auto kind = clang_getCursorKind(methodCursor);
-			Niflect::CString methodName;
-			if (kind == CXCursor_Constructor)
-				methodName = CXStringToCString(clang_getCursorSpelling(m_resolvedData->m_taggedMapping.m_vecType[m_bindingTypeIndexedRoot->m_taggedTypeIndex]->GetCursor()));
-			else if (kind == CXCursor_CXXMethod)
-				methodName = resomethod.m_resultType.GetResocursorInstanceName();
-			else
-				ASSERT(false);
 		}
 	}
 #else
@@ -317,6 +342,12 @@ namespace NiflectGen
 		dependencyHeaderFilePathAddrs.m_vecDecl.push_back(m_bindingTypeIndexedRoot->GetHeaderFilePathAddrForTaggedType());
 		for (auto& it0 : m_vecFieldResocursorNode)
 			it0.GetHeaderFilePathAddrs(dependencyHeaderFilePathAddrs.m_vecImpl);
+		for (auto& it0 : m_vecResomethod)
+		{
+			for (auto& it1 : it0.m_vecArgument)
+				it1.GetHeaderFilePathAddrs(dependencyHeaderFilePathAddrs.m_vecImpl);
+			it0.m_resultType.GetHeaderFilePathAddrs(dependencyHeaderFilePathAddrs.m_vecImpl);
+		}
 	}
 	void CInheritableTypeRegCodeWriter2::CollectDataForGenH(SCollectingGeneratedBodyWritingData& data) const
 	{

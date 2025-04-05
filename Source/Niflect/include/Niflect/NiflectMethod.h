@@ -25,25 +25,80 @@
 #pragma once
 #include "Niflect/Base/Array.h"
 #include "Niflect/NiflectAddr.h"
+#include "Niflect/Base/String.h" 
+#include "Niflect/NiflectNata.h"
 
 namespace Niflect
 {
 	class CNiflectType;
 
-	class CNiflectMethod
+	typedef void (*InvokeMethodFunc)(InstanceType* base, InstanceType** const args);
+
+	template <typename TType>
+	static void InvokeDefaultConstructor(InstanceType* base, InstanceType** const args)
 	{
-		typedef void (*InvokeMethodFunc)(InstanceType* obj, InstanceType** inputInstanceArray, InstanceType** ouputInstanceArray, const TArray<CNiflectType*>& vecInputType, const TArray<CNiflectType*>& vecOutputType);
+		GenericInstanceInvokeConstructor<TType>(base);
+	}
+
+	class CParameterInfo
+	{
 	public:
-		CNiflectMethod()
-			: m_InvokeFunc(NULL)
+		CParameterInfo()
+			: m_type(NULL)
+			, m_isConstant(false)
+			, m_isReference(false)
 		{
 		}
-		inline void Invoke(InstanceType* obj, InstanceType** inputInstanceArray, InstanceType** ouputInstanceArray) const
+		CParameterInfo(CNiflectType* type, bool isConstant, bool isReference)
+			: m_type(type)
+			, m_isConstant(isConstant)
+			, m_isReference(isReference)
 		{
-			m_InvokeFunc(obj, inputInstanceArray, ouputInstanceArray, m_vecInputType, m_vecOutputType);
+
 		}
-		TArray<CNiflectType*> m_vecInputType;
-		TArray<CNiflectType*> m_vecOutputType;
-		InvokeMethodFunc m_InvokeFunc;
+		CNiflectType* m_type;
+		bool m_isConstant;
+		bool m_isReference;
+	};
+
+	class CConstructorInfo
+	{
+	public:
+		CConstructorInfo()
+			: m_Func(NULL)
+		{
+		}
+		CConstructorInfo(const InvokeMethodFunc& Func, const CSharedNata& nata)
+			: m_Func(Func)
+			, m_nata(nata)
+		{
+		}
+		Niflect::TArray<CParameterInfo> m_vecInput;
+		InvokeMethodFunc m_Func;
+		CSharedNata m_nata;
+	};
+
+	class CMethodInfo
+	{
+	public:
+		CMethodInfo()
+			: m_Func(NULL)
+		{
+		}
+		CMethodInfo(const InvokeMethodFunc& Func, const Niflect::CString& name, const CSharedNata& nata)
+			: m_Func(Func)
+			, m_name(name)
+			, m_nata(nata)
+		{
+		}
+		//inline void Invoke(InstanceType* base, InstanceType** inputArray, InstanceType** ouputArray) const
+		//{
+		//	m_InvokeMethodFunc(base, inputArray, ouputArray);
+		//}
+		Niflect::TArray<CParameterInfo> m_vecInput;
+		Niflect::TArray<CParameterInfo> m_vecOutput;
+		InvokeMethodFunc m_Func;
+		Niflect::CString m_name;
+		CSharedNata m_nata;
 	};
 }

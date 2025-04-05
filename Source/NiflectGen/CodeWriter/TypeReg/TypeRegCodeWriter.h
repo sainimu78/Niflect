@@ -188,6 +188,18 @@ namespace NiflectGen
 #endif
 
 #ifdef REFACTORING_0_TYPE_ACCESSOR_FIELD_RESTRUACTURING
+	struct STypeReginvokeMethodFuncWritingInput
+	{
+		const CModuleRegInfoValidated& m_moduleRegInfo;
+		CGenLog* m_log;
+	};
+	struct STypeReginvokeMethodFuncWritingOutput
+	{
+		CCodeLines& m_linesDecl;
+		CCodeLines& m_linesImpl;
+		CDependencyHeaderFilePathAddrs& m_dependencyHeaderFilePathAddrs;
+	};
+
 	struct STypeRegBuildTypeMetaFuncWritingInput
 	{
 		const CModuleRegInfoValidated& m_moduleRegInfo;
@@ -198,6 +210,7 @@ namespace NiflectGen
 	{
 		CCodeLines& m_linesDecl;
 		CCodeLines& m_linesImpl;
+		CCodeLines& m_linesInvokeMethodFuncsImpl;
 		CDependencyHeaderFilePathAddrs& m_dependencyHeaderFilePathAddrs;
 #ifdef PORTING_GETTER_SETTER_DEFAULTVALUE
 		Niflect::TArrayNif<SGetterSetterData>& m_vecGetSetData;
@@ -241,6 +254,7 @@ namespace NiflectGen
 
 	struct SGetterSetterWritingData
 	{
+		CCodeLines& m_linesInvokeMethodFuncImpl;
 #ifdef PORTING_GETTER_SETTER_DEFAULTVALUE
 		Niflect::TArrayNif<SGetterSetterData>& m_vecGetSetData;
 #endif
@@ -257,6 +271,7 @@ namespace NiflectGen
 		void Init(const CResolvedData* resolvedData, const CResolvedCursorNode* bindingTypeIndexedRoot);
 		virtual void WriteInvokeRegisterType(const STypeRegRegisterTypeContext& context, STypeRegInvokeRegisterTypeWritingData& data) const;
 #ifdef REFACTORING_0_TYPE_ACCESSOR_FIELD_RESTRUACTURING
+		//virtual void WriteInvokeMethodFunc(const STypeReginvokeMethodFuncWritingInput& input, STypeReginvokeMethodFuncWritingOutput& output) const {}
 		void WriteBuildTypeMetaFunc(const STypeRegBuildTypeMetaFuncWritingInput& input, STypeRegBuildTypeMetaFuncWritingOutput& output) const;
 #else
 		void WriteWriteCreateTypeAccessorFunc(const STypeRegCreateTypeAccessorWritingContext& context, STypeRegCreateTypeAccessorWritingData& data) const;
@@ -276,7 +291,7 @@ namespace NiflectGen
 
 	private:
 #ifdef REFACTORING_0_TYPE_ACCESSOR_FIELD_RESTRUACTURING
-		void WriteAddFields(const STypeRegBuildTypeMetaFuncWritingInput& input, CCodeLines& linesBody, CDependencyHeaderFilePathAddrs& dependencyHeaderFilePathAddrs
+		void WriteAddFields(const STypeRegBuildTypeMetaFuncWritingInput& input, CCodeLines& linesInvokeMethodFuncImpl, CCodeLines& linesBody, CDependencyHeaderFilePathAddrs& dependencyHeaderFilePathAddrs
 #ifdef PORTING_GETTER_SETTER_DEFAULTVALUE
 			, Niflect::TArrayNif<SGetterSetterData>& vecGetSetData
 #endif
