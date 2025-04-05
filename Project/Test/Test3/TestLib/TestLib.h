@@ -20,7 +20,6 @@ namespace TestLibScope
 	NIF_T()
 	class CTestBase
 	{
-		GENERATED_BODY()
 	};
 
 	NIF_T()
