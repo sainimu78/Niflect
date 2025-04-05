@@ -16,7 +16,10 @@ namespace Niflect
 		if (!TRegisteredType<TType>::IsValid())
 		{
 			ASSERT(!typeName.empty());
+#ifdef REFACTORING_0_TYPE_ACCESSOR_FIELD_RESTRUACTURING
+#else
 			table->RegisterType<TInfo, TType>(typeName, &__InternalCreateFieldLayoutForFunctionPointer<TAccessor>);
+#endif
 		}
 		return Niflect::StaticGetTypeOld<TType>();
 	}
