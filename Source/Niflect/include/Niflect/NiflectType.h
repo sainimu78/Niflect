@@ -391,6 +391,21 @@ namespace Niflect
 	using CSharedNiflectType = TSharedPtr<CNiflectType>;
 
 #ifdef REFACTORING_0_TYPE_ACCESSOR_FIELD_RESTRUACTURING
+	template <typename TBase, typename ...TArgs>
+	inline static TSharedPtr<TBase> NiflectTypeMakeShared(const CNiflectType* type)
+	{
+		Niflect::InstanceType** argArray = NULL;
+		ASSERT(type->m_vecConstructorInfo[0].m_vecInput.size() == 0);
+		return GenericPlacementMakeShared<TBase, CMemory>(type->GetTypeSize(), type->m_InvokeDestructorFunc, type->m_vecConstructorInfo[0].m_Func, argArray);
+	}
+	template <typename TBase, typename ...TArgs>
+	inline static TSharedPtr<TBase> NiflectTypeMakeShared(const CNiflectType* type, TArgs&& ...args)
+	{
+		//std::array<Niflect::InstanceType*, sizeof ...(TArgs)> args_array = { (&args)... };//如使用 std::array 则可不定义无参数版本的函数
+		Niflect::InstanceType* argArray[] = { (&args)... };
+		ASSERT(type->m_vecConstructorInfo[0].m_vecInput.size() > 0);
+		return GenericPlacementMakeShared<TBase, CMemory>(type->GetTypeSize(), type->m_InvokeDestructorFunc, type->m_vecConstructorInfo[0].m_Func, argArray);
+	}
 #else
 	template <typename TBase>
 	inline static TSharedPtr<TBase> NiflectTypeMakeShared(const CNiflectType* type)

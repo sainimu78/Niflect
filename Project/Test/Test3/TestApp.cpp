@@ -38,13 +38,7 @@ TEST(TestAppAndLib, TestMain) {
     auto type = Niflect::StaticGetType<CTestLib>();
     for (uint32 idx = 0; idx < 1000; ++idx)
     {
-        float prm0 = 123.0f;
-        Niflect::InstanceType* prms[] = { &prm0 };
-        auto dummy = Niflect::GenericPlacementMakeShared<CTestBase, Niflect::CMemory>(
-            type->GetTypeSize(),
-            type->m_InvokeDestructorFunc,
-            type->m_vecConstructorInfo[0].m_Func,
-            prms);
+        auto dummy = Niflect::NiflectTypeMakeShared<CTestBase>(type, 123.0f);
         //auto& instance = *reinterpret_cast<CTestLib*>(dummy.Get());
         auto& instance = *dummy.Cast<CTestLib>();
         instance.m_array_float_3.push_back(1);
