@@ -315,11 +315,11 @@ int main(int argc, const char** argv)
 				//{
 				//	info.m_genSourceOutputDirPath = GetNextArgPath(argv, idx);
 				//}
-				parser.Register("-gbt", CArgDefinition()
-					.SetDescription("Generate an alias of CThis for the reflected class in GENERATED_BODY expansion")
+				parser.Register("-gat", CArgDefinition()
+					.SetDescription("Generate an alias of CThis for the reflected class in " NIFLECTFRAMEWORK_MACROPOSTFIX_GENERATED_NON_STORAGE_DECLS " expansion")
 					.SetRequirementType(EArgRequirementType::Optional)
 					.SetNoValue()
-					.SetOnFoundArgFunc([&] { info.m_toGenGeneratedBodyThisType = true; }));
+					.SetOnFoundArgFunc([&] { info.m_toGenGeneratedDeclsThisType = true; }));
 				parser.Register("-gsm", CArgDefinition()
 					.SetDescription("Generate the statically registering types function with C API")
 					.SetRequirementType(EArgRequirementType::Optional)

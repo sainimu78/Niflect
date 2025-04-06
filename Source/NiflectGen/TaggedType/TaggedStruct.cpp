@@ -23,7 +23,7 @@ namespace NiflectGen
 			auto kind = clang_getCursorKind(cursor);
 			if (kind == CXCursor_TypedefDecl)
 			{
-				if (this->CollectGeneratedBodyTag(cursor, kind))
+				if (this->CollectGeneratedNonStorageDeclsTag(cursor, kind))
 				{
 
 				}
@@ -49,7 +49,7 @@ namespace NiflectGen
 		}
 		else if (m_stage == EStage::FoundMember)
 		{
-			this->ErrorIfNoGeneratedBodyTag(cursor);
+			this->ErrorIfNoGeneratedNonStorageDeclsTag(cursor);
 
 			bool ok = false;
 			auto kind = clang_getCursorKind(cursor);

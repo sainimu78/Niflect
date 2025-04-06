@@ -444,7 +444,7 @@ namespace NiflectGen
 					SCollectingGeneratedBodyWritingData forGenHData{ data.m_lineNumberMacroData.m_generatedBodyLineNumber };
 					this->CollectDataForGenH(forGenHData);
 				}
-				if (context.m_moduleRegInfo.m_userProvided.m_toGenGeneratedBodyThisType)
+				if (context.m_moduleRegInfo.m_userProvided.m_toGenGeneratedDeclsThisType)
 				{
 					CMacroDefinitionData md;
 					md.m_namePostfix = "ThisType";

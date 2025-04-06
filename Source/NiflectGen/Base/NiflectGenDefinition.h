@@ -46,7 +46,7 @@ namespace NiflectGenDefinition
 
 	namespace CodeTag
 	{
-#define MACROTAG_GENERATED_BODY "__NiflectGen_GeneratedBody"
+#define MACROTAG_GENERATED_NON_STORAGE_DECLS "__NiflectGen_GeneratedNonStorageDecls"
 #define MACROTAG_TYPE "__NiflectGen_Type"
 #define MACROTAG_FIELD "__NiflectGen_Field"
 #define MACROTAG_METHOD "__NiflectGen_Method"
@@ -59,7 +59,7 @@ namespace NiflectGenDefinition
 #else
 		constexpr const char* BindingSetting = "__NiflectGen_BindingSetting";
 #endif
-		constexpr const char* GeneratedBody = MACROTAG_GENERATED_BODY;
+		constexpr const char* GeneratedNonStorageDecls = MACROTAG_GENERATED_NON_STORAGE_DECLS;
 
 		constexpr const char* Type = MACROTAG_TYPE;
 		constexpr const char* Field = MACROTAG_FIELD;
@@ -181,7 +181,8 @@ namespace NiflectGenDefinition
 		}
 		namespace LineNumberMacro
 		{
-			constexpr const char* GENERATED_BODY = "GENERATED_BODY";
+#define NIFLECTFRAMEWORK_MACROPOSTFIX_GENERATED_NON_STORAGE_DECLS "GENERATED_NON_STORAGE_DECLS"
+			//constexpr const char* GENERATED_NON_STORAGE_DECLS = NIFLECTFRAMEWORK_MACROPOSTFIX_GENERATED_NON_STORAGE_DECLS;
 			constexpr const char* FID = "FID_";
 		}
 		namespace FuncName

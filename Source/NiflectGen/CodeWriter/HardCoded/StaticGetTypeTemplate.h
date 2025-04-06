@@ -20,7 +20,7 @@ namespace NiflectGen
 	namespace HardCodedTemplate
 	{
 		static const char* LineNumberMacros =
-"//This is the expansion of GENERATED_BODY at the line " MAKELABEL(LABEL_7) " of " MAKELABEL(LABEL_8) R"(
+"//This is the expansion of " NIFLECTFRAMEWORK_MACROPOSTFIX_GENERATED_NON_STORAGE_DECLS " at the line " MAKELABEL(LABEL_7) " of " MAKELABEL(LABEL_8) R"(
 )" MAKELABEL(LABEL_9) R"(
 )" MAKELABEL(LABEL_10);
 		static const char* GenH =

@@ -21,8 +21,8 @@ namespace NiflectGen
 
 	protected:
 		void InitBaseTypeSpecifierCursor(const CXCursor& cursor);
-		bool CollectGeneratedBodyTag(const CXCursor& cursor, const CXCursorKind& kind);
-		void ErrorIfNoGeneratedBodyTag(const CXCursor& cursor) const;
+		bool CollectGeneratedNonStorageDeclsTag(const CXCursor& cursor, const CXCursorKind& kind);
+		void ErrorIfNoGeneratedNonStorageDeclsTag(const CXCursor& cursor) const;
 
 	public:
 		virtual void Deprecated_ResolveDependcies(const TCursorMap<CTaggedType*>& mapCursorDeclToTaggedType) override;

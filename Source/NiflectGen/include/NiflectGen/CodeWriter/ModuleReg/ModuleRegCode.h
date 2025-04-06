@@ -19,7 +19,7 @@ namespace NiflectGen
 	{
 	public:
 		CModuleRegInfo()
-			: m_toGenGeneratedBodyThisType(false)
+			: m_toGenGeneratedDeclsThisType(false)
 			, m_toGenStaticModuleReg(false)
 			, m_toGenStaticallyRegisterToRegistry(false)
 #ifdef FIELD_TYPE_CAN_BE_ALIAS_OF_BINDING_TYPE_IN_AS
@@ -41,7 +41,7 @@ namespace NiflectGen
 		Niflect::CString m_specifiedModuleApiMacro;
 		Niflect::CString m_specifiedModuleApiMacroHeaderFilePath;
 		Niflect::CString m_toolHeaderSearchPath;
-		bool m_toGenGeneratedBodyThisType;
+		bool m_toGenGeneratedDeclsThisType;
 		bool m_toGenStaticModuleReg;
 		bool m_toGenStaticallyRegisterToRegistry;
 #ifdef FIELD_TYPE_CAN_BE_ALIAS_OF_BINDING_TYPE_IN_AS

@@ -103,7 +103,7 @@ namespace NiflectGen
                         //_gen.h 改为无 pragma once, 并增加宏 #error 检查, _gen.h 是特殊写法, 
                         // 由于定义 CURRENT_FILE_ID, 因此不能加 pragma once, 否则 CURRENT_FILE_ID 不能在 _gen.h 作为依赖时被包含解析, 导致 CURRENT_FILE_ID 预处理错误.
                         // 现象为 CURRENT_FILE_ID 被解析为展开的 include 顺序中最先出现的 FID 定义.
-                        // 如 DerivedObject_gen.h 的 GENERATED_BODY 被解析为 TestModule1_gen.h 中的 FID_xxx_GENERATED_BODY
+                        // 如 DerivedObject_gen.h 的 GENERATED_NON_STORAGE_DECLS 被解析为 TestModule1_gen.h 中的 FID_xxx_GENERATED_NON_STORAGE_DECLS
                         MapLabelToText(map, LABEL_11, genHHeaderMacro);
                         MapLabelToText(map, LABEL_12, relativeStaticGetTypeGenHFilePath);
                         MapLabelToText(map, LABEL_13, headerFilePath);
@@ -162,7 +162,7 @@ namespace NiflectGen
                             }
                             CCodeLines linesRootDefinition;
                             {
-                                auto macroName = GenerateLineNumberMacroName(genHFileId, lineNumber, NiflectGenDefinition::NiflectFramework::LineNumberMacro::GENERATED_BODY);
+                                auto macroName = GenerateLineNumberMacroName(genHFileId, lineNumber, NIFLECTFRAMEWORK_MACROPOSTFIX_GENERATED_NON_STORAGE_DECLS);
                                 WriteLineNumberMacroDefinition(macroName, linesRootBody, linesRootDefinition);
                                 if (idx1 != cnt1 - 1)
                                     linesRootDefinition.push_back(EscapeChar::EmptyLine);

@@ -9,7 +9,7 @@ namespace NiflectGen
 	void WriteGenTimeNiflectMacroHeader(const SGenTimeNiflectMacroHeaderWritingContext& context)
 	{
 		CCodeLines linesMacroTagDefine;
-		linesMacroTagDefine.push_back("#define _NIFLECTGENTAG_GENERATED_BODY typedef void* CONCAT_SYMBOLS_2(" MACROTAG_GENERATED_BODY ",__LINE__);");
+		linesMacroTagDefine.push_back("#define _NIFLECTGENTAG_" NIFLECTFRAMEWORK_MACROPOSTFIX_GENERATED_NON_STORAGE_DECLS " typedef void* CONCAT_SYMBOLS_2(" MACROTAG_GENERATED_NON_STORAGE_DECLS ", __LINE__); ");
 		linesMacroTagDefine.push_back("#define _NIFLECTGENTAG_TYPE typedef void* " MACROTAG_TYPE ";");
 		linesMacroTagDefine.push_back("#define _NIFLECTGENTAG_FIELD typedef void* CONCAT_SYMBOLS_2(" MACROTAG_FIELD ",__LINE__);");
 		linesMacroTagDefine.push_back("#define _NIFLECTGENTAG_METHOD typedef void* " MACROTAG_METHOD ";");
