@@ -1,5 +1,5 @@
 #pragma once
-#include "Niflect/NiflectMacroTag.h"
+#include "Niflect/Default/DefaultMacroTag.h"
 
 NIF_T()
 class CPublicFields

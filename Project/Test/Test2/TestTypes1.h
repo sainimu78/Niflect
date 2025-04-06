@@ -4,7 +4,7 @@
 NIF_T()
 class CPrivateFields
 {
-	GENERATED_BODY()
+	NIFGNSD()
 public:
 	CPrivateFields()
 		: m_float_0(0.0f)

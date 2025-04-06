@@ -42,7 +42,7 @@ namespace TestLibScope
 	NIF_T()
 	class CTestLib : public CTestBase
 	{
-		GENERATED_BODY()
+		NIFGNSD()
 	public:
 		//CTestLib()
 		//	: m_float_0(0.0f)

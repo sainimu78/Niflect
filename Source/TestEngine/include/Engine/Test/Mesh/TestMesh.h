@@ -7,7 +7,7 @@ namespace TestEngineEditMode
 	NIF_T()
 	class CTestMesh : public CTestAsset
 	{
-		GENERATED_BODY()
+		NIFGNSD()
 	public:
 		virtual void DebugPrint() const override;
 

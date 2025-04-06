@@ -35,7 +35,7 @@ namespace TestModule1
 	NIF_T()
 	class CTestBase1
 	{
-		GENERATED_BODY()
+		NIFGNSD()
 	public:
 		CTestBase1()
 			: m_base_bool_1(false)
@@ -130,7 +130,7 @@ namespace TestModule1
 	NIF_T()
 	class CTestClass1 : public CTestBase1
 	{
-		GENERATED_BODY()
+		NIFGNSD()
 		typedef CTestBase1 inherited;
 	public:
 		CTestClass1()

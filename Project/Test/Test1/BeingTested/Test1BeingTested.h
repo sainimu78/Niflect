@@ -4,7 +4,7 @@
 NIF_T()
 class CTest1_Class_0
 {
-	GENERATED_BODY()
+	NIFGNSD()
 public:
 	CTest1_Class_0()
 		: m_float_0(0.0f)

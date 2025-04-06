@@ -43,7 +43,7 @@ namespace Engine
 		.SetCategory("Default Category"))
 	class CEngineObject
 	{
-		GENERATED_BODY()
+		NIFGNSD()
 	public:
 		CEngineObject()
 			: m_float_0(0.0f)
@@ -126,7 +126,7 @@ namespace Engine
 	NIF_T()
 	class CComponentObject
 	{
-		GENERATED_BODY()
+		NIFGNSD()
 	public:
 		CComponentObject()
 			: m_float_0(0.0f)

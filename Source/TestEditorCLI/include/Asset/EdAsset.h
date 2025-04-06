@@ -4,7 +4,7 @@
 namespace Editor
 {
 #define AAAAAAAA()\
-		GENERATED_BODY()\
+		NIFGNSD()\
 	public:\
 		virtual Niflect::CNiflectType* GetType() const\
 		{\

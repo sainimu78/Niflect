@@ -6,7 +6,7 @@ namespace TestModule1
 	NIF_T()
 	class CMyClassInPrecompileHeader
 	{
-		GENERATED_BODY()
+		NIFGNSD()
 	public:
 		CMyClassInPrecompileHeader()
 			: m_value_0(0.0f)

@@ -1,7 +1,10 @@
 #pragma once
 #include "Niflect/NiflectMacroTag.h"
 
+//·ÏÆú
 #define GENERATED_BODY(...) _NIFLECTGENTAG_GENERATED_NON_STORAGE_DECLS
+
+#define NIFGNSD(...) _NIFLECTGENTAG_GENERATED_NON_STORAGE_DECLS
 
 #define NIF_T(...) _NIFLECTGENTAG_TYPE
 #define NIF_F(...) _NIFLECTGENTAG_FIELD

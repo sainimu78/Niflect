@@ -45,7 +45,7 @@ namespace TestModule1
 	NIF_T()
 	class CTestMyInstance
 	{
-		GENERATED_BODY()
+		NIFGNSD()
 	public:
 		CTestMyInstance()
 			: m_float_0(0.0f)

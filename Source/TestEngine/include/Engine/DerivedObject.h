@@ -9,7 +9,7 @@ namespace Engine
 	NIF_T()
 	class CDerivedObject : public CEngineObject
 	{
-		GENERATED_BODY()
+		NIFGNSD()
 		typedef CEngineObject inherited;
 	public:
 		CDerivedObject()
@@ -74,7 +74,7 @@ namespace Engine
 	NIF_T()
 	class CDerivedFromModule1 : public TestModule1::CTestClass1
 	{
-		GENERATED_BODY()
+		NIFGNSD()
 		typedef TestModule1::CTestClass1 inherited;
 	public:
 		CDerivedFromModule1()
