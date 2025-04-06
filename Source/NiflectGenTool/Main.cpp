@@ -295,6 +295,10 @@ int main(int argc, const char** argv)
 					.SetDescription("File path of the accessor setting header using by the module")
 					.SetRequirementType(EArgRequirementType::MultipleOptional)
 					.SetOnFoundArgFunc([&] { info.m_vecAccessorSettingHeader.push_back(ParseNextArgPath(parser)); }));
+				parser.Register("-m", CArgDefinition()
+					.SetDescription("File path of the macro tag header").SetExample("F:/Source/Niflect/include/Niflect/Default/DefaultMacroTag.h")
+					.SetRequirementType(EArgRequirementType::Optional)
+					.SetOnFoundArgFunc([&] { info.m_specifiedMacroTagHeaderFilePath = ParseNextArgPath(parser); }));
 				parser.Register("-I", CArgDefinition()
 					.SetDescription("Include path containing the specified headers").SetExample("F:/Source/TestModule1/include")
 					.SetRequirementType(EArgRequirementType::SpecifiedAtLeastOne)
@@ -311,10 +315,6 @@ int main(int argc, const char** argv)
 					.SetDescription("Root output directory path of the generated files").SetExample("F:/Generated/NiflectGenerated ")
 					.SetRequirementType(EArgRequirementType::Required)
 					.SetOnFoundArgFunc([&] { info.m_genOutputDirPath = ParseNextArgPath(parser); }));
-				//else if (strcmp(pszV, "-gs") == 0)
-				//{
-				//	info.m_genSourceOutputDirPath = GetNextArgPath(argv, idx);
-				//}
 				parser.Register("-gat", CArgDefinition()
 					.SetDescription("Generate an alias of CThis for the reflected class in " NIFLECTFRAMEWORK_MACROPOSTFIX_GENERATED_NON_STORAGE_DECLS " expansion")
 					.SetRequirementType(EArgRequirementType::Optional)

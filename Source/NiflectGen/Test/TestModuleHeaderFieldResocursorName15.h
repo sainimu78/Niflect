@@ -1,5 +1,5 @@
 #pragma once
-#include "Niflect/NiflectMacroTag.h"
+#include "Niflect/Default/DefaultMacroTag.h"
 #include "Engine/Test/TestMyResource.h"
 #include "Engine/Test/TestMyAsset.h"
 

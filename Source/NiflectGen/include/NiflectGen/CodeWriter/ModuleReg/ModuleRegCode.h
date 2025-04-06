@@ -41,6 +41,7 @@ namespace NiflectGen
 		Niflect::CString m_specifiedModuleApiMacro;
 		Niflect::CString m_specifiedModuleApiMacroHeaderFilePath;
 		Niflect::CString m_toolHeaderSearchPath;
+		Niflect::CString m_specifiedMacroTagHeaderFilePath;
 		bool m_toGenGeneratedDeclsThisType;
 		bool m_toGenStaticModuleReg;
 		bool m_toGenStaticallyRegisterToRegistry;
@@ -67,6 +68,7 @@ namespace NiflectGen
 		Niflect::CString m_genSourceRootParentDir;
 		Niflect::CString m_moduleGenDirPath;
 		Niflect::CString m_moduleRegisteredTypeHeaderFilePath;
+		Niflect::CString m_macroTagHeaderFilePath;
 		Niflect::CString m_moduleScopeSymbolPrefix;
 		Niflect::CString m_moduleApiMacro;
 		Niflect::CString m_moduleApiMacroHeaderFilePath;

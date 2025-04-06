@@ -28,6 +28,10 @@ namespace NiflectGen
 		m_genIncludeBasePath = NiflectGenDefinition::DirName::GenInclude;
 		m_genSrcBasePath = NiflectGenDefinition::DirName::GenSrc;
 
+		m_macroTagHeaderFilePath = m_userProvided.m_specifiedMacroTagHeaderFilePath;
+		if (m_macroTagHeaderFilePath.empty())
+			m_macroTagHeaderFilePath = NiflectGenDefinition::NiflectFramework::FilePath::DefaultMacroTagHeader;
+
 		m_moduleRegisteredTypeHeaderFilePath = NiflectUtil::ConcatPath(m_typeRegBasePath, NiflectGenDefinition::NiflectFramework::FileName::ModuleRegisteredTypeHeader);
 		m_moduleScopeSymbolPrefix = "_" + m_userProvided.m_moduleName + "_";
 

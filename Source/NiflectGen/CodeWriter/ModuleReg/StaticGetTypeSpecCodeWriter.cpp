@@ -89,7 +89,7 @@ namespace NiflectGen
                 {
                     CCodeLines linesGenHInclude;
                     CHeaderFilePathDataArray vecHeaderData;
-                    vecHeaderData.push_back(NiflectGenDefinition::NiflectFramework::FilePath::NiflectMacroTagHeader);
+                    vecHeaderData.push_back(context.m_moduleRegInfo.m_macroTagHeaderFilePath);
                     if (requiredExportedStaticGetType && (!context.m_moduleRegInfo.m_moduleApiMacroHeaderFilePath.empty()))
                         vecHeaderData.push_back({ context.m_moduleRegInfo.m_moduleApiMacroHeaderFilePath, true });
                     vecHeaderData.push_back({ NiflectGenDefinition::NiflectFramework::FilePath::NiflectTypeHeader, true });
