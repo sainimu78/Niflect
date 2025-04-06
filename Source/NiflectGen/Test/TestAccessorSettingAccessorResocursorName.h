@@ -29,14 +29,14 @@ namespace EngineTypeBindingSettingScope
 	using namespace SubScope1;
 	using namespace std;
 
-	NIF_AS_A() TSetting<TMyTransformAccessor<float>, TMyTransform<float> >;
-	NIF_AS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, TMyTransform<double> >;
-	NIF_AS_A() TSetting<TMyTransformAccessor<float>, TMyScope2TM<int32> >;
-	NIF_AS_A() TSetting<TMyTransformAccessor<float>, TMySubScope1TM<uint32> >;
-	NIF_AS_A() TSetting<TMyTransformAccessor<float>, SubScope1::TMySubScope1TM<int64> >;
-	NIF_AS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, TArray<SMyStruct> >;
+	NIFAS_A() TSetting<TMyTransformAccessor<float>, TMyTransform<float> >;
+	NIFAS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, TMyTransform<double> >;
+	NIFAS_A() TSetting<TMyTransformAccessor<float>, TMyScope2TM<int32> >;
+	NIFAS_A() TSetting<TMyTransformAccessor<float>, TMySubScope1TM<uint32> >;
+	NIFAS_A() TSetting<TMyTransformAccessor<float>, SubScope1::TMySubScope1TM<int64> >;
+	NIFAS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, TArray<SMyStruct> >;
 	template <typename TInstance, typename T>
-	NIF_AS_A() TSetting<TArrayAccessor<TInstance>, TArray<T> >;
+	NIFAS_A() TSetting<TArrayAccessor<TInstance>, TArray<T> >;
 	template <typename T0, typename T1>
-	NIF_AS_A() TSetting<CCompoundAccessor, pair<T0, T1> >;
+	NIFAS_A() TSetting<CCompoundAccessor, pair<T0, T1> >;
 }

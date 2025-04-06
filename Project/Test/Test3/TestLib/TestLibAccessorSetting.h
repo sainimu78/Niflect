@@ -17,4 +17,4 @@ protected:
 	}
 };
 
-NIF_AS_A() TSetting<CMyStringPointerAccessor, Niflect::CString*>;
+NIFAS_A() TSetting<CMyStringPointerAccessor, Niflect::CString*>;

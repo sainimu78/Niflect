@@ -11,9 +11,9 @@ namespace EngineTypeBindingSettingScope
 	using namespace Niflect;
 
 	template <typename TInstance, typename T>
-	NIF_AS_A() TSetting<Niflect::TArrayAccessor<TInstance>, MyTestType::TMyArray<T> >;
-	NIF_AS_A() TSetting<Niflect::CFloatAccessor, float>;
-	NIF_AS_A() TSetting<Niflect::CStringAccessor, CString>;
-	NIF_AS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, TestAccessor2::TMyTransform<float> >;
-	NIF_AS_A() TSetting<Niflect::CSTLStringAccessor, std::string>;
+	NIFAS_A() TSetting<Niflect::TArrayAccessor<TInstance>, MyTestType::TMyArray<T> >;
+	NIFAS_A() TSetting<Niflect::CFloatAccessor, float>;
+	NIFAS_A() TSetting<Niflect::CStringAccessor, CString>;
+	NIFAS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, TestAccessor2::TMyTransform<float> >;
+	NIFAS_A() TSetting<Niflect::CSTLStringAccessor, std::string>;
 }

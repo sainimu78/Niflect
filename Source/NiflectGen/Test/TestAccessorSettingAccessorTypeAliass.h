@@ -19,15 +19,15 @@ namespace EngineTypeBindingSettingScope
 	using namespace NiflectAccessorSetting;
 	using namespace Niflect;
 
-	NIF_AS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, TestAccessor2::TMyTransform<float> >;
+	NIFAS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, TestAccessor2::TMyTransform<float> >;
 	using CNihao = TestAccessor2::TMyTransformAccessor<float>;
-	NIF_AS_A() TSetting<CNihao, int8>;
+	NIFAS_A() TSetting<CNihao, int8>;
 	template <typename T>
-	NIF_AS_A() TSetting<TestAccessor2::TMyTransformAccessor<T>, int16>;
+	NIFAS_A() TSetting<TestAccessor2::TMyTransformAccessor<T>, int16>;
 	template <typename T>
 	using TMyAccessorAlias = TestAccessor2::TMSSSSSSSSSSSSSSSSS<T>;
 	template <typename T>
-	NIF_AS_A() TSetting<TMyAccessorAlias<T>, int32>;
+	NIFAS_A() TSetting<TMyAccessorAlias<T>, int32>;
 
 	template <typename T0, typename T1>
 	class TSomeBinaryType
@@ -41,7 +41,7 @@ namespace EngineTypeBindingSettingScope
 	using TPartiallySpecializedAlias = TSomeBinaryTypeAccessor<float, T>;
 
 	template <typename T>
-	NIF_AS_A() TSetting<TSomeBinaryTypeAccessor<float, T>, TSomeBinaryType<float, T> >;
+	NIFAS_A() TSetting<TSomeBinaryTypeAccessor<float, T>, TSomeBinaryType<float, T> >;
 	template <typename T>
-	NIF_AS_A() TSetting<TPartiallySpecializedAlias<T>, TSomeBinaryType<float, bool> >;
+	NIFAS_A() TSetting<TPartiallySpecializedAlias<T>, TSomeBinaryType<float, bool> >;
 }

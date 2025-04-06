@@ -19,6 +19,6 @@ namespace EngineTypeBindingSettingScope
 	using namespace Niflect;
 	using namespace TestMyFinding;
 	using namespace MyAccessor;
-	NIF_AS_A() TSetting<CMyClassAccessor, CMyClass_0>;
-	NIF_AS_A() TSetting<CMyFloatAccessor, float>;
+	NIFAS_A() TSetting<CMyClassAccessor, CMyClass_0>;
+	NIFAS_A() TSetting<CMyFloatAccessor, float>;
 }

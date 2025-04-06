@@ -15,7 +15,7 @@ namespace TestAS
 
 	using namespace NiflectAccessorSetting;
 
-	NIF_AS_A() TSetting<CPlaceholderValueAccessor, float>;
+	NIFAS_A() TSetting<CPlaceholderValueAccessor, float>;
 	template <typename TInstance, typename T>
-	NIF_AS_A() TSetting<TPlaceholderContainerAccessor<TInstance>, Niflect::TArray<T> >;
+	NIFAS_A() TSetting<TPlaceholderContainerAccessor<TInstance>, Niflect::TArray<T> >;
 }

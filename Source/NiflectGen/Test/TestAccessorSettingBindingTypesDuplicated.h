@@ -8,13 +8,13 @@ namespace EngineTypeBindingSettingScope
 	using namespace Niflect;
 
 	using CMyTM = TestAccessor2::TMyTransform<float>;
-	NIF_AS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, TestAccessor2::TMyTransform<float> >;
-	NIF_AS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, TestAccessor2::TMyTransform<float> >;//failed
-	NIF_AS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, float>;
-	NIF_AS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, float>;//failed
+	NIFAS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, TestAccessor2::TMyTransform<float> >;
+	NIFAS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, TestAccessor2::TMyTransform<float> >;//failed
+	NIFAS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, float>;
+	NIFAS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, float>;//failed
 	using CMyFloat = float;
-	NIF_AS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, CMyFloat>;
-	NIF_AS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, CMyFloat>;//failed
+	NIFAS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, CMyFloat>;
+	NIFAS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, CMyFloat>;//failed
 	template <typename T0, typename T1>
 	class TSomeBinaryType
 	{
@@ -24,9 +24,9 @@ namespace EngineTypeBindingSettingScope
 	{
 	};
 	template <typename T0, typename T1>
-	NIF_AS_A() TSetting<TSomeBinaryTypeAccessor<T0, T1>, TSomeBinaryType<T0, T1> >;
+	NIFAS_A() TSetting<TSomeBinaryTypeAccessor<T0, T1>, TSomeBinaryType<T0, T1> >;
 	template <typename T>
 	using TPartiallySpecializedAlias = TSomeBinaryTypeAccessor<float, T>;
 	template <typename T>
-	NIF_AS_A() TSetting<TPartiallySpecializedAlias<T>, TSomeBinaryType<float, T> >;//failed, 不支持部分特化的模板
+	NIFAS_A() TSetting<TPartiallySpecializedAlias<T>, TSomeBinaryType<float, T> >;//failed, 不支持部分特化的模板
 }

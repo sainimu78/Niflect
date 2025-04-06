@@ -6,5 +6,5 @@
 namespace EngineTypeBindingSettingScope2
 {
 	using namespace NiflectAccessorSetting;
-	NIF_AS_A() TSetting<TestModule1::TSharedInstanceAccessor<TestModule1::CTestBase1>, TestModule1::CSharedTestBase1>;
+	NIFAS_A() TSetting<TestModule1::TSharedInstanceAccessor<TestModule1::CTestBase1>, TestModule1::CSharedTestBase1>;
 }

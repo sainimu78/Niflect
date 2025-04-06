@@ -53,43 +53,43 @@ namespace EngineTypeBindingSettingScope
 	using namespace Niflect;
 	using namespace TestAccessor2;
 
-	NIF_AS_A() TSetting<TMyTransformAccessor<float>, TMyTransform<float> >;
+	NIFAS_A() TSetting<TMyTransformAccessor<float>, TMyTransform<float> >;
 
 	using CMyTM = TestAccessor2::TMyTransform<float>;
-	NIF_AS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, CMyTM>;
-	NIF_AS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, TArray<float> >;
-	NIF_AS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, TArray<EngineTypeBindingSettingScope::CMyTM> >;
+	NIFAS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, CMyTM>;
+	NIFAS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, TArray<float> >;
+	NIFAS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, TArray<EngineTypeBindingSettingScope::CMyTM> >;
 
 	using namespace TestGenMyScope;
-	NIF_AS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, TestGenMyScope::MyAliasInt8_0>;
-	NIF_AS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, MyAliasInt8_1>;
-	NIF_AS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, Niflect::TMap<Niflect::CString, CMyTM> >;
-	NIF_AS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, TMap<float, CMyTM> >;
-	NIF_AS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, TMap<bool, EngineTypeBindingSettingScope::CMyTM> >;
-	NIF_AS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, TMap<float, bool> >;
-	NIF_AS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, TMap<std::string, bool> >;
+	NIFAS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, TestGenMyScope::MyAliasInt8_0>;
+	NIFAS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, MyAliasInt8_1>;
+	NIFAS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, Niflect::TMap<Niflect::CString, CMyTM> >;
+	NIFAS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, TMap<float, CMyTM> >;
+	NIFAS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, TMap<bool, EngineTypeBindingSettingScope::CMyTM> >;
+	NIFAS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, TMap<float, bool> >;
+	NIFAS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, TMap<std::string, bool> >;
 
 	using namespace std;
-	NIF_AS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, map<string, int8> >;
+	NIFAS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, map<string, int8> >;
 
 	using namespace TestAccessor2;
-	NIF_AS_A() TSetting<TMyTransformAccessor<float>, MyAliasInt8_2>;
+	NIFAS_A() TSetting<TMyTransformAccessor<float>, MyAliasInt8_2>;
 
-	NIF_AS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, TestGenMyScope::SubScope::SubMyAliasInt8_0>;
+	NIFAS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, TestGenMyScope::SubScope::SubMyAliasInt8_0>;
 
 #ifdef CLASS_TYPE_SCOPE
 	//流程缺陷无法区分类Scope与模板定义
-	NIF_AS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, TestGenMyScope::CSub_0::CSubSub_0>;
-	NIF_AS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, CSub_1::CSubSub_0>;
+	NIFAS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, TestGenMyScope::CSub_0::CSubSub_0>;
+	NIFAS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, CSub_1::CSubSub_0>;
 #else
 #endif
-	NIF_AS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, MyAliasInt8_3>;
-	NIF_AS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, TestGenMyScope::MyAliasInt8_4>;
-	NIF_AS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, MyAliasSub_0>;
-	NIF_AS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, MyAliasSub_1>;
-	NIF_AS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, MyAliasSub_2>;
+	NIFAS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, MyAliasInt8_3>;
+	NIFAS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, TestGenMyScope::MyAliasInt8_4>;
+	NIFAS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, MyAliasSub_0>;
+	NIFAS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, MyAliasSub_1>;
+	NIFAS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, MyAliasSub_2>;
 #ifdef TEMPLATE_INSTANCE_SCOPE
-	NIF_AS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, TSub_2<float>::CSubSub_0>;//不支持模板实例的Scope
+	NIFAS_A() TSetting<TestAccessor2::TMyTransformAccessor<float>, TSub_2<float>::CSubSub_0>;//不支持模板实例的Scope
 #else
 #endif
 }
