@@ -1,5 +1,5 @@
 #pragma once
-#include "Niflect/NiflectMacro.h"
+#include "Niflect/NiflectMacroTag.h"
 
 namespace TestMyFinding
 {

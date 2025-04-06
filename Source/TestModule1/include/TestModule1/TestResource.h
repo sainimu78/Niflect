@@ -1,7 +1,7 @@
 #pragma once
 #include "Niflect/Base/SharedPtr.h"
 #include "Niflect/Base/String.h"
-#include "Niflect/NiflectMacro.h"
+#include "Niflect/NiflectMacroTag.h"
 #include "TestModule1/TestResource_gen.h"
 
 namespace TestModule1

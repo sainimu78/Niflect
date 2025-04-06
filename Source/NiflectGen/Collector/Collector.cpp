@@ -12,8 +12,8 @@
 #include "NiflectGen/Collector/TemplateSubcursor.h"//备用, 现已另作实现, 见CSubcursor
 
 //名词说明
-//CodeTag: 指NiflectGen专用的标记, 如NiflectGenDefinition::CodeTag中的定义, 对应NiflectMacro.h中的如typedef void* __NiflectGen_Type标识
-//Macro或MacroExpansion: 指NiflectMacro.h中如NIF_T宏, 展开内容即为Tag, 这样设计的好处在于用户可自定义NIF_T反射宏的名称
+//CodeTag: 指NiflectGen专用的标记, 如NiflectGenDefinition::CodeTag中的定义, 对应NiflectMacroTag.h中的如typedef void* __NiflectGen_Type标识
+//Macro或MacroExpansion: 指NiflectMacroTag.h中如NIF_T宏, 展开内容即为Tag, 这样设计的好处在于用户可自定义NIF_T反射宏的名称
 //TaggedNode: 指被CodeTag标记为被反射的类型定义, 现支持3种, class, struct, enum
 //Subcursor: 概念与Cursor类似, 用于Cursor所不支持的一些数据以的树形结构表示, 现用于BindingSetting模板类实例的树形表示
 

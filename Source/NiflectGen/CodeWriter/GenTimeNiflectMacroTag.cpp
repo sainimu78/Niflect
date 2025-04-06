@@ -1,4 +1,4 @@
-#include "NiflectGen/CodeWriter/GenTimeNiflectMacro.h"
+#include "NiflectGen/CodeWriter/GenTimeNiflectMacroTag.h"
 #include "NiflectGen/Base/NiflectGenDefinition.h"
 #include "NiflectGen/CodeWriter/CppTemplate.h"
 #include "NiflectGen/CodeWriter/CppWriter.h"
@@ -19,7 +19,7 @@ namespace NiflectGen
 		linesMacroTagDefine.push_back("#define _NIFLECTGENTAG_ACCESSMETHOD typedef void* CONCAT_SYMBOLS_2(" MACROTAG_ACCESSMETHOD ",__LINE__);");
 #endif
 
-		Niflect::CString relativeFilePath = NiflectGenDefinition::NiflectFramework::FilePath::NiflectMacroHeader;
+		Niflect::CString relativeFilePath = NiflectGenDefinition::NiflectFramework::FilePath::NiflectMacroTagHeader;
 		std::ifstream ifs;
 		for (auto& it : context.m_vecToolHeaderSearchPath)
 		{

@@ -1,5 +1,5 @@
 #pragma once
-#include "Niflect/NiflectMacro.h"
+#include "Niflect/NiflectMacroTag.h"
 #include "Niflect/NiflectBase.h"
 #include "Engine/Test/TestMyTransform.h"
 

@@ -2,7 +2,7 @@
 #include "NiflectGen/Base/NiflectGenDefinition.h"
 #include "Niflect/Util/SystemUtil.h"
 #include "NiflectGen/Generator/BypassSTLHeaders.h"
-#include "NiflectGen/CodeWriter/GenTimeNiflectMacro.h"
+#include "NiflectGen/CodeWriter/GenTimeNiflectMacroTag.h"
 #include "NiflectGen/CodeWriter/CppWriter.h"
 #include "NiflectGen/CodeWriter/ModuleApiMacroHeaderWriter.h"
 
@@ -33,7 +33,7 @@ namespace NiflectGen
 
 		for (auto& it : m_userProvided.m_vecModuleHeaderSearchPath2)
 			m_writingHeaderSearchPaths.m_vecForRegularConversion.push_back(it);
-		//须添加在最后, NiflectMacro.h 应使用 _GenTime 中生成的, 而 NiflectMacro.h 仍须使用 m_toolHeaderSearchPath 中的其它头文件, 如 ConcatSymbols.h
+		//须添加在最后, NiflectMacroTag.h 应使用 _GenTime 中生成的, 而 NiflectMacroTag.h 仍须使用 m_toolHeaderSearchPath 中的其它头文件, 如 ConcatSymbols.h
 		m_writingHeaderSearchPaths.m_vecForRegularConversion.push_back(m_userProvided.m_toolHeaderSearchPath);
 		
 		m_genTimeBasePath = NiflectUtil::ConcatPath(m_moduleGenDirPath, NiflectGenDefinition::DirName::GenTime);

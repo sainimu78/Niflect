@@ -24,8 +24,7 @@ namespace NiflectGen
 )" MAKELABEL(LABEL_9) R"(
 )" MAKELABEL(LABEL_10);
 		static const char* GenH =
-R"(#include "Niflect/NiflectMacro.h"
-)" MAKELABEL(LABEL_0) R"(
+"" MAKELABEL(LABEL_0) R"(
 
 #ifdef )" MAKELABEL(LABEL_11) R"(
 #error ")" MAKELABEL(LABEL_12) R"( already included, missing '#pragma once' in )" MAKELABEL(LABEL_13) R"("

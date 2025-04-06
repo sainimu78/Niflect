@@ -81,7 +81,7 @@ namespace NiflectGen
             memSrc.m_filePath = "memSrcMain.cpp";
             CSimpleCppWriter writer(memSrc.m_data);
             writer.AddHeaderFirstLine();
-            writer.AddInclude(NiflectGenDefinition::NiflectFramework::FilePath::NiflectMacroHeader);//_gen.h未生成时, 可解析标记
+            writer.AddInclude(NiflectGenDefinition::NiflectFramework::FilePath::NiflectMacroTagHeader);//使_gen.h未生成时, 可解析标记
             //begin
             // 此文件列表非一个构建目标只需要 1 份 的 PCH, PCH 是编译器生成的二进制文件, 不同编译器的 PCH 格式不同, 正由于此, 解析时只能以 PCH 的所有来源头文件传给 libclang
             // 用于支持目标项目中使用 PCH 的编码方式, 缺陷为无 PCH 的作用, 每次都须解析, 可考虑通过 Cursor 序列化实现一种缓存, 或者解析后转换为 Bypass Header
