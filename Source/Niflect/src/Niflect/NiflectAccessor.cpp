@@ -23,15 +23,6 @@ namespace Niflect
 		return true;
 	}
 
-	bool CField::LayoutSaveToRwNode(const InstanceType* base, CRwNode* rw) const
-	{
-		return m_type->GetTypeLayout().AccessorsSaveToRwNode(base, m_offset, rw);
-	}
-	bool CField::LayoutLoadFromRwNode(InstanceType* base, const CRwNode* rw) const
-	{
-		return m_type->GetTypeLayout().AccessorsLoadFromRwNode(base, m_offset, rw);
-	}
-
 	const Niflect::TArray<CField>& CAccessor::GetFields() const
 	{
 		return m_type->GetFields();

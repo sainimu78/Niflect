@@ -27,6 +27,7 @@
 #include "Niflect/NiflectAddr.h"
 #include "Niflect/Base/String.h" 
 #include "Niflect/NiflectNata.h"
+#include "Niflect/NiflectCommon.h"
 
 namespace Niflect
 {
@@ -66,16 +67,21 @@ namespace Niflect
 	public:
 		CConstructorInfo()
 			: m_Func(NULL)
+			, m_signatureHash(INDEX_NONE)
 		{
 		}
-		CConstructorInfo(const InvokeMethodFunc& Func, const CSharedNata& nata)
+		CConstructorInfo(const InvokeMethodFunc& Func, const CSharedNata& nata, const HashInt& signatureHash, const Niflect::CString& argsSignature)
 			: m_Func(Func)
 			, m_nata(nata)
+			, m_signatureHash(signatureHash)
+			, m_argsSignature(argsSignature)
 		{
 		}
 		Niflect::TArray<CParameterInfo> m_vecInput;
 		InvokeMethodFunc m_Func;
 		CSharedNata m_nata;
+		HashInt m_signatureHash;
+		Niflect::CString m_argsSignature;
 	};
 
 	class CMethodInfo
@@ -83,11 +89,14 @@ namespace Niflect
 	public:
 		CMethodInfo()
 			: m_Func(NULL)
+			, m_signatureHash(INDEX_NONE)
 		{
 		}
-		CMethodInfo(const InvokeMethodFunc& Func, const Niflect::CString& name, const CSharedNata& nata)
+		CMethodInfo(const InvokeMethodFunc& Func, const Niflect::CString& name, const CSharedNata& nata, const HashInt& signatureHash, const Niflect::CString& argsSignature)
 			: m_Func(Func)
 			, m_name(name)
+			, m_signatureHash(signatureHash)
+			, m_argsSignature(argsSignature)
 			, m_nata(nata)
 		{
 		}
@@ -98,7 +107,11 @@ namespace Niflect
 		Niflect::TArray<CParameterInfo> m_vecInput;
 		Niflect::TArray<CParameterInfo> m_vecOutput;
 		InvokeMethodFunc m_Func;
+		HashInt m_signatureHash;
 		Niflect::CString m_name;
+		Niflect::CString m_argsSignature;
 		CSharedNata m_nata;
 	};
+
+	NIFLECT_API HashInt ComputeSignatureHash(const Niflect::CString& str);
 }

@@ -47,10 +47,10 @@ namespace Niflect
 	};
 
 	template <typename TType, typename TInfo>
-	void )" MAKELABEL(LABEL_1) R"(RegisterType(CNiflectTable* table, const Niflect::CString& id, const BuildTypeMetaFunc& inBuildTypeMetaFunc, const CSharedNata& nata)
+	void )" MAKELABEL(LABEL_1) R"(RegisterType(CNiflectTable* table, const Niflect::CString& id, const BuildTypeMetaFunc& inBuildTypeMetaFunc, const CSharedNata& nata, const HashInt& typeHash)
 	{
 		ASSERT(!)" MAKELABEL(LABEL_1) R"(TRegisteredType<TType>::IsValid());
-		table->RegisterTypeDetailed<TType, TInfo>(id, inBuildTypeMetaFunc, &)" MAKELABEL(LABEL_1) R"(TRegisteredType<TType>::s_type, nata, CConstructorInfo(&InvokeDefaultConstructor<TType>, NULL));
+		table->RegisterTypeDetailed<TType, TInfo>(id, inBuildTypeMetaFunc, &)" MAKELABEL(LABEL_1) R"(TRegisteredType<TType>::s_type, nata, CConstructorInfo(&InvokeDefaultConstructor<TType>, NULL, typeHash, ""), typeHash);
 		ASSERT()" MAKELABEL(LABEL_1) R"(TRegisteredType<TType>::IsValid());
 	}
 })";

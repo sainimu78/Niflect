@@ -111,7 +111,7 @@ namespace NiflectGen
 			}
 			if (vecInvalid.size())
 			{
-				auto paths = NiflectUtil::CombineFromPaths(vecInvalid, '\n');
+				auto paths = NiflectUtil::CombineFromStrings(vecInvalid, '\n');
 				bool plural = vecInvalid.size() > 1;
 				GenLogError(log, NiflectUtil::FormatString(
 R"(The accessor setting header%s (by -a) %s invalid:
@@ -142,8 +142,8 @@ R"(The accessor setting header%s (by -a) %s invalid:
 			}
 			if (vecFailtToConvert.size() > 0)
 			{
-				auto incPaths = NiflectUtil::CombineFromPaths(info.m_vecModuleHeaderSearchPath2, '\n');
-				auto headerPaths = NiflectUtil::CombineFromPaths(vecFailtToConvert, '\n');
+				auto incPaths = NiflectUtil::CombineFromStrings(info.m_vecModuleHeaderSearchPath2, '\n');
+				auto headerPaths = NiflectUtil::CombineFromStrings(vecFailtToConvert, '\n');
 				GenLogError(log, NiflectUtil::FormatString(
 R"(The module header search paths specified:
 %s

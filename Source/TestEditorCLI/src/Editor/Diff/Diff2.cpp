@@ -410,10 +410,32 @@ namespace QtNodeEditor
 	//	const uint32 m_count;
 	//};
 
+	static std::string FormatStdString(const char* format, ...)
+	{
+		va_list args;
+
+		// 第一次获取格式化长度
+		va_start(args, format);
+		const int length = std::vsnprintf(nullptr, 0, format, args);
+		va_end(args);
+
+		if (length <= 0) return std::string();  // 处理无效格式或空输出
+
+		// 准备足够大小的缓冲区
+		std::string result;
+		result.resize(static_cast<size_t>(length));
+
+		// 实际执行格式化
+		va_start(args, format);
+		std::vsnprintf(&result[0], result.size() + 1, format, args); // +1给终止符留空间
+		va_end(args);
+
+		return result;
+	}
 	static std::string TestHelper(const std::vector<CDiff2::Item>& f) {
 		std::vector<std::string> ret;
 		for (int n = 0; n < (int)f.size(); n++) {
-			ret.push_back(NiflectUtil::FormatStdString("%d.%d.%d.%d*", f[n].deletedA, f[n].insertedB, f[n].StartA, f[n].StartB));
+			ret.push_back(FormatStdString("%d.%d.%d.%d*", f[n].deletedA, f[n].insertedB, f[n].StartA, f[n].StartB));
 		}
 		std::string result;
 		for (auto& it : ret)

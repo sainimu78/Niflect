@@ -6,6 +6,8 @@
 #include "NiflectGen/Base/NiflectGenDefinition.h"
 #include "NiflectGen/CodeWriter/HardCoded/TypeRegInitialRegTemplate.h"
 #include "NiflectGen/Resolver/ResolvedData.h"
+#include "Niflect/NiflectType.h"
+#include "NiflectGen/Util/WriterUtil.h"
 
 namespace NiflectGen
 {
@@ -102,6 +104,9 @@ namespace NiflectGen
 				CCodeTemplate tpl0;
 				ReadTemplateFromRawData(tpl0, HardCodedTemplate::InvokeRegisterTypeByFrameworkTableMethod);
 				CLabelToCodeMapping map;
+#ifdef REFACTORING_0_TYPE_ACCESSOR_FIELD_RESTRUACTURING
+				MapLabelToText(map, LABEL_23, ConvertHashToString(Niflect::ComputeTypeHash(m_bindingTypeIndexedRoot->m_resocursorName)));
+#endif
 				MapLabelToText(map, LABEL_0, m_bindingTypeIndexedRoot->m_resocursorName);
 				MapLabelToText(map, LABEL_2, funcName);
 #ifdef REFACTORING_0_TYPE_ACCESSOR_FIELD_RESTRUACTURING
@@ -129,6 +134,9 @@ namespace NiflectGen
 				CCodeTemplate tpl0;
 				ReadTemplateFromRawData(tpl0, HardCodedTemplate::InvokeRegisterTypeByGeneratedStaticFunc);
 				CLabelToCodeMapping map;
+#ifdef REFACTORING_0_TYPE_ACCESSOR_FIELD_RESTRUACTURING
+				MapLabelToText(map, LABEL_23, ConvertHashToString(Niflect::ComputeTypeHash(m_bindingTypeIndexedRoot->m_resocursorName)));
+#endif
 				MapLabelToText(map, LABEL_0, m_bindingTypeIndexedRoot->m_resocursorName);
 				MapLabelToText(map, LABEL_2, funcName);
 #ifdef REFACTORING_0_TYPE_ACCESSOR_FIELD_RESTRUACTURING

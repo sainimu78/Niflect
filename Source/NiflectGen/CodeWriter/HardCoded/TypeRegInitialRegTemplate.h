@@ -29,13 +29,24 @@ namespace NiflectGen
 #define LABEL_20 "ArgRegs"
 #define LABEL_21 "MethodName"
 #define LABEL_22 "ResultAssignment"
+#define LABEL_23 "TypeHash"
+#define LABEL_24 "SignatureHash"
+#define LABEL_25 "ArgsSignature"
+#define LABEL_26 "FieldHash"
 
 	namespace HardCodedTemplate
 	{
+#ifdef REFACTORING_0_TYPE_ACCESSOR_FIELD_RESTRUACTURING
+		constexpr const char* InvokeRegisterTypeByFrameworkTableMethod =
+"table->" MAKELABEL(LABEL_2) R"((")" MAKELABEL(LABEL_0) R"(", &)" MAKELABEL(LABEL_13) ", " MAKELABEL(LABEL_14) ", " MAKELABEL(LABEL_15) ", " MAKELABEL(LABEL_23) ");";
+		constexpr const char* InvokeRegisterTypeByGeneratedStaticFunc =
+"" MAKELABEL(LABEL_2) R"((table, ")" MAKELABEL(LABEL_0) R"(", &)" MAKELABEL(LABEL_13) ", " MAKELABEL(LABEL_14) ", " MAKELABEL(LABEL_23) ");";
+#else
 		constexpr const char* InvokeRegisterTypeByFrameworkTableMethod =
 "table->" MAKELABEL(LABEL_2) R"((")" MAKELABEL(LABEL_0) R"(", &)" MAKELABEL(LABEL_13) ", " MAKELABEL(LABEL_14) ", " MAKELABEL(LABEL_15) ");";
 		constexpr const char* InvokeRegisterTypeByGeneratedStaticFunc =
 "" MAKELABEL(LABEL_2) R"((table, ")" MAKELABEL(LABEL_0) R"(", &)" MAKELABEL(LABEL_13) ", " MAKELABEL(LABEL_14) ");";
+#endif
 		constexpr const char* CreateTypeAccessorDecl =
 R"(template <>
 CSharedAccessor )" MAKELABEL(LABEL_2) "();";
@@ -74,7 +85,7 @@ return node0;
 "auto type1 = " MAKELABEL(LABEL_2) "();";
 #ifdef REFACTORING_0_TYPE_ACCESSOR_FIELD_RESTRUACTURING
 		constexpr const char* InitChildAccessor =
-R"(type0->InitAddField(")" MAKELABEL(LABEL_0) R"(", )" MAKELABEL(LABEL_7) ", type1, " MAKELABEL(LABEL_14) ");";
+R"(type0->InitAddField(")" MAKELABEL(LABEL_0) R"(", )" MAKELABEL(LABEL_7) ", type1, " MAKELABEL(LABEL_14) ", " MAKELABEL(LABEL_26) ");";
 #else
 	constexpr const char* InitChildAccessor =
 R"(type1->InitAddFieldToAccessor(node0.Get(), ")" MAKELABEL(LABEL_0) R"(", )" MAKELABEL(LABEL_7) ", " MAKELABEL(LABEL_14) ");";
@@ -126,11 +137,11 @@ void )" MAKELABEL(LABEL_17) R"((InstanceType* base, InstanceType** const args)
 	)" MAKELABEL(LABEL_22) "static_cast<" MAKELABEL(LABEL_0) "*>(base)->" MAKELABEL(LABEL_21) "(" MAKELABEL(LABEL_19) R"();
 })";
 		constexpr const char* MethodRegConstructorInfo =
-R"(CConstructorInfo info(&)" MAKELABEL(LABEL_17) ", " MAKELABEL(LABEL_14) R"();
+R"(CConstructorInfo info(&)" MAKELABEL(LABEL_17) ", " MAKELABEL(LABEL_14) ", " MAKELABEL(LABEL_24) ", " MAKELABEL(LABEL_25) R"();
 )" MAKELABEL(LABEL_20) R"(
 type0->InitAddConstructorInfo(info);)";
 		constexpr const char* MethodRegMethodInfo =
-R"(CMethodInfo info(&)" MAKELABEL(LABEL_17) R"(, ")" MAKELABEL(LABEL_21) R"(", )" MAKELABEL(LABEL_14) R"();
+R"(CMethodInfo info(&)" MAKELABEL(LABEL_17) R"(, ")" MAKELABEL(LABEL_21) R"(", )" MAKELABEL(LABEL_14) ", " MAKELABEL(LABEL_24) ", " MAKELABEL(LABEL_25) R"();
 )" MAKELABEL(LABEL_20) R"(
 type0->InitAddMethodInfo(info);)";
 	}

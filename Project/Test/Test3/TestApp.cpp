@@ -48,15 +48,15 @@ TEST(TestAppAndLib, TestMain) {
             type->m_vecMethodInfo[0].m_Func(&instance, NULL);
         }
         {
-            float prm0 = 456.0f;
-            Niflect::InstanceType* prms[] = { &prm0 };
-            type->m_vecMethodInfo[1].m_Func(&instance, prms);
+            float arg0 = 456.0f;
+            Niflect::InstanceType* args[] = { &arg0 };
+            type->m_vecMethodInfo[1].m_Func(&instance, args);
         }
         {
-            Niflect::CString prm0 = "bucuo";
+            Niflect::CString arg0 = "bucuo";
             float ret0 = 0.0f;
-            Niflect::InstanceType* prms[] = { &prm0, &ret0 };
-            type->m_vecMethodInfo[2].m_Func(&instance, prms);
+            Niflect::InstanceType* args[] = { &arg0, &ret0 };
+            type->m_vecMethodInfo[2].m_Func(&instance, args);
             printf("ret: %f\n", ret0);
         }
 

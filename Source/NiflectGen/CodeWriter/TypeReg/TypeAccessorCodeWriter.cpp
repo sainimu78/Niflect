@@ -2,6 +2,9 @@
 #include "NiflectGen/CodeWriter/CppTemplate.h"
 #include "NiflectGen/CodeWriter/HardCoded/TypeRegInitialRegTemplate.h"
 #include "NiflectGen/Collector/TaggedNode.h"//WriteNataArgNullOrVar
+#include "Niflect/NiflectField.h"
+#include "Niflect/NiflectMethod.h"
+#include "NiflectGen/Util/WriterUtil.h"
 
 namespace NiflectGen
 {
@@ -29,6 +32,7 @@ namespace NiflectGen
 			auto invokeGetFieldOffset = ReplaceLabelToText2(HardCodedTemplate::GetFieldOffset, LABEL_0, LABEL_8, fieldOwnerResocursorName, fieldName);
 			MapLabelToText(map, LABEL_7, invokeGetFieldOffset);
 			MapLabelToText(map, LABEL_14, nataNullOrVar);
+			MapLabelToText(map, LABEL_26, ConvertHashToString(Niflect::ComputeFieldHash(fieldName)));
 			Niflect::TSet<Niflect::CString> setReplacedLabel;
 			tpl0.ReplaceLabels(map, linesCode, &setReplacedLabel);
 			ASSERT(setReplacedLabel.size() == map.size());
@@ -151,6 +155,7 @@ namespace NiflectGen
 	void WriteMethodRegConstructorInfo(const Niflect::CString& typeBodyFuncName, const CCodeLines& linesNata, const Niflect::CString& moduleScopeSymbolPrefix, const Niflect::TArray<CResolvedCursorNode>& vecArgument, const CResolvedCursorNode& resultType, CCodeLines& linesReg)
 	{
 		CCodeLines linesArgReg;
+		Niflect::TArray<Niflect::CString> vecArgResocursorName;
 		if (vecArgument.size() > 0)
 		{
 			for (uint32 idx0 = 0; idx0 < vecArgument.size(); ++idx0)
@@ -158,6 +163,7 @@ namespace NiflectGen
 				auto& it0 = vecArgument[idx0];
 				auto argStaticGetTypeFuncName = it0.GetStaticGetTypeFuncName(moduleScopeSymbolPrefix);
 				linesArgReg.push_back(GenerateInputParameterInfoConstructionCode(argStaticGetTypeFuncName));
+				vecArgResocursorName.push_back(it0.m_resocursorName);
 			}
 		}
 
@@ -171,6 +177,9 @@ namespace NiflectGen
 		MapLabelToText(map, LABEL_17, typeBodyFuncName);
 		if (linesArgReg.size() > 0)
 			MapLabelToLines(map, LABEL_20, linesArgReg);
+		auto argsSignature = NiflectUtil::CombineFromStrings(vecArgResocursorName, ',');
+		MapLabelToText(map, LABEL_24, ConvertHashToString(Niflect::ComputeSignatureHash(argsSignature)));
+		MapLabelToText(map, LABEL_25, "\"" + argsSignature + "\"");
 		Niflect::TSet<Niflect::CString> setReplacedLabel;
 		tpl0.ReplaceLabels(map, linesCode, &setReplacedLabel);
 		ASSERT(setReplacedLabel.size() == map.size());
@@ -179,6 +188,7 @@ namespace NiflectGen
 	void WriteMethodRegMethodInfo(const Niflect::CString& typeBodyFuncName, const CCodeLines& linesNata, const Niflect::CString& moduleScopeSymbolPrefix, const Niflect::TArray<CResolvedCursorNode>& vecArgument, const CResolvedCursorNode& resultType, const Niflect::CString& methodName, CCodeLines& linesReg)
 	{
 		CCodeLines linesArgReg;
+		Niflect::TArray<Niflect::CString> vecArgResocursorName;
 		if (vecArgument.size() > 0)
 		{
 			for (uint32 idx0 = 0; idx0 < vecArgument.size(); ++idx0)
@@ -186,6 +196,7 @@ namespace NiflectGen
 				auto& it0 = vecArgument[idx0];
 				auto argStaticGetTypeFuncName = it0.GetStaticGetTypeFuncName(moduleScopeSymbolPrefix);
 				linesArgReg.push_back(GenerateInputParameterInfoConstructionCode(argStaticGetTypeFuncName));
+				vecArgResocursorName.push_back(it0.m_resocursorName);
 			}
 			if (resultType.IsValid())
 			{
@@ -205,6 +216,10 @@ namespace NiflectGen
 		if (linesArgReg.size() > 0)
 			MapLabelToLines(map, LABEL_20, linesArgReg);
 		MapLabelToText(map, LABEL_21, methodName);
+		auto argsSignature = NiflectUtil::CombineFromStrings(vecArgResocursorName, ',');
+		auto signature = methodName + ',' + argsSignature;
+		MapLabelToText(map, LABEL_24, ConvertHashToString(Niflect::ComputeSignatureHash(signature)));
+		MapLabelToText(map, LABEL_25, "\"" + argsSignature + "\"");
 		Niflect::TSet<Niflect::CString> setReplacedLabel;
 		tpl0.ReplaceLabels(map, linesCode, &setReplacedLabel);
 		ASSERT(setReplacedLabel.size() == map.size());
