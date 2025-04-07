@@ -40,7 +40,7 @@ namespace Niflect
 			, m_InvokeDestructorFunc(NULL)
 			, m_BuildTypeMetaFunc(NULL)
 			, m_staticTypePtrAddr(NULL)
-			, m_typeHash(INDEX_NONE)
+			, m_typeHash(INVALID_HASH)
 		{
 		}
 		~CNiflectType()

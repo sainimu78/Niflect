@@ -21,6 +21,7 @@ typedef unsigned long long uint64;
 
 namespace Niflect
 {
+    enum { INVALID_HASH = 0 };
     typedef uint64 HashInt;
 }
 
