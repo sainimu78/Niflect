@@ -2,197 +2,6 @@
 
 The C++ native-style type reflection framework.
 
-# 1. Hello World
-
-```c++
-#include "HelloWorld_gen.h"
-
-NIF_T()
-class CHelloWorld
-{
-public:
-    NIF_F()
-    float m_value = 0.0f;
-};
-```
-
-Use macro tags like `NIF_T` to enable the reflection.
-
-# 2. Get The Reflection Info.
-
-```c++
-#include "HelloWorld.h"
-#include "HelloWorld_private.h"
-#include "Niflect/NiflectTable.h"
-
-int main(int argc, char** argv)
-{
-    Niflect::CNiflectTable table;
-    Niflect::GeneratedRegisterTypes(&table);
-    Niflect::GeneratedInitTypes();
-    table.InitTypesLayout();
-    
-    auto info = Niflect::StaticGetType<CHelloWorld>();
-    printf("%s\n", info->GetTypeName().c_str());
-    
-    return 0;
-}
-```
-
-First build the types' metadata, then use `StaticGetType` to get the reflection info..
-
-# 3. Save and Load an Instance
-
-```c++
-...
-int main(int argc, char** argv)
-{
-    ...
-    using namespace RwTree;
-    CRwNode rw;
-    
-    CHelloWorld src;
-    src.m_value = 1.23f;
-    info->SaveInstanceToRwNode(&src, &rw);
-    
-    CHelloWorld dst;
-    info->LoadInstanceFromRwNode(&dst, &rw);
-    assert(src == dst);
-    ...
-}
-```
-
-Save and Load the instance of `CHelloWorld` by the reflection info.. 
-
-# 4. Serialize Into Human Readable Format
-
-```c++
-...
-#include "Niflect/Serialization/JsonFormat.h"
-    
-int main(int argc, char** argv)
-{
-    ...
-	std::stringstream ss;
-	CJsonFormat::Write(&rw, ss);
-	printf("%s\n", ss.str().c_str());
-    ...
-}
-```
-
-We can serialize / deserialize the instance data into / from any format by encoding / decoding the tree-like object `rw`
-
-# 5. Reflect a Nested Template
-
-```c++
-#include "Example1_gen.h"
-
-NIF_T()
-class CExample1
-{
-public:
-    NIF_F()
-    std::vector<std::map<std::string, int> > m_name_to_value_mappings;
-};
-```
-
-Just tag the field.
-
-# 6. Reflect a Pointer
-
-```c++
-#include "Example2_gen.h"
-
-NIF_T()
-class CExample2
-{
-public:
-    NIF_F()
-    CResource* m_resource = NULL;
-};
-```
-
-Tag the field, implement the accessor by overriding methods of derived `Niflect::CAccessor`
-
-```c++
-class CResourceAccessor : public Niflect::CAccessor
-{
-    using MyPtr = CResource*;
-protected:
-    virtual bool SaveInstanceImpl(const InstanceType* base, CRwNode* rw) const override
-    {
-        const auto& instance = *static_cast<const MyPtr*>(base);
-        AddRwString(rw, "Path", instance->m_path);
-        return true;
-    }
-    virtual bool LoadInstanceImpl(InstanceType* base, const CRwNode* rw) const override
-    {
-        auto& instance = *static_cast<MyPtr*>(base);
-        auto path = FindRwString(rw, "Path");
-        instance = GetResourceFactory()->FindOrAdd(path);
-        return true;
-    }
-};
-```
-
-bind the type and accessor in `Accessor Setting Header`
-
-```c++
-NIFAS_A() TSetting<CResourceAccessor, CResource*>;
-```
-
-This is not friendly for the beginners, so we will explore more later for the concept of binding type and accessor.
-
-# 7. Reflect a Field Using Type Alias
-
-```c++
-#include "Example3_gen.h"
-
-using CMappingsArray = std::vector<std::map<std::string, int> >;
-
-NIF_T()
-class CExample3
-{
-public:
-    NIF_F()
-    CMappingsArray m_name_to_value_mappings;
-};
-```
-
-It's helpful when we change the actual type of `CMappingsArray` and the most important is helping us code lesser.
-
-# 8. Bind a metadata natively
-
-```c++
-class CMyNata : public Niflect::CNata
-{
-	typedef CMyNata CThis;
-public:
-    CThis& SetCategory(const std::string& name)
-    {
-    	m_categoryName = name;
-		return *this;
-	}
-	std::string m_categoryName;
-};
-
-NIF_T(CMyNata()
-	.SetCategory("My Special Category"))
-class CExample3
-{
-};
-```
-
-The native metadata, called Nata, is C++ native class like `CMyNata`, we can define any property we like in that class and retrieve its instance by `static_cast<CMyNata*>` or more friendly
-
-```c++
-auto info = Niflect::StaticGetType<CExample3>();
-auto myNata = info->GetDerivedNata<CMyNata>();
-printf("%s\n", myNata.m_categoryNata.c_str())
-```
-
-
-
 **This is a concept currently in the experimental stage.**
 
 Before you begin reading, it’s important to ensure that you have the necessary experience to fully benefit from this article and to avoid wasting your time. Specifically, you should :
@@ -266,7 +75,7 @@ Execute NiflectGenTool to generate reflection code, here is a batch script examp
 
 Then the reflection code will be generated
 
-![1732206465218](Doc/Introduction/1732206465218.png)
+![1732206465218](../1732206465218.png)
 
 About the **DefaultAccessorSetting.h** appears in the commandline args
 
@@ -348,7 +157,7 @@ int main()
 
 and the result
 
-![1732212533978](Doc/Introduction/1732212533978.png)
+![1732212533978](../1732212533978.png)
 
 ## [Experiment 2] Being C++ Native
 
@@ -537,7 +346,7 @@ public:
 
 Finally, do save and load `CMyClass` instance like the Step 3 of Experiment 1
 
-![1732372828784](Doc/Introduction/1732372828784.png)
+![1732372828784](../1732372828784.png)
 
 ## The Repo of The Experiments Above
 
