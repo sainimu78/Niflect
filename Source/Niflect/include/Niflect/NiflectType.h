@@ -126,6 +126,10 @@ namespace Niflect
 		{
 			m_vecMethodInfo.push_back(info);
 		}
+		void InitAddStaticMemberFunctionInfo(const CFunctionInfo& info)
+		{
+			m_vecStaticMemberFunctionInfo.push_back(info);
+		}
 		void InitAddConstructorInfo(const CConstructorInfo& info)
 		{
 			m_vecConstructorInfo.push_back(info);
@@ -159,6 +163,7 @@ namespace Niflect
 	public:
 		Niflect::TArray<CConstructorInfo> m_vecConstructorInfo;
 		Niflect::TArray<CMethodInfo> m_vecMethodInfo;
+		Niflect::TArray<CFunctionInfo> m_vecStaticMemberFunctionInfo;
 		InvokeDestructorFunc m_InvokeDestructorFunc;
 
 	private:

@@ -197,6 +197,7 @@ namespace NiflectGen
 		ASSERT(m_vecTaggedMethod.size() == m_vecResomethod.size());
 		uint32 constructorsCount = 0;
 		uint32 methodsCount = 0;
+		uint32 staticMemberFunctionsCount = 0;
 		for (uint32 idx0 = 0; idx0 < m_vecResomethod.size(); ++idx0)
 		{
 			auto& resomethod = m_vecResomethod[idx0];
@@ -220,9 +221,18 @@ namespace NiflectGen
 			else if (kind == CXCursor_CXXMethod)
 			{
 				auto methodName = CXStringToCString(clang_getCursorSpelling(methodCursor));
-				WriteInvokeMethodBody(m_bindingTypeIndexedRoot->m_resocursorName, methodsCount, resomethod.m_vecArgument, resomethod.m_resultType, methodName, typeBodyFuncName, data.m_linesInvokeMethodFuncImpl);
-				WriteMethodRegMethodInfo(typeBodyFuncName, linesNata, context.m_moduleRegInfo.m_moduleScopeSymbolPrefix, resomethod.m_vecArgument, resomethod.m_resultType, methodName, data.m_linesResoBodyCode);
-				methodsCount++;
+				if (clang_Cursor_getStorageClass(methodCursor) != CX_StorageClass::CX_SC_Static)
+				{
+					WriteInvokeMethodBody(m_bindingTypeIndexedRoot->m_resocursorName, methodsCount, resomethod.m_vecArgument, resomethod.m_resultType, methodName, typeBodyFuncName, data.m_linesInvokeMethodFuncImpl);
+					WriteMethodRegMethodInfo(typeBodyFuncName, linesNata, context.m_moduleRegInfo.m_moduleScopeSymbolPrefix, resomethod.m_vecArgument, resomethod.m_resultType, methodName, data.m_linesResoBodyCode);
+					methodsCount++;
+				}
+				else
+				{
+					WriteInvokeStaticMemberFunctionBody(m_bindingTypeIndexedRoot->m_resocursorName, staticMemberFunctionsCount, resomethod.m_vecArgument, resomethod.m_resultType, methodName, typeBodyFuncName, data.m_linesInvokeMethodFuncImpl);
+					WriteMethodRegStaticMemberFunctionInfo(typeBodyFuncName, linesNata, context.m_moduleRegInfo.m_moduleScopeSymbolPrefix, resomethod.m_vecArgument, resomethod.m_resultType, methodName, data.m_linesResoBodyCode);
+					staticMemberFunctionsCount++;
+				}
 			}
 			else
 			{

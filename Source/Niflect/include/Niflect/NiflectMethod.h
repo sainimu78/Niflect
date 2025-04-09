@@ -34,6 +34,7 @@ namespace Niflect
 	class CNiflectType;
 
 	typedef void (*InvokeMethodFunc)(InstanceType* base, InstanceType** const args);
+	typedef void (*InvokeFunctionFunc)(InstanceType** const args);
 
 	template <typename TType>
 	static void InvokeDefaultConstructor(InstanceType* base, InstanceType** const args)
@@ -100,13 +101,34 @@ namespace Niflect
 			, m_nata(nata)
 		{
 		}
-		//inline void Invoke(InstanceType* base, InstanceType** inputArray, InstanceType** ouputArray) const
-		//{
-		//	m_InvokeMethodFunc(base, inputArray, ouputArray);
-		//}
 		Niflect::TArray<CParameterInfo> m_vecInput;
 		Niflect::TArray<CParameterInfo> m_vecOutput;
 		InvokeMethodFunc m_Func;
+		HashInt m_signatureHash;
+		Niflect::CString m_name;
+		Niflect::CString m_argsSignature;
+		CSharedNata m_nata;
+	};
+
+	class CFunctionInfo
+	{
+	public:
+		CFunctionInfo()
+			: m_Func(NULL)
+			, m_signatureHash(INVALID_HASH)
+		{
+		}
+		CFunctionInfo(const InvokeFunctionFunc& Func, const Niflect::CString& name, const CSharedNata& nata, const HashInt& signatureHash, const Niflect::CString& argsSignature)
+			: m_Func(Func)
+			, m_name(name)
+			, m_signatureHash(signatureHash)
+			, m_argsSignature(argsSignature)
+			, m_nata(nata)
+		{
+		}
+		Niflect::TArray<CParameterInfo> m_vecInput;
+		Niflect::TArray<CParameterInfo> m_vecOutput;
+		InvokeFunctionFunc m_Func;
 		HashInt m_signatureHash;
 		Niflect::CString m_name;
 		Niflect::CString m_argsSignature;

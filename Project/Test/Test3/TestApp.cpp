@@ -55,11 +55,6 @@ TEST(TestAppAndLib, TestMain) {
         {
             type->m_vecMethodInfo[0].m_Func(&instance, NULL);
         }
-        //{
-        //    float arg0 = 456.0f;
-        //    Niflect::InstanceType* args[] = { &arg0 };
-        //    type->m_vecMethodInfo[1].m_Func(&instance, args);
-        //}
         {
             DebugNiflectInvokeMethod(type, &instance, 456.0f);
         }
@@ -69,6 +64,11 @@ TEST(TestAppAndLib, TestMain) {
             Niflect::InstanceType* args[] = { &arg0, &ret0 };
             type->m_vecMethodInfo[2].m_Func(&instance, args);
             printf("ret: %f\n", ret0);
+        }
+        {
+            float arg0 = 789.0f;
+            Niflect::InstanceType* args[] = { &arg0 };
+            type->m_vecStaticMemberFunctionInfo[0].m_Func(args);
         }
 
         printf("");

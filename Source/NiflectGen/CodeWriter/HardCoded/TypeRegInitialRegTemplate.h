@@ -122,6 +122,8 @@ R"(friend Niflect::CSharedAccessor Niflect::)" NIFLECTFRAMEWORK_TEMPLATEFUNC_CTy
 "CTypeBody::InvokeConstructor<" MAKELABEL(LABEL_0) ", " MAKELABEL(LABEL_16) ">";
 		constexpr const char* TypeBodyInvokeMethodFuncName =
 "CTypeBody::InvokeMethod<" MAKELABEL(LABEL_0) ", " MAKELABEL(LABEL_16) ">";
+		constexpr const char* TypeBodyInvokeStaticMemberFunctionFuncName =
+"CTypeBody::InvokeStaticMemberFunction<" MAKELABEL(LABEL_0) ", " MAKELABEL(LABEL_16) ">";
 		constexpr const char* TypeBodyInvokeConstructorImpl =
 R"(template <>
 void )" MAKELABEL(LABEL_17) R"((InstanceType* base, InstanceType** const args)
@@ -136,6 +138,13 @@ void )" MAKELABEL(LABEL_17) R"((InstanceType* base, InstanceType** const args)
 	)" MAKELABEL(LABEL_18) R"(
 	)" MAKELABEL(LABEL_22) "static_cast<" MAKELABEL(LABEL_0) "*>(base)->" MAKELABEL(LABEL_21) "(" MAKELABEL(LABEL_19) R"();
 })";
+		constexpr const char* TypeBodyInvokeFunctionImpl =
+R"(template <>
+void )" MAKELABEL(LABEL_17) R"((InstanceType** const args)
+{
+	)" MAKELABEL(LABEL_18) R"(
+	)" MAKELABEL(LABEL_22) "" MAKELABEL(LABEL_0) "::" MAKELABEL(LABEL_21) "(" MAKELABEL(LABEL_19) R"();
+})";
 		constexpr const char* MethodRegConstructorInfo =
 R"(CConstructorInfo info(&)" MAKELABEL(LABEL_17) ", " MAKELABEL(LABEL_14) ", " MAKELABEL(LABEL_24) ", " MAKELABEL(LABEL_25) R"();
 )" MAKELABEL(LABEL_20) R"(
@@ -144,5 +153,9 @@ type0->InitAddConstructorInfo(info);)";
 R"(CMethodInfo info(&)" MAKELABEL(LABEL_17) R"(, ")" MAKELABEL(LABEL_21) R"(", )" MAKELABEL(LABEL_14) ", " MAKELABEL(LABEL_24) ", " MAKELABEL(LABEL_25) R"();
 )" MAKELABEL(LABEL_20) R"(
 type0->InitAddMethodInfo(info);)";
+		constexpr const char* MethodRegStaticMemberFunctionInfo =
+R"(CFunctionInfo info(&)" MAKELABEL(LABEL_17) R"(, ")" MAKELABEL(LABEL_21) R"(", )" MAKELABEL(LABEL_14) ", " MAKELABEL(LABEL_24) ", " MAKELABEL(LABEL_25) R"();
+)" MAKELABEL(LABEL_20) R"(
+type0->InitAddStaticMemberFunctionInfo(info);)";
 	}
 }

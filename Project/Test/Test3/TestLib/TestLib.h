@@ -101,6 +101,12 @@ namespace TestLibScope
 			m_value = cnt;
 			return m_value;
 		}
+		NIF_M()
+		static void MethodStatic0(float a)
+		{
+			static int cnt = 0;
+			printf("MethodStatic0, %f, %d\n", a, ++cnt);
+		}
 		float m_value;
 
 	public:
