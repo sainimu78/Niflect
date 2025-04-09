@@ -3,6 +3,7 @@
 #include "Niflect/Memory/Default/DefaultMemory.h"
 #include "TestLib/TestLib.h"
 #include "Test3_private.h"
+#include <array>
 
 static void InitTestApp(Niflect::CNiflectTable& table)
 {
@@ -23,6 +24,13 @@ static void TestSerializationOf()
     TTestType dst;
     type->LoadInstanceFromRwNode(&dst, &rw);
     EXPECT_TRUE(src == dst);
+}
+
+template <typename ...TArgs>
+inline static void DebugNiflectInvokeMethod(const Niflect::CNiflectType* type, Niflect::InstanceType* base, TArgs&& ...args)
+{
+    std::array<Niflect::InstanceType*, sizeof ...(TArgs)> argArray = { (&args)... };
+    type->m_vecMethodInfo[1].m_Func(base, argArray.data());
 }
 
 TEST(TestAppAndLib, TestMain) {
@@ -47,10 +55,13 @@ TEST(TestAppAndLib, TestMain) {
         {
             type->m_vecMethodInfo[0].m_Func(&instance, NULL);
         }
+        //{
+        //    float arg0 = 456.0f;
+        //    Niflect::InstanceType* args[] = { &arg0 };
+        //    type->m_vecMethodInfo[1].m_Func(&instance, args);
+        //}
         {
-            float arg0 = 456.0f;
-            Niflect::InstanceType* args[] = { &arg0 };
-            type->m_vecMethodInfo[1].m_Func(&instance, args);
+            DebugNiflectInvokeMethod(type, &instance, 456.0f);
         }
         {
             Niflect::CString arg0 = "bucuo";
