@@ -205,6 +205,9 @@ static void MyStaticFunc0(float a)
 NIF_M(CMyGlobalsNata().SetExampleValue(555.0f))
 void MyGlobalFunc2(float a);
 
+NIF_F(CMyGlobalsNata().SetExampleValue(777.0f))
+extern float g_b;
+
 #ifdef TESTLIB_API
 #else
 #ifdef WIN32
@@ -225,3 +228,4 @@ void MyGlobalFunc2(float a);
 TESTLIB_API void InitTestLib(Niflect::CNiflectTable& table);
 TESTLIB_API Niflect::CNiflectType* GetTestLibGlobalsType();
 TESTLIB_API void TestLibSetGlobalVar0(float val);
+TESTLIB_API void TestLibSetGlobalVar1(float val);

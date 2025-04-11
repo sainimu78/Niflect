@@ -12,6 +12,8 @@ namespace MyGlobalScope
 	}
 }
 
+float g_b = 0.0f;
+
 void MyGlobalFunc2(float a)
 {
 	static int cnt = 0;
@@ -31,4 +33,8 @@ Niflect::CNiflectType* GetTestLibGlobalsType()
 void TestLibSetGlobalVar0(float val)
 {
 	MyGlobalScope::g_a = val;
+}
+void TestLibSetGlobalVar1(float val)
+{
+	g_b = val;
 }

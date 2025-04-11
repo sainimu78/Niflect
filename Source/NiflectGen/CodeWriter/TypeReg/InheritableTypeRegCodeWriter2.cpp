@@ -209,7 +209,8 @@ namespace NiflectGen
 
 			Niflect::CString typeBodyFuncName;
 			auto kind = clang_getCursorKind(methodCursor);
-			bool isGlobal = m_bindingTypeIndexedRoot->IsGlobalsType();
+			bool isGlobalsType = m_bindingTypeIndexedRoot->IsGlobalsType();
+			bool isGlobal = isGlobalsType;
 			if (!isGlobal)
 			{
 				if (kind == CXCursor_Constructor)
@@ -244,9 +245,10 @@ namespace NiflectGen
 			{
 				auto methodName = CXStringToCString(clang_getCursorSpelling(methodCursor));
 				Niflect::CString scopeName = GenerateNamespacesAndScopesCode(methodCursor);
-				if (!m_bindingTypeIndexedRoot->IsGlobalsType())
+				if (!isGlobalsType)
 					scopeName = m_bindingTypeIndexedRoot->m_resocursorName + "::";
-				WriteInvokeStaticMemberFunctionBody(m_bindingTypeIndexedRoot->m_resocursorName, scopeName, staticMemberFunctionsCount, resomethod.m_vecArgument, resomethod.m_resultType, methodName, typeBodyFuncName, data.m_linesInvokeMethodFuncImpl);
+				methodName = scopeName + methodName;
+				WriteInvokeStaticMemberFunctionBody(m_bindingTypeIndexedRoot->m_resocursorName, staticMemberFunctionsCount, resomethod.m_vecArgument, resomethod.m_resultType, methodName, typeBodyFuncName, data.m_linesInvokeMethodFuncImpl);
 				WriteMethodRegStaticMemberFunctionInfo(typeBodyFuncName, linesNata, context.m_moduleRegInfo.m_moduleScopeSymbolPrefix, resomethod.m_vecArgument, resomethod.m_resultType, methodName, data.m_linesResoBodyCode);
 				staticMemberFunctionsCount++;
 			}
@@ -302,6 +304,8 @@ namespace NiflectGen
 			Niflect::CString scopeName = GenerateNamespacesAndScopesCode(fieldCursor);
 			if (!m_bindingTypeIndexedRoot->IsGlobalsType())
 				scopeName = m_bindingTypeIndexedRoot->m_resocursorName + "::";
+			else
+				fieldName = scopeName + fieldName;
 			WriteNextInitChildAccessor2(m_bindingTypeIndexedRoot->m_resocursorName, m_bindingTypeIndexedRoot->m_taggedTypeIndex == INDEX_NONE, scopeName, fieldStaticGetTypeFuncName, fieldName, linesNata, data.m_linesResoBodyCode);
 		}
 	}

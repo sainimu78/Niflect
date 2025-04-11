@@ -44,16 +44,27 @@ TEST(TestAppAndLib, TestMain) {
 
     {
         auto type = GetTestLibGlobalsType();
+        auto& vecField = type->GetFields();
+        {
+            TestLibSetGlobalVar1(444.0f);
+            auto& field = vecField[0];
+            RwTree::CRwNode rw;
+            field.LayoutSaveToRwNode(NULL, &rw);
+            Niflect::CStringStream ss;
+            RwTree::CJsonFormat::Write(&rw, ss);
+            printf("Global var 0: %s, %s\n", field.GetName().c_str(), ss.str().c_str());
+        }
+        {
+            TestLibSetGlobalVar0(222.0f);
+            auto& field = vecField[1];
+            RwTree::CRwNode rw;
+            field.LayoutSaveToRwNode(NULL, &rw);
+            Niflect::CStringStream ss;
+            RwTree::CJsonFormat::Write(&rw, ss);
+            printf("Global var 1: %s, %s\n", field.GetName().c_str(), ss.str().c_str());
+        }
         float arg0 = 321.0f;
         Niflect::InstanceType* args[] = { &arg0 };
-        auto& vecField = type->GetFields();
-        TestLibSetGlobalVar0(222.0f);
-        auto& field = vecField[0];
-        RwTree::CRwNode rw;
-        field.LayoutSaveToRwNode(NULL, &rw);
-        Niflect::CStringStream ss;
-        RwTree::CJsonFormat::Write(&rw, ss);
-        printf("Global var: %s, %s\n", field.GetName().c_str(), ss.str().c_str());
         type->m_vecStaticMemberFunctionInfo[0].m_Func(args);
         arg0 = 654.0f;
         type->m_vecStaticMemberFunctionInfo[1].m_Func(args);

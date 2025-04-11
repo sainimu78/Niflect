@@ -91,7 +91,7 @@ R"(type1->InitAddFieldToAccessor(node0.Get(), ")" MAKELABEL(LABEL_0) R"(", )" MA
 	constexpr const char* GetFieldOffset =
 R"(GetFieldOffset(&)" MAKELABEL(LABEL_27) "::" MAKELABEL(LABEL_8) R"())";
 	constexpr const char* GetGlobalVarOffset =
-R"(reinterpret_cast<OffsetType>(&)" MAKELABEL(LABEL_27) "" MAKELABEL(LABEL_8) ")";
+R"(reinterpret_cast<OffsetType>(&)" MAKELABEL(LABEL_8) ")";
 #ifdef REFACTORING_0_TYPE_ACCESSOR_FIELD_RESTRUACTURING
 	constexpr const char* InitElementAccessor =
 "node0->InitElementType(type1);";
