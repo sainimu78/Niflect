@@ -144,8 +144,10 @@ namespace NiflectGen
 		Niflect::TArrayNif<uint32> m_vecTypeRegDataIndex;
 	};
 
-	struct SResolvedGlobalsType
+	class CResolvedGlobalsType
 	{
+	public:
+		bool IsValid() const { return m_typeNode != NULL; }
 		Niflect::TSharedPtr<CTaggedType> m_typeNode;
 		CResolvedCursorRoots m_resocursorNode;
 	};
@@ -173,6 +175,6 @@ namespace NiflectGen
 		CSharedAccessorBindingMapping m_accessorBindingMapping;
 		CTaggedTypesMapping m_taggedMapping;
 		CUntaggedTemplatesMapping m_untaggedTemplateMapping;
-		SResolvedGlobalsType m_resoGlobalsType;
+		CResolvedGlobalsType m_resoGlobalsType;
 	};
 }

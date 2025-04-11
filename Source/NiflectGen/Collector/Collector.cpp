@@ -1231,13 +1231,13 @@ namespace NiflectGen
 		if (m_globalsCollection.IsValid())
 		{
 			//从 taggedParent 中整理创建 GlobalsType 对应的解析类
-			auto node = Niflect::MakeShared<CTaggedClass>();
+			auto globalsTypeNode = Niflect::MakeShared<CTaggedClass>();
 			for (auto& it : m_globalsCollection.m_vecIdx)
 			{
 				auto node = taggedParent->TakeNode(it);
-				node->AddChildWhileBuildingGlobalsType(node);
+				globalsTypeNode->AddChildWhileBuildingGlobalsType(node);
 			}
-			collectionData.m_globalsTypeNode = node;
+			collectionData.m_globalsTypeNode = globalsTypeNode;
 		}
 
 		if (accessorSettings.m_vecAccessorBindingSetting.size() == 0)

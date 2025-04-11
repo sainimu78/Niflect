@@ -26,7 +26,7 @@ void InitTestLib(Niflect::CNiflectTable& table)
 }
 Niflect::CNiflectType* GetTestLibGlobalsType()
 {
-	return Niflect::_TestLib_StaticGetType<Niflect::_TestLib_CGlobals>();
+	return Niflect::GeneratedGetGlobalsType();
 }
 void TestLibSetGlobalVar0(float val)
 {

@@ -10,6 +10,8 @@ namespace NiflectGen
 #define LABEL_4 "ModuleName"
 #define LABEL_5 "ModuleAPI"
 #define LABEL_6 "FuncNamePrefix"
+#define LABEL_7 "Funcs"
+#define LABEL_8 "Func"
 
 	namespace HardCodedTemplate
 	{
@@ -20,14 +22,21 @@ namespace NiflectGen
 
 namespace Niflect
 {
-	static void )" GENERATED_FUNC_NAME_GeneratedRegisterTypes R"((Niflect::CNiflectTable* table)
-	{
-		)" MAKELABEL(LABEL_1) R"(
-	}
-	static void GeneratedInitTypes()
-	{
-		)" MAKELABEL(LABEL_2) R"(
-	}
+	)" MAKELABEL(LABEL_7) R"(
+})";
+		static const char* GeneratedFuncs =
+R"(static void )" GENERATED_FUNC_NAME_GeneratedRegisterTypes R"((Niflect::CNiflectTable* table)
+{
+	)" MAKELABEL(LABEL_1) R"(
+}
+static void GeneratedInitTypes()
+{
+	)" MAKELABEL(LABEL_2) R"(
+})";
+		static const char* GetGlobalsTypeFunc = 
+R"(static CNiflectType* GeneratedGetGlobalsType()
+{
+	return )" MAKELABEL(LABEL_8) R"(();
 })";
 		static const char* StaticModuleRegHeader =
 R"(#pragma once

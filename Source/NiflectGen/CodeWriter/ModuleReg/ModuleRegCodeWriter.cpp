@@ -136,7 +136,7 @@ namespace NiflectGen
                 m_vecWriter2.push_back(writer);
             }
         }
-        if (m_resolvedData.m_resoGlobalsType.m_typeNode != NULL)
+        if (m_resolvedData.m_resoGlobalsType.IsValid())
         {
             auto writer = m_resolvedData.m_resoGlobalsType.m_typeNode->CreateCodeWriter2();
             writer->Init(&m_resolvedData, &m_resolvedData.m_resoGlobalsType.m_resocursorNode.m_resoRoot);
@@ -416,24 +416,33 @@ namespace NiflectGen
                     CIncludesHelper::ConvertFromHeaderFilePaths(vecHeaderData, m_moduleRegInfo.m_writingHeaderSearchPaths, linesInclude);
                     MapLabelToLines(map, LABEL_0, linesInclude);
                 }
-                CCodeLines linesInvokeRegisterTypes;
-                CCodeLines linesInvokeTaggedTypeInit;
+                CCodeLines linesGeneratedFuncs;
                 {
-                    for (auto& it1 : context.m_vecSplittedModuleRegFuncsName)
+                    CCodeLines linesInvokeRegisterTypes;
+                    CCodeLines linesInvokeTaggedTypeInit;
+                    CCodeTemplate tpl1;
+                    ReadTemplateFromRawData(tpl1, HardCodedTemplate::GeneratedFuncs);
+                    CLabelToCodeMapping map;
                     {
-                        linesInvokeRegisterTypes.push_back(it1.m_registerTypes + "(table);");
-                        if (!it1.m_initTypes.empty())
-                            linesInvokeTaggedTypeInit.push_back(it1.m_initTypes + "();");
+                        for (auto& it1 : context.m_vecSplittedModuleRegFuncsName)
+                        {
+                            linesInvokeRegisterTypes.push_back(it1.m_registerTypes + "(table);");
+                            if (!it1.m_initTypes.empty())
+                                linesInvokeTaggedTypeInit.push_back(it1.m_initTypes + "();");
+                        }
+                        MapLabelToLines(map, LABEL_1, linesInvokeRegisterTypes);
                     }
-                    MapLabelToLines(map, LABEL_1, linesInvokeRegisterTypes);
+                    MapLabelToLines(map, LABEL_2, linesInvokeTaggedTypeInit);
+                    Niflect::TSet<Niflect::CString> setReplacedLabel;
+                    tpl1.ReplaceLabels(map, linesGeneratedFuncs, &setReplacedLabel);
+
+                    if (m_resolvedData.m_resoGlobalsType.IsValid())
+                    {
+                        auto funcName = m_resolvedData.m_resoGlobalsType.m_resocursorNode.m_resoRoot.GetStaticGetTypeFuncName(context.m_moduleRegInfo.m_moduleScopeSymbolPrefix);
+                        ReplaceLabelToLines1(HardCodedTemplate::GetGlobalsTypeFunc, LABEL_8, funcName, linesGeneratedFuncs);
+                    }
                 }
-                MapLabelToLines(map, LABEL_2, linesInvokeTaggedTypeInit);
-                //CCodeLines linesStaticModuleReg;
-                //if (context.m_moduleRegInfo.m_userProvided.m_toGenStaticModuleReg)
-                //{
-                //    ReplaceLabelToLines1(HardCodedTemplate::StaticModuleReg, LABEL_4, context.m_moduleRegInfo.m_userProvided.m_moduleName, linesStaticModuleReg);
-                //    MapLabelToLines(map, LABEL_3, linesStaticModuleReg);
-                //}
+                MapLabelToLines(map, LABEL_7, linesGeneratedFuncs);
                 Niflect::TSet<Niflect::CString> setReplacedLabel;
                 tpl1.ReplaceLabels(map, data.m_moduleRegGenData.m_privateH, &setReplacedLabel);
             }
