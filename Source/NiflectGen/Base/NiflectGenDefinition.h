@@ -68,6 +68,8 @@ namespace NiflectGenDefinition
 #ifdef PORTING_ACCESS_METHOD
 		constexpr const char* AccessMethod = MACROTAG_ACCESSMETHOD;
 #endif
+		constexpr const char* GlobalVariable = Field;//暂同标识
+		constexpr const char* GlobalFunction = Method;//暂同标识
 
 #ifdef ACCESSOR_SETTING_ABCD
 		//static bool IsAccessorSettingA(const Niflect::CString& text)

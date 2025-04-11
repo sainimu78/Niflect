@@ -73,7 +73,7 @@ namespace NiflectGen
 					auto it0 = ut->GetChild(idx);
 					auto fieldStaticGetTypeFuncName = m_bindingTypeIndexedRoot->m_vecChild[idx].GetStaticGetTypeFuncName(context.m_moduleRegInfo.m_moduleScopeSymbolPrefix);
 					auto fieldName = CXStringToCString(clang_getCursorSpelling(it0->GetCursor()));
-					WriteNextInitChildAccessor2(m_bindingTypeIndexedRoot->m_resocursorName, fieldStaticGetTypeFuncName, fieldName, CCodeLines(), data.m_linesResoBodyCode);
+					WriteNextInitChildAccessor2(m_bindingTypeIndexedRoot->m_resocursorName, false, m_bindingTypeIndexedRoot->m_resocursorName, fieldStaticGetTypeFuncName, fieldName, CCodeLines(), data.m_linesResoBodyCode);
 				}
 			}
 		}

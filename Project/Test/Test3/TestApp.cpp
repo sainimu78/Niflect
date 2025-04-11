@@ -4,6 +4,7 @@
 #include "TestLib/TestLib.h"
 #include "Test3_private.h"
 #include <array>
+#include "Niflect/Serialization/JsonFormat.h"
 
 static void InitTestApp(Niflect::CNiflectTable& table)
 {
@@ -40,6 +41,24 @@ TEST(TestAppAndLib, TestMain) {
     InitTestLib(table0);
     Niflect::CNiflectTable table1;
     InitTestApp(table1);
+
+    {
+        auto type = GetTestLibGlobalsType();
+        float arg0 = 321.0f;
+        Niflect::InstanceType* args[] = { &arg0 };
+        auto& vecField = type->GetFields();
+        TestLibSetGlobalVar0(222.0f);
+        auto& field = vecField[0];
+        RwTree::CRwNode rw;
+        field.LayoutSaveToRwNode(NULL, &rw);
+        Niflect::CStringStream ss;
+        RwTree::CJsonFormat::Write(&rw, ss);
+        printf("Global var: %s, %s\n", field.GetName().c_str(), ss.str().c_str());
+        type->m_vecStaticMemberFunctionInfo[0].m_Func(args);
+        arg0 = 654.0f;
+        type->m_vecStaticMemberFunctionInfo[1].m_Func(args);
+        printf("");
+    }
 
     using namespace TestLibScope;
 

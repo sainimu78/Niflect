@@ -21,10 +21,18 @@ namespace NiflectGen
 		void InitForTemplateEnd();
 		void InitForTemplate(const Niflect::CString& signature, const CResolvedCursorNode& childrenOwner, bool isTemplateFormat);
 		void InitForClassDecl(const Niflect::CString& resocursorName, uint32 taggedTypeIdx, uint32 accessorBindingIdx, const Niflect::CString& headerFilePath);
+		void InitForGlobalsType(const Niflect::CString& resocursorName, const Niflect::CString& headerFilePath);
 		bool IsValid() const
 		{
 			return m_accessorBindingIndex != INDEX_NONE || m_taggedTypeIndex != INDEX_NONE;
 		}
+		bool IsGlobalsType() const
+		{
+			return m_accessorBindingIndex == m_taggedTypeIndex && m_taggedTypeIndex == INDEX_NONE && (!m_resocursorName.empty());
+		}
+
+	private:
+		void InitForClassBasic(const Niflect::CString& resocursorName, const Niflect::CString& headerFilePath);
 
 	public:
 		const Niflect::CString* GetHeaderFilePathAddrForTaggedType() const;

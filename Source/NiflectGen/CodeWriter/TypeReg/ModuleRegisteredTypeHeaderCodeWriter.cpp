@@ -46,6 +46,10 @@ namespace Niflect
 		static void BuildTypeMeta(CNiflectType* type0);
 	};
 
+	class )" MAKELABEL(LABEL_1) R"(CGlobals
+	{
+	};
+
 	template <typename TType, typename TInfo>
 	void )" MAKELABEL(LABEL_1) R"(RegisterType(CNiflectTable* table, const Niflect::CString& id, const BuildTypeMetaFunc& inBuildTypeMetaFunc, const CSharedNata& nata, const HashInt& typeHash)
 	{

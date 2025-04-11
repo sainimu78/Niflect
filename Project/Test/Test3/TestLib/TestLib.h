@@ -45,6 +45,9 @@ namespace TestLibScope
 		NIFGNSD()
 	public:
 		//CTestLib()
+		//{
+		//}
+		//CTestLib()
 		//	: m_float_0(0.0f)
 		//	, m_string_2(NULL)
 		//{
@@ -154,8 +157,8 @@ namespace TestLibScope
 		}
 
 	public:
-		//NIF_F()
-		//Niflect::TArray<float> m_array_float_1;
+		NIF_F()
+		Niflect::TArray<float> m_array_float_1;
 		NIF_F()
 		Niflect::CString* m_string_2;
 		NIF_F()
@@ -164,6 +167,43 @@ namespace TestLibScope
 		Niflect::TArray<float> m_array_float_3;
 	};
 }
+
+class CMyGlobalsNata : public Niflect::CNata
+{
+public:
+	CMyGlobalsNata()
+		: m_value(0.0f)
+	{
+	}
+	CMyGlobalsNata& SetExampleValue(float a) { m_value = a; return *this; }
+	float m_value;
+};
+
+namespace MyGlobalScope
+{
+	NIF_F(CMyGlobalsNata().SetExampleValue(111.0f))
+	extern float g_a;
+
+	NIF_M(CMyGlobalsNata().SetExampleValue(444.0f))
+	static void MyScopedStaticFunc1(float a)
+	{
+		static int cnt = 0;
+		printf("MyScopedStaticFunc1, %f, %d\n", a, ++cnt);
+	}
+
+	NIF_M(CMyGlobalsNata().SetExampleValue(666.0f))
+	void MyGlobalFunc3(float a);
+}
+
+NIF_M(CMyGlobalsNata().SetExampleValue(333.0f))
+static void MyStaticFunc0(float a)
+{
+	static int cnt = 0;
+	printf("MyStaticFunc0, %f, %d\n", a, ++cnt);
+}
+
+NIF_M(CMyGlobalsNata().SetExampleValue(555.0f))
+void MyGlobalFunc2(float a);
 
 #ifdef TESTLIB_API
 #else
@@ -183,3 +223,5 @@ namespace TestLibScope
 #endif
 
 TESTLIB_API void InitTestLib(Niflect::CNiflectTable& table);
+TESTLIB_API Niflect::CNiflectType* GetTestLibGlobalsType();
+TESTLIB_API void TestLibSetGlobalVar0(float val);

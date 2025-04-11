@@ -33,6 +33,7 @@ namespace NiflectGen
 #define LABEL_24 "SignatureHash"
 #define LABEL_25 "ArgsSignature"
 #define LABEL_26 "FieldHash"
+#define LABEL_27 "TypeOrScope"
 
 	namespace HardCodedTemplate
 	{
@@ -66,13 +67,10 @@ void )" MAKELABEL(LABEL_2) R"((CNiflectType* type0)
 	)" MAKELABEL(LABEL_3) R"(
 })";
 #ifdef REFACTORING_0_TYPE_ACCESSOR_FIELD_RESTRUACTURING
-		constexpr const char* BuildTypeMetaBlock =
-R"({
-	auto node0 = Niflect::MakeShared<)" MAKELABEL(LABEL_4) R"(>();
-	node0->InitType()" MAKELABEL(LABEL_2) R"(());
-	type0->InitAccessor(node0);
-	)" MAKELABEL(LABEL_5) R"(
-})";
+		constexpr const char* BuildTypeMetaAccessor =
+R"(auto node0 = Niflect::MakeShared<)" MAKELABEL(LABEL_4) R"(>();
+node0->InitType()" MAKELABEL(LABEL_2) R"(());
+type0->InitAccessor(node0);)";
 #else
 		constexpr const char* CreateAndInitTypeAccessor =
 "auto node0 = Niflect::MakeShared<" MAKELABEL(LABEL_4) R"(>();
@@ -91,7 +89,9 @@ R"(type0->InitAddField(")" MAKELABEL(LABEL_0) R"(", )" MAKELABEL(LABEL_7) ", typ
 R"(type1->InitAddFieldToAccessor(node0.Get(), ")" MAKELABEL(LABEL_0) R"(", )" MAKELABEL(LABEL_7) ", " MAKELABEL(LABEL_14) ");";
 #endif
 	constexpr const char* GetFieldOffset =
-R"(GetFieldOffset(&)" MAKELABEL(LABEL_0) "::" MAKELABEL(LABEL_8) R"())";
+R"(GetFieldOffset(&)" MAKELABEL(LABEL_27) "::" MAKELABEL(LABEL_8) R"())";
+	constexpr const char* GetGlobalVarOffset =
+R"(reinterpret_cast<OffsetType>(&)" MAKELABEL(LABEL_27) "" MAKELABEL(LABEL_8) ")";
 #ifdef REFACTORING_0_TYPE_ACCESSOR_FIELD_RESTRUACTURING
 	constexpr const char* InitElementAccessor =
 "node0->InitElementType(type1);";
@@ -136,14 +136,14 @@ R"(template <>
 void )" MAKELABEL(LABEL_17) R"((InstanceType* base, InstanceType** const args)
 {
 	)" MAKELABEL(LABEL_18) R"(
-	)" MAKELABEL(LABEL_22) "static_cast<" MAKELABEL(LABEL_0) "*>(base)->" MAKELABEL(LABEL_21) "(" MAKELABEL(LABEL_19) R"();
+	)" MAKELABEL(LABEL_22) "static_cast<" MAKELABEL(LABEL_27) "*>(base)->" MAKELABEL(LABEL_21) "(" MAKELABEL(LABEL_19) R"();
 })";
 		constexpr const char* TypeBodyInvokeFunctionImpl =
 R"(template <>
 void )" MAKELABEL(LABEL_17) R"((InstanceType** const args)
 {
 	)" MAKELABEL(LABEL_18) R"(
-	)" MAKELABEL(LABEL_22) "" MAKELABEL(LABEL_0) "::" MAKELABEL(LABEL_21) "(" MAKELABEL(LABEL_19) R"();
+	)" MAKELABEL(LABEL_22) "" MAKELABEL(LABEL_27) "" MAKELABEL(LABEL_21) "(" MAKELABEL(LABEL_19) R"();
 })";
 		constexpr const char* MethodRegConstructorInfo =
 R"(CConstructorInfo info(&)" MAKELABEL(LABEL_17) ", " MAKELABEL(LABEL_14) ", " MAKELABEL(LABEL_24) ", " MAKELABEL(LABEL_25) R"();

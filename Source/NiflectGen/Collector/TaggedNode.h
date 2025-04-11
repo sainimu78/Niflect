@@ -71,6 +71,7 @@ namespace NiflectGen
 		void InitMacroExpansionCursor(const CXCursor& cursor);
 		void ResolveMacroNata(const SResolvingMacroNataContext& context);
 		void AddChildAndInitDefault(const CSharedTaggedNode& taggedNode, const CXCursor& cursor, const CXCursor& macroCursor);
+		void AddChildWhileBuildingGlobalsType(const CSharedTaggedNode& taggedNode);
 		uint32 GetChildrenCount() const
 		{
 			return static_cast<uint32>(m_vecChild.size());
@@ -78,6 +79,12 @@ namespace NiflectGen
 		CTaggedNode2* GetChild(uint32 idx) const
 		{
 			return m_vecChild[idx].Get();
+		}
+		CSharedTaggedNode TakeNode(uint32 idx)
+		{
+			auto taken = m_vecChild[idx];
+			m_vecChild[idx] = NULL;
+			return taken;
 		}
 		const CXCursor& GetCursor() const
 		{

@@ -758,27 +758,47 @@ namespace NiflectGen
 		return true;
 	}
 
-	CTaggedTypeCollector::CTaggedTypeCollector(CMacroTagCollection2& tagCollection)
+	CTaggedTypeCollector::CTaggedTypeCollector(CMacroTagCollection2& tagCollection, CGlobalsCollection& globalsCollection)
 		: m_tagCollection(tagCollection)
+		, m_globalsCollection(globalsCollection)
 		, m_stage(EStage::None)
 		, m_tagLocation{}
 	{
 
 	}
-	bool CTaggedTypeCollector::Collect(const CXCursor& cursor, CTaggedNode2* taggedParent, CGenLog* log)
+	bool CTaggedTypeCollector::Collect(const CXCursor& cursor, CTaggedNode2* taggedParent, const CTaggedNode2* rootNode, CGenLog* log)
 	{
 		bool addedTaggedChidl = false;
 		if (m_stage == EStage::None)
 		{
-			if (FindTagByKindAndDisplayName(cursor, CXCursor_TypedefDecl, NiflectGenDefinition::CodeTag::Type))
+			if (clang_getCursorKind(cursor) == CXCursor_TypedefDecl)
 			{
-				m_tagLocation = clang_getCursorLocation(cursor);
-				m_stage = EStage::Found;
+				auto tagName = CXStringToCString(clang_getCursorDisplayName(cursor));
+				bool found = false;
+				if (NiflectUtil::StartsWith(tagName, NiflectGenDefinition::CodeTag::Type))
+				{
+					found = true;
+				}
+				else if (taggedParent == rootNode)//表示全局作用域
+				{
+					if (NiflectUtil::StartsWith(tagName, NiflectGenDefinition::CodeTag::GlobalVariable)
+						|| NiflectUtil::StartsWith(tagName, NiflectGenDefinition::CodeTag::GlobalFunction)
+						)
+					{
+						found = true;
+					}
+				}
+				if (found)
+				{
+					m_tagLocation = clang_getCursorLocation(cursor);
+					m_stage = EStage::Found;
+				}
 			}
 		}
 		else if (m_stage == EStage::Found)
 		{
-			TSharedPtr<CTaggedType> taggedChild;
+			bool notAType = false;
+			CSharedTaggedNode taggedChild;
 			auto kind = clang_getCursorKind(cursor);
 			if (kind == CXCursor_ClassDecl)
 				taggedChild = MakeShared<CTaggedClass>();
@@ -786,6 +806,27 @@ namespace NiflectGen
 				taggedChild = MakeShared<CTaggedEnum>();
 			else if (kind == CXCursor_StructDecl)
 				taggedChild = MakeShared<CTaggedStruct>();
+			else
+				notAType = true;
+			bool isInGlobal = false;
+			if (notAType)
+			{
+				if (kind == CXCursor_VarDecl)
+				{
+					taggedChild = m_globalsCollection.AddVariableChild();
+					isInGlobal = true;
+				}
+				else if (kind == CXCursor_FunctionDecl)
+				{
+					taggedChild = m_globalsCollection.AddFunctionChild();
+					isInGlobal = true;
+				}
+				if (isInGlobal)
+				{
+					ASSERT(taggedParent == rootNode);
+					m_globalsCollection.m_vecIdx.push_back(taggedParent->GetChildrenCount());
+				}
+			}
 			if (taggedChild != NULL)
 			{
 				CXCursor macroCursor;
@@ -833,7 +874,7 @@ namespace NiflectGen
 
 	CDataCollector::CDataCollector(const CModuleRegInfoValidated& moduleRegInfo)
 		: m_moduleRegInfo(moduleRegInfo)
-		, m_taggedTypeCollector(m_macroTagCollection)
+		, m_taggedTypeCollector(m_macroTagCollection, m_globalsCollection)
 		, m_collectingClassBaseCursorDecl(true)
 	{
 	}
@@ -852,12 +893,13 @@ namespace NiflectGen
 	{
 		CDataCollector* m_this;
 		CTaggedNode2* m_taggedParent;
+		const CTaggedNode2* m_rootNode;
 		CCollectingContext& m_context;
 		CAliasChain* m_aliasChain;
 		CCursorArray m_vecCursorChild;
 		SVisitingData m_visitingData;
 	};
-	void CDataCollector::Visit(const CXCursor& cursor, CTaggedNode2* taggedParent, CCollectingContext& context, CAliasChain* aliasChain, SVisitingData& data)
+	void CDataCollector::Visit(const CXCursor& cursor, CTaggedNode2* taggedParent, const CTaggedNode2* rootNode, CCollectingContext& context, CAliasChain* aliasChain, SVisitingData& data)
 	{
 		uint32 taggedChildIndex = taggedParent->GetChildrenCount();
 		bool addedTaggedChild = false;
@@ -1008,7 +1050,7 @@ namespace NiflectGen
 			}
 			if (!addedTaggedChild)
 			{
-				addedTaggedChild = m_taggedTypeCollector.Collect(cursor, taggedParent, context.m_log);
+				addedTaggedChild = m_taggedTypeCollector.Collect(cursor, taggedParent, rootNode, context.m_log);
 				if (!addedTaggedChild)
 				{
 					STaggedNodeCollectingContext taggedNodeContext{ m_macroTagCollection, context.m_log };
@@ -1043,7 +1085,7 @@ namespace NiflectGen
 	CXChildVisitResult VisitorCallback(CXCursor cursor, CXCursor parent, CXClientData data)
 	{
 		auto& d = *static_cast<SVisitorCallbackData*>(data);
-		d.m_this->Visit(cursor, d.m_taggedParent, d.m_context, d.m_aliasChain, d.m_visitingData);
+		d.m_this->Visit(cursor, d.m_taggedParent, d.m_rootNode, d.m_context, d.m_aliasChain, d.m_visitingData);
 		d.m_vecCursorChild.push_back(cursor);
 
 		return CXChildVisit_Continue;
@@ -1185,7 +1227,18 @@ namespace NiflectGen
 #endif
 		auto& accessorSettings= accessorBindingMapping->m_settings;
 		SRecursCollectingData recursCollectiingData{ aliasChain.Get(), accessorSettings };
-		this->CollectDataRecurs2(cursor, g_invalidCursor, taggedParent, context, recursCollectiingData);
+		this->CollectDataRecurs2(cursor, g_invalidCursor, taggedParent, taggedParent, context, recursCollectiingData);
+		if (m_globalsCollection.IsValid())
+		{
+			//从 taggedParent 中整理创建 GlobalsType 对应的解析类
+			auto node = Niflect::MakeShared<CTaggedClass>();
+			for (auto& it : m_globalsCollection.m_vecIdx)
+			{
+				auto node = taggedParent->TakeNode(it);
+				node->AddChildWhileBuildingGlobalsType(node);
+			}
+			collectionData.m_globalsTypeNode = node;
+		}
 
 		if (accessorSettings.m_vecAccessorBindingSetting.size() == 0)
 		{
@@ -1691,7 +1744,7 @@ namespace NiflectGen
 		//	}
 		//}
 	}
-	void CDataCollector::CollectDataRecurs2(const CXCursor& cursor, const CXCursor& parentCursor, CTaggedNode2* taggedParent, CCollectingContext& context, SRecursCollectingData& recursCollectiingData)
+	void CDataCollector::CollectDataRecurs2(const CXCursor& cursor, const CXCursor& parentCursor, CTaggedNode2* taggedParent, const CTaggedNode2* rootNode, CCollectingContext& context, SRecursCollectingData& recursCollectiingData)
 	{
 		if (auto debugData = context.m_debugData)
 		{
@@ -1699,7 +1752,7 @@ namespace NiflectGen
 			DebugPrintCursor(debugData->m_fp, cursor, debugData->m_level);
 		}
 
-		SVisitorCallbackData visitorCbData{this, taggedParent, context, recursCollectiingData.m_aliasChain };
+		SVisitorCallbackData visitorCbData{this, taggedParent, rootNode, context, recursCollectiingData.m_aliasChain };
 		clang_visitChildren(cursor, &VisitorCallback, &visitorCbData);
 
 		CScopeBindingSetting scopeBindingSetting(*this, cursor, visitorCbData.m_vecCursorChild, context, recursCollectiingData);
@@ -1729,7 +1782,7 @@ namespace NiflectGen
 			auto& taggedChildIndex = visitorCbData.m_visitingData.m_vecTaggedChildIndex[idx];
 			if (taggedChildIndex != INDEX_NONE)
 				taggedChild = taggedParent->GetChild(taggedChildIndex);
-			this->CollectDataRecurs2(visitorCbData.m_vecCursorChild[idx], cursor, taggedChild, context, recursCollectiingData);
+			this->CollectDataRecurs2(visitorCbData.m_vecCursorChild[idx], cursor, taggedChild, rootNode, context, recursCollectiingData);
 		}
 
 		if (auto debugData = context.m_debugData)

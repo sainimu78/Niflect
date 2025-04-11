@@ -136,6 +136,12 @@ namespace NiflectGen
                 m_vecWriter2.push_back(writer);
             }
         }
+        if (m_resolvedData.m_resoGlobalsType.m_typeNode != NULL)
+        {
+            auto writer = m_resolvedData.m_resoGlobalsType.m_typeNode->CreateCodeWriter2();
+            writer->Init(&m_resolvedData, &m_resolvedData.m_resoGlobalsType.m_resocursorNode.m_resoRoot);
+            m_vecWriter2.push_back(writer);
+        }
         std::sort(m_vecWriter2.begin(), m_vecWriter2.end(), [](const CSharedTypeRegCodeWriter2& a, const CSharedTypeRegCodeWriter2& b)
             {
                 return CTypeRegCodeWriter2::CompareLess(*a, *b);

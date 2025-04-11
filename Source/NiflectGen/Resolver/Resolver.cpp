@@ -385,7 +385,7 @@ namespace NiflectGen
 	{
 		data.m_accessorBindingMapping = m_collectionData.m_accessorBindingMapping;
 
-		this->ResolveRecurs4(context, taggedRoot, data, data.m_taggedMapping, data.m_untaggedTemplateMapping);
+		this->ResolveRecurs4(context, taggedRoot, false, data, data.m_taggedMapping, data.m_untaggedTemplateMapping);
 
 		data.m_taggedMapping.Resolve();
 		data.m_untaggedTemplateMapping.Init(*m_collectionData.m_aliasChain);
@@ -424,10 +424,16 @@ namespace NiflectGen
 				it0->InitForImportType();
 			}
 		}
-		for (auto& it0 : vecValidToResolveDependencies)
+		if (m_collectionData.m_globalsTypeNode != NULL)
 		{
-			it0->ResolveDependcies(resolvingDepCtx, resolvingDepData);
+			data.m_resoGlobalsType.m_resocursorNode.m_resoRoot.InitForGlobalsType(/*定义到公共处*/"Niflect::_" + m_moduleRegInfo.m_userProvided.m_moduleName + "_CGlobals", m_moduleRegInfo.m_moduleRegisteredTypeHeaderFilePath);
+			data.m_resoGlobalsType.m_typeNode = m_collectionData.m_globalsTypeNode;
+			this->ResolveRecurs4(context, data.m_resoGlobalsType.m_typeNode.Get(), true, data, data.m_taggedMapping, data.m_untaggedTemplateMapping);
+			vecValidToResolveDependencies.push_back(data.m_resoGlobalsType.m_typeNode.Get());
 		}
+
+		for (auto& it0 : vecValidToResolveDependencies)
+			it0->ResolveDependcies(resolvingDepCtx, resolvingDepData);
 
 		for (auto& it0 : vecFilePathAndTaggedTypeIdx)
 		{
@@ -519,30 +525,36 @@ R"(The conversion of %s to an include directive failed because the file could no
 			}
 		}
 	}
-	void CResolver::ResolveRecurs4(const CResolvingContext& context, CTaggedNode2* taggedParent, CResolvedData& data, CTaggedTypesMapping& taggedTypesMapping, CUntaggedTemplatesMapping& untaggedTemplatesMapping)
+	void CResolver::ResolveRecurs4(const CResolvingContext& context, CTaggedNode2* taggedParent, bool isGlobalsType, CResolvedData& data, CTaggedTypesMapping& taggedTypesMapping, CUntaggedTemplatesMapping& untaggedTemplatesMapping)
 	{
+		if (taggedParent == NULL)//借放的 Field 与 Method 取走后为空
+			return;
+
 		SResolvingMacroNataContext macroNataCtx{ context.m_log };
 		taggedParent->ResolveMacroNata(macroNataCtx);
 
-		if (auto taggedType = CTaggedType::CastChecked(taggedParent))
+		if (!isGlobalsType)
 		{
-			auto& cursor = taggedType->GetCursor();
-			ASSERT(clang_isDeclaration(clang_getCursorKind(cursor)));
-			auto ret = taggedTypesMapping.m_mapCursorToIndex.insert({ cursor, static_cast<uint32>(taggedTypesMapping.m_vecType.size())});
-			ASSERT(ret.second);
-			taggedTypesMapping.m_vecType.push_back(taggedType);
-		}
-		else if (auto untaggedType = CUntaggedTemplate::CastChecked(taggedParent))
-		{
-			auto& cursor = untaggedType->GetCursor();
-			auto ret = untaggedTemplatesMapping.m_mapCursorToIndex.insert({ cursor, static_cast<uint32>(untaggedTemplatesMapping.m_vecType.size()) });
-			ASSERT(ret.second);
-			untaggedTemplatesMapping.m_vecType.push_back(untaggedType);
+			if (auto taggedType = CTaggedType::CastChecked(taggedParent))
+			{
+				auto& cursor = taggedType->GetCursor();
+				ASSERT(clang_isDeclaration(clang_getCursorKind(cursor)));
+				auto ret = taggedTypesMapping.m_mapCursorToIndex.insert({ cursor, static_cast<uint32>(taggedTypesMapping.m_vecType.size()) });
+				ASSERT(ret.second);
+				taggedTypesMapping.m_vecType.push_back(taggedType);
+			}
+			else if (auto untaggedType = CUntaggedTemplate::CastChecked(taggedParent))
+			{
+				auto& cursor = untaggedType->GetCursor();
+				auto ret = untaggedTemplatesMapping.m_mapCursorToIndex.insert({ cursor, static_cast<uint32>(untaggedTemplatesMapping.m_vecType.size()) });
+				ASSERT(ret.second);
+				untaggedTemplatesMapping.m_vecType.push_back(untaggedType);
+			}
 		}
 
 		for (auto& it0 : taggedParent->DebugGetChildren())
 		{
-			this->ResolveRecurs4(context, it0.Get(), data, taggedTypesMapping, untaggedTemplatesMapping);
+			this->ResolveRecurs4(context, it0.Get(), isGlobalsType, data, taggedTypesMapping, untaggedTemplatesMapping);
 		}
 	}
 

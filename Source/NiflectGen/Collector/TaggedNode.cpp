@@ -303,6 +303,10 @@ namespace NiflectGen
 		taggedNode->InitMacroExpansionCursor(macroCursor);
 		m_vecChild.push_back(taggedNode);
 	}
+	void CTaggedNode2::AddChildWhileBuildingGlobalsType(const CSharedTaggedNode& taggedNode)
+	{
+		m_vecChild.push_back(taggedNode);
+	}
 	bool ExtractBuiltinMetadata(const Niflect::CString& keyword, const Niflect::CString& line, Niflect::CString& metadata, uint32& movedPos)
 	{
 		auto pos0 = line.find(keyword, movedPos);

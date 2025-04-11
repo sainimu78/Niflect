@@ -211,9 +211,8 @@ namespace NiflectGen
 					NiflectGenDefinition::CodeStyle::TemplateAngleBracketR(accessorResocursorName);
 				}
 			}
-			else
+			else if (m_bindingTypeIndexedRoot->m_taggedTypeIndex != INDEX_NONE)
 			{
-				ASSERT(m_bindingTypeIndexedRoot->m_taggedTypeIndex != INDEX_NONE);
 				auto& tt = m_resolvedData->m_taggedMapping.m_vecType[m_bindingTypeIndexedRoot->m_taggedTypeIndex];
 				auto& cursor = tt->GetCursor();
 				auto kind = clang_getCursorKind(cursor);
@@ -246,15 +245,26 @@ namespace NiflectGen
 
 				tt->WriteUsingNamespaceDirectiveForNata(linesBody);
 			}
-			NiflectGenDefinition::CodeStyle::TryFormatNestedTemplate(accessorResocursorName);
+			else if (m_bindingTypeIndexedRoot->m_resocursorName.empty())
+			{
+				ASSERT(false);
+			}
 		}
 
 		{
-			CCodeTemplate tpl0;
-			ReadTemplateFromRawData(tpl0, HardCodedTemplate::BuildTypeMetaBlock);
-			CLabelToCodeMapping map;
-			MapLabelToText(map, LABEL_4, accessorResocursorName);
-			MapLabelToText(map, LABEL_2, m_bindingTypeIndexedRoot->GetStaticGetTypeFuncName(input.m_moduleRegInfo.m_moduleScopeSymbolPrefix));
+			CCodeLines linesBlock;
+			if (!accessorResocursorName.empty())
+			{
+				NiflectGenDefinition::CodeStyle::TryFormatNestedTemplate(accessorResocursorName);
+				CCodeTemplate tpl0;
+				ReadTemplateFromRawData(tpl0, HardCodedTemplate::BuildTypeMetaAccessor);
+				CLabelToCodeMapping map;
+				MapLabelToText(map, LABEL_4, accessorResocursorName);
+				MapLabelToText(map, LABEL_2, m_bindingTypeIndexedRoot->GetStaticGetTypeFuncName(input.m_moduleRegInfo.m_moduleScopeSymbolPrefix));
+				Niflect::TSet<Niflect::CString> setReplacedLabel;
+				tpl0.ReplaceLabels(map, linesBlock, &setReplacedLabel);
+				ASSERT(setReplacedLabel.size() == map.size());
+			}
 #ifdef PORTING_GETTER_SETTER_DEFAULTVALUE
 			SGetterSetterWritingData dddddData{ vecGetSetData };
 #else
@@ -262,12 +272,11 @@ namespace NiflectGen
 #endif
 			SResocursorNodeBodyCodeWritingContext bodyCodeCtx{ input.m_moduleRegInfo, input.m_log };
 			this->WriteResocursorNodeBodyCode(bodyCodeCtx, dddddData);
-			MapLabelToLines(map, LABEL_5, dddddData.m_linesResoElemCode);
-			Niflect::TSet<Niflect::CString> setReplacedLabel;
-			tpl0.ReplaceLabels(map, linesBody, &setReplacedLabel);
+			for (auto& it : dddddData.m_linesResoElemCode)
+				linesBlock.push_back(it);
 			for (auto& it : dddddData.m_linesResoBodyCode)
-				linesBody.push_back(it);
-			ASSERT(setReplacedLabel.size() == map.size());
+				linesBlock.push_back(it);
+			ReplaceLabelToImplScopeLines(linesBlock, linesBody);
 		}
 	}
 #else

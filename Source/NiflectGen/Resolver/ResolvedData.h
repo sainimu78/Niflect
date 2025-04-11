@@ -144,6 +144,12 @@ namespace NiflectGen
 		Niflect::TArrayNif<uint32> m_vecTypeRegDataIndex;
 	};
 
+	struct SResolvedGlobalsType
+	{
+		Niflect::TSharedPtr<CTaggedType> m_typeNode;
+		CResolvedCursorRoots m_resocursorNode;
+	};
+
 	class CResolvedData
 	{
 	public:
@@ -167,5 +173,6 @@ namespace NiflectGen
 		CSharedAccessorBindingMapping m_accessorBindingMapping;
 		CTaggedTypesMapping m_taggedMapping;
 		CUntaggedTemplatesMapping m_untaggedTemplateMapping;
+		SResolvedGlobalsType m_resoGlobalsType;
 	};
 }

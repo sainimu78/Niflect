@@ -60,7 +60,7 @@ namespace NiflectGen
 	private:
 		//void ResolveRecurs(CTaggedNode2* taggedParent, CResolvingContext& context, CResolvedData& data);
 		void ResolveRecurs2(CTaggedNode2* taggedParent, CResolvingContext& context, CResolvedData& data);
-		void ResolveRecurs4(const CResolvingContext& context, CTaggedNode2* taggedParent, CResolvedData& data, CTaggedTypesMapping& resolvedMapping, CUntaggedTemplatesMapping& untaggedTemplatesMapping);
+		void ResolveRecurs4(const CResolvingContext& context, CTaggedNode2* taggedParent, bool isGlobalsType, CResolvedData& data, CTaggedTypesMapping& resolvedMapping, CUntaggedTemplatesMapping& untaggedTemplatesMapping);
 
 	//public:
 	//	void DebugFinish(const CResolvedData& data) const;

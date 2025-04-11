@@ -6,6 +6,7 @@
 #include "NiflectGen/Collector/TaggedNode.h"
 #include "NiflectGen/Util/CursorMap.h"
 #include "NiflectGen/CodeWriter/ModuleReg/ModuleRegCode.h"
+#include "NiflectGen/Collector/GlobalsCollection.h"
 
 namespace NiflectGen
 {
@@ -41,8 +42,8 @@ namespace NiflectGen
 	class CTaggedTypeCollector
 	{
 	public:
-		CTaggedTypeCollector(CMacroTagCollection2& tagCollection);
-		bool Collect(const CXCursor& cursor, CTaggedNode2* taggedParent, CGenLog* log);
+		CTaggedTypeCollector(CMacroTagCollection2& tagCollection, CGlobalsCollection& globalsCollection);
+		bool Collect(const CXCursor& cursor, CTaggedNode2* taggedParent, const CTaggedNode2* rootNode, CGenLog* log);
 
 	private:
 		enum class EStage
@@ -53,6 +54,7 @@ namespace NiflectGen
 		EStage m_stage;
 		CXSourceLocation m_tagLocation;
 		CMacroTagCollection2& m_tagCollection;
+		CGlobalsCollection& m_globalsCollection;
 	};
 
 	class CTemplateCollector
@@ -100,8 +102,8 @@ namespace NiflectGen
 		void DebugFinish2(CTaggedNode2* taggedParent, const CCollectionData& collectionData) const;
 
 	private:
-		void CollectDataRecurs2(const CXCursor& cursor, const CXCursor& parentCursor, CTaggedNode2* taggedParent, CCollectingContext& context, SRecursCollectingData& recursCollectiingData);
-		void Visit(const CXCursor& cursor, CTaggedNode2* taggedParent, CCollectingContext& context, CAliasChain* aliasChain, SVisitingData& data);
+		void CollectDataRecurs2(const CXCursor& cursor, const CXCursor& parentCursor, CTaggedNode2* taggedParent, const CTaggedNode2* rootNode, CCollectingContext& context, SRecursCollectingData& recursCollectiingData);
+		void Visit(const CXCursor& cursor, CTaggedNode2* taggedParent, const CTaggedNode2* rootNode, CCollectingContext& context, CAliasChain* aliasChain, SVisitingData& data);
 #ifdef BINDING_TYPE_DUPLICATION_VERIFICATION
 		void CollectUntaggedTypesRecurs(CTaggedNode2* taggedParent, CUntaggedTypesMapping& mapping) const;
 #else
@@ -120,6 +122,7 @@ namespace NiflectGen
 		Niflect::TArrayNif<CXCursor> m_stkNamespaceCursor;//±∏”√
 		CMacroTagCollection2 m_macroTagCollection;
 		CTaggedTypeCollector m_taggedTypeCollector;
+		CGlobalsCollection m_globalsCollection;
 		CTemplateCollector m_templateCollector;
 #ifdef BINDING_TYPE_DUPLICATION_VERIFICATION
 		CUntaggedTypeCollector m_untaggedTypeCollector;

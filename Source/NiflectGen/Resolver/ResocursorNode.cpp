@@ -107,6 +107,14 @@ namespace NiflectGen
 		this->InitForTemplateArguments(childrenOwner, isTemplateFormat);
 		this->InitForTemplateEnd();
 	}
+	void CResolvedCursorNode::InitForClassBasic(const Niflect::CString& resocursorName, const Niflect::CString& headerFilePath)
+	{
+		ASSERT(m_resocursorName.empty());
+		m_resocursorName = resocursorName;
+
+		ASSERT(m_vecRequiredHeaderFilePath.size() == 0);
+		m_vecRequiredHeaderFilePath.push_back(headerFilePath);
+	}
 	void CResolvedCursorNode::InitForClassDecl(const Niflect::CString& resocursorName, uint32 taggedTypeIdx, uint32 accessorBindingIdx, const Niflect::CString& headerFilePath)
 	{
 		ASSERT(m_key.empty());
@@ -117,11 +125,11 @@ namespace NiflectGen
 
 		m_accessorBindingIndex = accessorBindingIdx;
 
-		ASSERT(m_resocursorName.empty());
-		m_resocursorName = resocursorName;
-
-		ASSERT(m_vecRequiredHeaderFilePath.size() == 0);
-		m_vecRequiredHeaderFilePath.push_back(headerFilePath);
+		this->InitForClassBasic(resocursorName, headerFilePath);
+	}
+	void CResolvedCursorNode::InitForGlobalsType(const Niflect::CString& resocursorName, const Niflect::CString& headerFilePath)
+	{
+		this->InitForClassBasic(resocursorName, headerFilePath);
 	}
 	const Niflect::CString* CResolvedCursorNode::GetHeaderFilePathAddrForTaggedType() const
 	{

@@ -18,7 +18,7 @@ namespace NiflectGen
 		tpl0.ReplaceLabels(map, linesCode, &setReplacedLabel);
 		ASSERT(setReplacedLabel.size() == map.size());
 	}
-	void WriteNextInitChildAccessor2(const Niflect::CString& fieldOwnerResocursorName, const Niflect::CString& funcName, const Niflect::CString& fieldName, const CCodeLines& linesNata, CCodeLines& linesResoBodyCode)
+	void WriteNextInitChildAccessor2(const Niflect::CString& fieldOwnerResocursorName, bool isGlobalVar, const Niflect::CString& scopeName, const Niflect::CString& funcName, const Niflect::CString& fieldName, const CCodeLines& linesNata, CCodeLines& linesResoBodyCode)
 	{
 		CCodeLines linesCode;
 		WriteNextInitNextAccessor2(funcName, linesCode);
@@ -29,7 +29,26 @@ namespace NiflectGen
 			ReadTemplateFromRawData(tpl0, HardCodedTemplate::InitChildAccessor);
 			CLabelToCodeMapping map;
 			MapLabelToText(map, LABEL_0, fieldName);
-			auto invokeGetFieldOffset = ReplaceLabelToText2(HardCodedTemplate::GetFieldOffset, LABEL_0, LABEL_8, fieldOwnerResocursorName, fieldName);
+			Niflect::CString invokeGetFieldOffset;
+			if (!isGlobalVar)
+			{
+				invokeGetFieldOffset = ReplaceLabelToText2(HardCodedTemplate::GetFieldOffset, LABEL_27, LABEL_8, fieldOwnerResocursorName, fieldName);
+			}
+			else
+			{
+				CCodeTemplate tpl0;
+				ReadTemplateFromRawData(tpl0, HardCodedTemplate::GetGlobalVarOffset);
+				CLabelToCodeMapping map0;
+				if (!scopeName.empty())
+					MapLabelToText(map0, LABEL_27, scopeName);
+				MapLabelToText(map0, LABEL_8, fieldName);
+				CCodeLines lines0;
+				Niflect::TSet<Niflect::CString> setReplacedLabel;
+				tpl0.ReplaceLabels(map0, lines0, &setReplacedLabel);
+				ASSERT(setReplacedLabel.size() == map0.size());
+				ASSERT(lines0.size() == 1);
+				invokeGetFieldOffset = lines0[0];
+			}
 			MapLabelToText(map, LABEL_7, invokeGetFieldOffset);
 			MapLabelToText(map, LABEL_14, nataNullOrVar);
 			MapLabelToText(map, LABEL_26, ConvertHashToString(Niflect::ComputeFieldHash(fieldName)));
@@ -100,7 +119,7 @@ namespace NiflectGen
 		tpl0.ReplaceLabels(map, linesCode, &setReplacedLabel);
 		ASSERT(setReplacedLabel.size() == map.size());
 	}
-	static void InternalWriteTypeBodyInvokeMethod(const char* pszTemplate, const Niflect::CString& typeName, const Niflect::TArray<CResolvedCursorNode>& vecArgument, const CResolvedCursorNode& resultType, const Niflect::CString& typeBodyFuncName, const Niflect::CString& methodName, CCodeLines& linesCode)
+	static void InternalWriteTypeBodyInvokeMethod(const char* pszTemplate, const Niflect::CString& scopeName, const Niflect::TArray<CResolvedCursorNode>& vecArgument, const CResolvedCursorNode& resultType, const Niflect::CString& typeBodyFuncName, const Niflect::CString& methodName, CCodeLines& linesCode)
 	{
 		CCodeLines linesConversion;
 		Niflect::CString linePassing;
@@ -109,7 +128,8 @@ namespace NiflectGen
 		CCodeTemplate tpl0;
 		ReadTemplateFromRawData(tpl0, pszTemplate);
 		CLabelToCodeMapping map;
-		MapLabelToText(map, LABEL_0, typeName);
+		if (!scopeName.empty())
+			MapLabelToText(map, LABEL_27, scopeName);
 		MapLabelToText(map, LABEL_17, typeBodyFuncName);
 		if (linesConversion.size() > 0)
 			MapLabelToLines(map, LABEL_18, linesConversion);
@@ -132,10 +152,10 @@ namespace NiflectGen
 		GenerateTypeBodyInvokeMethodFuncNameInternal(HardCodedTemplate::TypeBodyInvokeMethodFuncName, typeName, methodIdx, typeBodyFuncName);
 		InternalWriteTypeBodyInvokeMethod(HardCodedTemplate::TypeBodyInvokeMethodImpl, typeName, vecArgument, resultType, typeBodyFuncName, methodName, linesImpl);
 	}
-	void WriteInvokeStaticMemberFunctionBody(const Niflect::CString& typeName, uint32 methodIdx, const Niflect::TArray<CResolvedCursorNode>& vecArgument, const CResolvedCursorNode& resultType, const Niflect::CString& methodName, Niflect::CString& typeBodyFuncName, CCodeLines& linesImpl)
+	void WriteInvokeStaticMemberFunctionBody(const Niflect::CString& typeName, const Niflect::CString& scopeName, uint32 methodIdx, const Niflect::TArray<CResolvedCursorNode>& vecArgument, const CResolvedCursorNode& resultType, const Niflect::CString& methodName, Niflect::CString& typeBodyFuncName, CCodeLines& linesImpl)
 	{
 		GenerateTypeBodyInvokeMethodFuncNameInternal(HardCodedTemplate::TypeBodyInvokeStaticMemberFunctionFuncName, typeName, methodIdx, typeBodyFuncName);
-		InternalWriteTypeBodyInvokeMethod(HardCodedTemplate::TypeBodyInvokeFunctionImpl, typeName, vecArgument, resultType, typeBodyFuncName, methodName, linesImpl);
+		InternalWriteTypeBodyInvokeMethod(HardCodedTemplate::TypeBodyInvokeFunctionImpl, scopeName, vecArgument, resultType, typeBodyFuncName, methodName, linesImpl);
 	}
 	static Niflect::CString GenerateParameterInfoConstructionCode(const Niflect::CString& staticGetTypeFuncName)
 	{
