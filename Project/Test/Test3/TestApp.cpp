@@ -63,6 +63,15 @@ TEST(TestAppAndLib, TestMain) {
             RwTree::CJsonFormat::Write(&rw, ss);
             printf("Global var 1: %s, %s\n", field.GetName().c_str(), ss.str().c_str());
         }
+        {
+            TestLibSetGlobalVar2(666.0f);
+            auto& field = vecField[2];
+            RwTree::CRwNode rw;
+            field.LayoutSaveToRwNode(NULL, &rw);
+            Niflect::CStringStream ss;
+            RwTree::CJsonFormat::Write(&rw, ss);
+            printf("Global var 2: %s, %s\n", field.GetName().c_str(), ss.str().c_str());
+        }
         float arg0 = 321.0f;
         Niflect::InstanceType* args[] = { &arg0 };
         type->m_vecStaticMemberFunctionInfo[0].m_Func(args);

@@ -179,10 +179,13 @@ public:
 	float m_value;
 };
 
+NIF_F(CMyGlobalsNata().SetExampleValue(888.0f))
+extern float g_c;
+
 namespace MyGlobalScope
 {
 	NIF_F(CMyGlobalsNata().SetExampleValue(111.0f))
-	extern float g_a;
+	extern float g_a;//由于 GenTool 对 AST 遍历方式, 在 namespace 中的变量比全局作用域中的更后添加
 
 	NIF_M(CMyGlobalsNata().SetExampleValue(444.0f))
 	static void MyScopedStaticFunc1(float a)
@@ -229,3 +232,4 @@ TESTLIB_API void InitTestLib(Niflect::CNiflectTable& table);
 TESTLIB_API Niflect::CNiflectType* GetTestLibGlobalsType();
 TESTLIB_API void TestLibSetGlobalVar0(float val);
 TESTLIB_API void TestLibSetGlobalVar1(float val);
+TESTLIB_API void TestLibSetGlobalVar2(float val);

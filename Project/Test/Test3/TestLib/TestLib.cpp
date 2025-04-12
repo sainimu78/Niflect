@@ -13,6 +13,7 @@ namespace MyGlobalScope
 }
 
 float g_b = 0.0f;
+float g_c = 0.0f;
 
 void MyGlobalFunc2(float a)
 {
@@ -37,4 +38,8 @@ void TestLibSetGlobalVar0(float val)
 void TestLibSetGlobalVar1(float val)
 {
 	g_b = val;
+}
+void TestLibSetGlobalVar2(float val)
+{
+	g_c = val;
 }
