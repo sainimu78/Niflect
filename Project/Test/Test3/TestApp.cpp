@@ -10,7 +10,7 @@ static void InitTestApp(Niflect::CNiflectTable& table)
 {
     Niflect::GeneratedRegisterTypes(&table);
     Niflect::GeneratedInitTypes();
-    table.InitTypesLayout();
+    table.BuildTypesMeta();
 }
 
 template <typename TTestType>

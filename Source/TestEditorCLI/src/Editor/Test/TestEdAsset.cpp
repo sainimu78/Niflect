@@ -105,7 +105,7 @@ void TestEdAsset()
 		auto table = tableHolder.Get();
 		Niflect::GeneratedRegisterTypes(table);
 		Niflect::GeneratedInitTypes();
-		table->InitTypesLayout();
+		table->BuildTypesMeta();
 
 		auto meshFilePath = NiflectUtil::ConcatPath(MyContent, "Mesh.json");
 		auto cookedFilePath = NiflectUtil::RemoveFileExt(meshFilePath) + "_cooked.json";

@@ -13,7 +13,7 @@ static void InvokeTest(UnitTestFunc Func)
         Niflect::CNiflectTable table;
         Niflect::GeneratedRegisterTypes(&table);
         Niflect::GeneratedInitTypes();
-        table.InitTypesLayout();
+        table.BuildTypesMeta();
         Func();
     }
     EXPECT_EQ(memTest->m_bytesRuntime, 0);

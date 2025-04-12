@@ -11,7 +11,7 @@ void TestModule1Create()
 	g_defaultTable = Niflect::MakeShared<CNiflectTable>();
 	GeneratedRegisterTypes(g_defaultTable.Get());
 	GeneratedInitTypes();
-	g_defaultTable->InitTypesLayout();
+	g_defaultTable->BuildTypesMeta();
 }
 void TestModule1Destroy()
 {

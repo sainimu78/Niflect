@@ -24,7 +24,7 @@ void InitTestLib(Niflect::CNiflectTable& table)
 {
 	Niflect::GeneratedRegisterTypes(&table);
 	Niflect::GeneratedInitTypes();
-	table.InitTypesLayout();
+	table.BuildTypesMeta();
 }
 Niflect::CNiflectType* GetTestLibGlobalsType()
 {

@@ -9,7 +9,7 @@ namespace Niflect
 		for (auto& it0 : m_vecModule)
 			it0->InitTypes();
 		for (auto& it0 : m_vecModule)
-			it0->InitTableTypesLayout();
+			it0->BuildTableTypesMeta();
 	}
 	bool CNiflectModuleRegistry::RegisterModuleStatically(const Niflect::CString& name, const ModuleRegisterTypesFunc& RegisterTypesFunc, const ModuleInitTypesFunc& InitTypesFunc)
 	{

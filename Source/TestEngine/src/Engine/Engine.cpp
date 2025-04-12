@@ -33,7 +33,7 @@ void TestEngineCreate()
 	g_defaultTable = Niflect::MakeShared<Niflect::CNiflectTable>();
 	Niflect::GeneratedRegisterTypes(g_defaultTable.Get());
 	Niflect::GeneratedInitTypes();
-	g_defaultTable->InitTypesLayout();
+	g_defaultTable->BuildTypesMeta();
 }
 void TestEngineRun()
 {
