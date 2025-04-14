@@ -123,7 +123,7 @@ R"(friend Niflect::CSharedAccessor Niflect::)" NIFLECTFRAMEWORK_TEMPLATEFUNC_CTy
 		constexpr const char* TypeBodyInvokeMethodFuncName =
 "CTypeBody::InvokeMethod<" MAKELABEL(LABEL_0) ", " MAKELABEL(LABEL_16) ">";
 		constexpr const char* TypeBodyInvokeStaticMemberFunctionFuncName =
-"CTypeBody::InvokeStaticMemberFunction<" MAKELABEL(LABEL_0) ", " MAKELABEL(LABEL_16) ">";
+"CTypeBody::InvokeStaticMethod<" MAKELABEL(LABEL_0) ", " MAKELABEL(LABEL_16) ">";
 		constexpr const char* TypeBodyInvokeConstructorImpl =
 R"(template <>
 void )" MAKELABEL(LABEL_17) R"((InstanceType* base, InstanceType** const args)
@@ -156,6 +156,6 @@ type0->InitAddMethodInfo(info);)";
 		constexpr const char* MethodRegStaticMemberFunctionInfo =
 R"(CFunctionInfo info(&)" MAKELABEL(LABEL_17) R"(, ")" MAKELABEL(LABEL_21) R"(", )" MAKELABEL(LABEL_14) ", " MAKELABEL(LABEL_24) ", " MAKELABEL(LABEL_25) R"();
 )" MAKELABEL(LABEL_20) R"(
-type0->InitAddStaticMemberFunctionInfo(info);)";
+type0->InitAddStaticMethodInfo(info);)";
 	}
 }
