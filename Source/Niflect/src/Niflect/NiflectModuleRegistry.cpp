@@ -24,6 +24,10 @@ namespace Niflect
 	{
 		return static_cast<uint32>(m_vecModule.size());
 	}
+	CNiflectModule2* CNiflectModuleRegistry::GetModuleByIndex(uint32 idx) const
+	{
+		return m_vecModule[idx].Get();
+	}
 
 	using CSharedModuleRegistry = Niflect::TSharedPtr<CNiflectModuleRegistry>;
 	static CSharedModuleRegistry* g_mgrPtr = NULL;
