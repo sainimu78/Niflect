@@ -124,6 +124,8 @@ namespace NiflectGen
 	class CCollectedAccessorSettings
 	{
 	public:
+		bool AreValid() const;
+
 		Niflect::TArrayNif<CBindingSettingData> m_vecAccessorBindingSetting;
 #ifdef ACCESSOR_SETTING_ABCD
 		CBindingSettingData m_settingCompound;

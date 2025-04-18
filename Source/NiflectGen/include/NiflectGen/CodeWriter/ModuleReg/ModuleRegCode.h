@@ -58,6 +58,7 @@ namespace NiflectGen
 	public:
 		bool Init(const CModuleRegInfo& info, CGenLog* log);
 		Niflect::CString GetSourceFileExtForGenFileMode() const;
+		bool VeryfyAccessorSettingHeaders(CGenLog* log) const;
 
 		Niflect::CString m_moduleGenSourceRoot;
 		Niflect::CString m_typeRegBasePath;

@@ -78,6 +78,28 @@ namespace NiflectGen
 			return NiflectGenDefinition::FileExt::PrivateH;
 		return NiflectGenDefinition::FileExt::Cpp;
 	}
+	bool CModuleRegInfoValidated::VeryfyAccessorSettingHeaders(CGenLog* log) const
+	{
+		bool yes = m_userProvided.m_vecAccessorSettingHeader.size() > 0;
+		if (yes)
+		{
+			Niflect::CString str;
+			str += "Accessor setting headers:\n";
+			for (auto& it : m_userProvided.m_vecAccessorSettingHeader)
+			{
+				str += it;
+				if (!NiflectUtil::FileExists(it))
+				{
+					yes = false;
+					str += ", does not exist";
+				}
+				str += "\n";
+			}
+			if (!yes)
+				GenLogError(log, str);
+		}
+		return yes;
+	}
 	namespace Test
 	{
 		void InitArgs(CModuleRegInfo& info)

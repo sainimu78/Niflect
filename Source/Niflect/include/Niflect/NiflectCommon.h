@@ -3,7 +3,6 @@
 #define ASSERTION_ABORT
 #ifdef ASSERTION_ABORT
 #include <cassert>//assert
-#include <cstdio>//fflush
 #else
 #include <cstdio>//printf, fflush
 #endif
@@ -32,7 +31,6 @@ namespace Niflect
             bool cond = b;\
             if (!cond)\
             {\
-                fflush(stdout);\
                 assert(false);\
             }\
         } while(0)

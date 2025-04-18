@@ -5,6 +5,15 @@
 
 namespace NiflectGen
 {
+	bool CCollectedAccessorSettings::AreValid() const
+	{
+		return m_vecAccessorBindingSetting.size() > 0
+			|| m_settingCompound.IsValid()
+			|| m_settingEnumClass.IsValid()
+			|| m_settingEnumBitMask.IsValid()
+			;
+	}
+
 	bool CAccessorBindingMapping2::IterateForTemplate(const SResonodesInitContext& context, const CXType& fieldOrArgCXType, const Niflect::TArrayNif<CXCursor>& vecDetailCursor, const CTaggedTypesMapping& taggedMapping, const CUntaggedTemplatesMapping& untaggedTemplateMapping, const CAliasChain& aliasChain, CResolvedCursorNode& resultIndexedParent, uint32& detailIteratingIdx) const
 	{
 		//auto argsCount = clang_Type_getNumTemplateArguments(fieldOrArgCXType);

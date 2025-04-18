@@ -1240,9 +1240,13 @@ namespace NiflectGen
 			collectionData.m_globalsTypeNode = globalsTypeNode;
 		}
 
-		if (accessorSettings.m_vecAccessorBindingSetting.size() == 0)
+		if (!accessorSettings.AreValid())
 		{
-			GenLogError(context.m_log, "There is no valid accessor setting");
+			if (m_moduleRegInfo.VeryfyAccessorSettingHeaders(context.m_log))
+			{
+				for (auto& it : m_moduleRegInfo.m_userProvided.m_vecAccessorSettingHeader)
+					GenLogError(context.m_log, CLogLocationInfo(it, 0, 0), "There is no valid accessor setting");
+			}
 			return;
 		}
 

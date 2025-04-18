@@ -48,6 +48,7 @@ namespace NiflectGen
 		if ((!isNormal) && m_opt.m_assertionOnAddingItem)
 		{
 			ASSERT(false);
+			fflush(stdout);
 		}
 		if (m_opt.m_cachedItems)
 		{
