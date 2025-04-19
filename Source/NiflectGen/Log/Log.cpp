@@ -44,11 +44,11 @@ namespace NiflectGen
 			if (indicator.IsValid())
 				strLoc = NiflectUtil::FormatString("%s(%u,%u): ", indicator.m_filePath.c_str(), indicator.m_line, indicator.m_column);
 			printf("%s%s%s\n", strLoc.c_str(), pszTextType, text.c_str());
+			fflush(stdout);
 		}
 		if ((!isNormal) && m_opt.m_assertionOnAddingItem)
 		{
 			ASSERT(false);
-			fflush(stdout);
 		}
 		if (m_opt.m_cachedItems)
 		{

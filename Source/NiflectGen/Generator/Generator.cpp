@@ -103,13 +103,59 @@ namespace NiflectGen
         opt.InitDefault();
         opt.AddIncludePaths(m_moduleRegInfo.m_vecParsingHeaderSearchPath);
 
-        const bool displayDiagnostics = true;
+        const bool displayDiagnostics = false;//为 true 时, clang_parseTranslationUnit 遇到语法, 类型未定义等错误时会直接输出信息, 无关错误导致无法构建. 应对信息分类后再确定是否输出, 计划如下 clang_getDiagnostic 位置以此方法修改
         auto index = clang_createIndex(true, displayDiagnostics);
 
         auto translation_unit = clang_parseTranslationUnit(index, memSrcMain.m_filePath.c_str(), opt.GetArgV(),
             opt.GetArgC(), memSrcCache.m_vecHandle.data(),
             static_cast<uint32>(memSrcCache.m_vecHandle.size()), CXTranslationUnit_DetailedPreprocessingRecord | CXTranslationUnit_SkipFunctionBodies
         );
+
+        const bool printParsingDiagnostics = false;
+        if (printParsingDiagnostics)
+        {
+            unsigned numDiags = clang_getNumDiagnostics(translation_unit);
+            for (unsigned i = 0; i < numDiags; ++i) {
+                CXDiagnostic diag = clang_getDiagnostic(translation_unit, i);
+
+                //unsigned diagID = clang_getDiagnosticNumber(diagnostic);
+
+                //// 示例：Clang 中 unknown type 的典型错误号为 3 (扩展编号需参考具体版本)
+                //if (diagID == 3 || (diagID >= 1000 && diagID <= 1999)) {
+                //    handleClangBuiltinError(diagID);
+                //}
+
+                // 获取诊断详细信息
+                CXString text = clang_getDiagnosticSpelling(diag);
+                CXSourceLocation loc = clang_getDiagnosticLocation(diag);
+
+                // 解析位置信息
+                CXString fname;
+                unsigned line, column;
+                clang_getPresumedLocation(loc, &fname, &line, &column);
+
+                //// 构造错误对象（自定义数据结构）
+                //ErrorInfo err;
+                //err.message = std::string(clang_getCString(text));
+                //err.file = std::string(clang_getCString(fname));
+                //err.line = line;
+                //err.column = column;
+
+                //// 手动控制是否打印
+                //if (shouldPrintError(err)) { // 自定义判断逻辑
+                //    std::cerr << "[" << err.file << ":" << line << ":" << column << "] "
+                //        << err.message << std::endl;
+                //}
+
+                GenLogInfo(m_log, CLogLocationInfo(clang_getCString(fname), line, column), clang_getCString(text));
+
+
+                // 释放资源
+                clang_disposeString(text);
+                clang_disposeString(fname);
+                clang_disposeDiagnostic(diag);
+            }
+        }
 
         if (false)//if (true)//
         {

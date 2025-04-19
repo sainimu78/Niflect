@@ -93,6 +93,10 @@ namespace Niflect
 		{
 			return m_vecFiled;
 		}
+		CAccessor* GetAccessor() const
+		{
+			return m_accessor.Get();
+		}
 
 	public:
 		bool SaveInstanceToRwNode(const InstanceType* base, CRwNode* rw) const
